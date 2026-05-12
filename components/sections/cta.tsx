@@ -4,21 +4,22 @@ import { ArrowRight } from "lucide-react"
 export function CTASection() {
   return (
     <section
-      className="py-28 px-6 bg-background-secondary"
+      id="cta"
+      className="py-24 px-5 border-t border-border bg-background-secondary"
       aria-labelledby="cta-heading"
     >
-      <div className="max-w-3xl mx-auto text-center flex flex-col items-center gap-8">
+      <div className="max-w-2xl mx-auto text-center flex flex-col items-center gap-7">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
             Get started
           </p>
           <h2
             id="cta-heading"
-            className="font-display text-4xl sm:text-5xl font-bold text-foreground text-balance"
+            className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground text-balance"
           >
             See what a great quote looks like.
           </h2>
-          <p className="mt-5 text-lg text-foreground-muted leading-relaxed max-w-xl mx-auto text-pretty">
+          <p className="mt-4 text-base text-foreground-muted leading-relaxed max-w-md mx-auto text-pretty">
             No sign-up needed. Explore the interactive demo quote and experience
             what your clients will see.
           </p>
@@ -27,14 +28,14 @@ export function CTASection() {
         <div className="flex flex-col sm:flex-row items-center gap-3">
           <Link
             href="/q/demo"
-            className="inline-flex items-center gap-2 rounded-full bg-accent hover:bg-accent-hover text-white text-sm font-semibold px-7 py-3.5 transition-colors duration-200"
+            className="inline-flex items-center gap-2 bg-foreground text-white hover:bg-foreground/85 text-sm font-medium px-6 py-2.5 rounded-md transition-colors duration-150"
           >
             View demo quote
-            <ArrowRight size={15} />
+            <ArrowRight size={14} />
           </Link>
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-full border border-border text-foreground text-sm font-medium px-7 py-3.5 transition-colors duration-200 hover:bg-background"
+            className="inline-flex items-center text-sm font-medium text-foreground border border-border hover:bg-background px-6 py-2.5 rounded-md transition-colors duration-150"
           >
             Access dashboard
           </Link>

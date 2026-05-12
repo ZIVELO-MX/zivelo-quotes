@@ -3,13 +3,13 @@ import { FileX, Clock, Frown } from "lucide-react"
 const PAINS = [
   {
     icon: FileX,
-    title: "Static PDFs that nobody reads",
+    title: "Static PDFs nobody reads",
     body: "Attachments get lost, aren't mobile-friendly, and give you zero signal on whether the client even opened them.",
   },
   {
     icon: Clock,
-    title: "Generic templates in 10 seconds",
-    body: "Every proposal looks the same. No branding, no personality — clients can't tell the difference between you and your competitors.",
+    title: "Generic templates, zero personality",
+    body: "Every proposal looks the same. Clients can't tell you apart from your competition.",
   },
   {
     icon: Frown,
@@ -21,37 +21,36 @@ const PAINS = [
 export function ProblemSection() {
   return (
     <section
-      className="py-28 px-6 bg-background-secondary"
+      id="problem"
+      className="py-24 px-5 border-t border-border bg-background-secondary"
       aria-labelledby="problem-heading"
     >
       <div className="max-w-5xl mx-auto">
-        {/* Label */}
-        <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4">
+        <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
           The problem
         </p>
         <h2
           id="problem-heading"
-          className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground text-balance max-w-2xl"
+          className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
         >
-          Traditional quotes feel like a 2005 Word document.
+          Traditional quotes feel like a 2005 Word doc.
         </h2>
-        <p className="mt-5 text-lg text-foreground-muted leading-relaxed max-w-xl text-pretty">
-          The way most agencies and teams share proposals hasn&apos;t changed in decades.
-          The tools have — clients&apos; expectations have too.
+        <p className="mt-4 text-base text-foreground-muted leading-relaxed max-w-lg text-pretty">
+          The way most agencies share proposals hasn&apos;t changed in decades.
+          Your clients&apos; expectations have.
         </p>
 
-        {/* Pain cards */}
-        <div className="mt-14 grid sm:grid-cols-3 gap-6">
+        <div className="mt-12 grid sm:grid-cols-3 gap-px bg-border">
           {PAINS.map(({ icon: Icon, title, body }) => (
             <div
               key={title}
-              className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4"
+              className="bg-background-secondary p-8 flex flex-col gap-4"
             >
-              <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent flex-shrink-0">
-                <Icon size={20} />
+              <div className="w-9 h-9 rounded-lg border border-border bg-white flex items-center justify-center text-foreground-muted flex-shrink-0">
+                <Icon size={16} />
               </div>
               <div>
-                <h3 className="font-semibold text-foreground mb-1">{title}</h3>
+                <h3 className="text-sm font-semibold text-foreground mb-1.5">{title}</h3>
                 <p className="text-sm text-foreground-muted leading-relaxed">{body}</p>
               </div>
             </div>

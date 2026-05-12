@@ -3,64 +3,39 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ─── Light Theme ───────────────────────────────────────── */
+/* ─── Light-only theme (Notion-inspired) ────────────────── */
 :root {
   --background: #ffffff;
-  --background-secondary: #f5f5f5;
-  --background-tertiary: #ebebeb;
-  --foreground: #1d1d1b;
-  --foreground-muted: #5a5a5a;
-  --foreground-dim: #8a8a8a;
+  --background-secondary: #f7f7f5;
+  --background-tertiary: #efefed;
+  --foreground: #191919;
+  --foreground-muted: #6b6b6b;
+  --foreground-dim: #a0a0a0;
   --accent: #cc0000;
   --accent-hover: #aa0000;
-  --border: rgba(0, 0, 0, 0.1);
+  --accent-subtle: #fff0f0;
+  --border: #e9e9e7;
+  --border-strong: #d3d3cf;
 
   /* shadcn tokens */
   --card: #ffffff;
-  --card-foreground: #1d1d1b;
+  --card-foreground: #191919;
   --popover: #ffffff;
-  --popover-foreground: #1d1d1b;
-  --primary: #1d1d1b;
+  --popover-foreground: #191919;
+  --primary: #191919;
   --primary-foreground: #ffffff;
-  --secondary: #f5f5f5;
-  --secondary-foreground: #1d1d1b;
-  --muted: #f5f5f5;
-  --muted-foreground: #5a5a5a;
-  --input: rgba(0, 0, 0, 0.1);
+  --secondary: #f7f7f5;
+  --secondary-foreground: #191919;
+  --muted: #f7f7f5;
+  --muted-foreground: #6b6b6b;
+  --input: #e9e9e7;
   --ring: #cc0000;
-  --radius: 0.625rem;
-}
-
-/* ─── Dark Theme ─────────────────────────────────────────── */
-.dark {
-  --background: #0a0000;
-  --background-secondary: #110000;
-  --background-tertiary: #160000;
-  --foreground: #f5f0f0;
-  --foreground-muted: #9a8585;
-  --foreground-dim: #5a4040;
-  --accent: #cc0000;
-  --accent-hover: #e60000;
-  --border: rgba(255, 255, 255, 0.07);
-
-  /* shadcn tokens */
-  --card: #110000;
-  --card-foreground: #f5f0f0;
-  --popover: #110000;
-  --popover-foreground: #f5f0f0;
-  --primary: #f5f0f0;
-  --primary-foreground: #0a0000;
-  --secondary: #160000;
-  --secondary-foreground: #f5f0f0;
-  --muted: #160000;
-  --muted-foreground: #9a8585;
-  --input: rgba(255, 255, 255, 0.07);
-  --ring: #cc0000;
+  --radius: 0.5rem;
 }
 
 @theme inline {
   --font-sans: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), 'Space Grotesk', ui-sans-serif, sans-serif;
+  --font-display: var(--font-inter), 'Inter', ui-sans-serif, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
 
   --color-background: var(--background);
@@ -71,7 +46,9 @@
   --color-foreground-dim: var(--foreground-dim);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
 
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -86,22 +63,20 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* ─── Scroll progress bar ────────────────────────────────── */
-.scroll-progress-bar {
-  transform-origin: left;
 }

@@ -11,12 +11,12 @@ const FEATURES = [
   {
     icon: MousePointerClick,
     title: "Interactive quote pages",
-    body: "Clients navigate structured sections — overview, deliverables, pricing, timeline — in a single beautiful page.",
+    body: "Clients navigate structured sections — overview, deliverables, pricing, timeline — all in one beautiful page.",
   },
   {
     icon: Link2,
     title: "Public shareable links",
-    body: "Share a clean URL with any client, no login required. Works perfectly on mobile.",
+    body: "Share a clean URL with any client. No login required. Works perfectly on mobile.",
   },
   {
     icon: FileDown,
@@ -35,39 +35,50 @@ const FEATURES = [
   },
   {
     icon: Globe,
-    title: "White-label support (coming soon)",
-    body: "Custom domains and full client branding for agencies and resellers.",
+    title: "White-label support",
+    body: "Custom domains and full client branding for agencies and resellers. Coming soon.",
+    soon: true,
   },
 ]
 
 export function FeaturesSection() {
   return (
     <section
-      className="py-28 px-6 bg-background-secondary"
+      id="features"
+      className="py-24 px-5 border-t border-border bg-background-secondary"
       aria-labelledby="features-heading"
     >
       <div className="max-w-5xl mx-auto">
-        <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4">
+        <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
           Features
         </p>
         <h2
           id="features-heading"
-          className="font-display text-3xl sm:text-4xl font-bold text-foreground text-balance max-w-xl"
+          className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
         >
           Everything a modern proposal needs.
         </h2>
 
-        <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FEATURES.map(({ icon: Icon, title, body }) => (
+        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
+          {FEATURES.map(({ icon: Icon, title, body, soon }) => (
             <div
               key={title}
-              className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-3 group hover:border-accent/30 transition-colors duration-200"
+              className="bg-background-secondary p-7 flex flex-col gap-3"
             >
-              <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent flex-shrink-0 group-hover:bg-accent/15 transition-colors duration-200">
-                <Icon size={18} />
+              <div className="w-9 h-9 rounded-lg border border-border bg-white flex items-center justify-center text-foreground-muted flex-shrink-0">
+                <Icon size={16} />
               </div>
-              <h3 className="font-semibold text-foreground">{title}</h3>
-              <p className="text-sm text-foreground-muted leading-relaxed">{body}</p>
+              <div>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+                  {soon && (
+                    <span className="text-[10px] font-medium text-foreground-dim border border-border rounded-full px-2 py-0.5">
+                      Soon
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-foreground-muted leading-relaxed">{body}</p>
+              </div>
             </div>
           ))}
         </div>
