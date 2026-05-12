@@ -1,0 +1,107 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─── Light Theme ───────────────────────────────────────── */
+:root {
+  --background: #ffffff;
+  --background-secondary: #f5f5f5;
+  --background-tertiary: #ebebeb;
+  --foreground: #1d1d1b;
+  --foreground-muted: #5a5a5a;
+  --foreground-dim: #8a8a8a;
+  --accent: #cc0000;
+  --accent-hover: #aa0000;
+  --border: rgba(0, 0, 0, 0.1);
+
+  /* shadcn tokens */
+  --card: #ffffff;
+  --card-foreground: #1d1d1b;
+  --popover: #ffffff;
+  --popover-foreground: #1d1d1b;
+  --primary: #1d1d1b;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #1d1d1b;
+  --muted: #f5f5f5;
+  --muted-foreground: #5a5a5a;
+  --input: rgba(0, 0, 0, 0.1);
+  --ring: #cc0000;
+  --radius: 0.625rem;
+}
+
+/* ─── Dark Theme ─────────────────────────────────────────── */
+.dark {
+  --background: #0a0000;
+  --background-secondary: #110000;
+  --background-tertiary: #160000;
+  --foreground: #f5f0f0;
+  --foreground-muted: #9a8585;
+  --foreground-dim: #5a4040;
+  --accent: #cc0000;
+  --accent-hover: #e60000;
+  --border: rgba(255, 255, 255, 0.07);
+
+  /* shadcn tokens */
+  --card: #110000;
+  --card-foreground: #f5f0f0;
+  --popover: #110000;
+  --popover-foreground: #f5f0f0;
+  --primary: #f5f0f0;
+  --primary-foreground: #0a0000;
+  --secondary: #160000;
+  --secondary-foreground: #f5f0f0;
+  --muted: #160000;
+  --muted-foreground: #9a8585;
+  --input: rgba(255, 255, 255, 0.07);
+  --ring: #cc0000;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), 'Space Grotesk', ui-sans-serif, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-dim: var(--foreground-dim);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-border: var(--border);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ─── Scroll progress bar ────────────────────────────────── */
+.scroll-progress-bar {
+  transform-origin: left;
+}
