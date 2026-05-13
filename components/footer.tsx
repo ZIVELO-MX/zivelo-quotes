@@ -170,32 +170,12 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div
-          className="mt-16 pt-8"
+          className="mt-16 pt-8 text-center"
           style={{ borderTop: "1px solid rgba(0,0,0,0.1)" }}
         >
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <p className="text-sm" style={{ color: "#8a8a8a" }}>
-              &copy; {year} Zivelo. All rights reserved.
-            </p>
-            <a
-              href="https://zivelo.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
-              style={{
-                backgroundColor: "#CC0000",
-                color: "white",
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = "#b30000"
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = "#CC0000"
-              }}
-            >
-              Explore more
-            </a>
-          </div>
+          <p className="text-sm" style={{ color: "#8a8a8a" }}>
+            &copy; {year} Zivelo. All rights reserved.
+          </p>
         </div>
 
       </div>
