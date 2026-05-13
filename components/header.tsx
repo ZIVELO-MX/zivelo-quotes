@@ -4,17 +4,19 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
-
-const NAV_LINKS = [
-  { label: "Home", href: "#hero" },
-  { label: "Problem", href: "#problem" },
-  { label: "Solution", href: "#why" },
-  { label: "Product", href: "#features" },
-]
+import { useLanguage } from "@/app/language-provider"
 
 export function Header() {
+  const { t } = useLanguage()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  const NAV_LINKS = [
+    { label: t.header.home, href: "#hero" },
+    { label: t.header.problem, href: "#problem" },
+    { label: t.header.solution, href: "#why" },
+    { label: t.header.product, href: "#features" },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -73,13 +75,13 @@ export function Header() {
               href="/dashboard"
               className="hidden md:inline-flex text-sm text-foreground-muted hover:text-foreground px-3 py-1.5 rounded-md hover:bg-background-secondary transition-colors duration-150"
             >
-              Log in
+              {t.header.logIn}
             </Link>
             <a
               href="#cta"
               className="inline-flex items-center text-sm font-medium bg-foreground text-white hover:bg-foreground/85 px-4 py-1.5 rounded-md transition-colors duration-150"
             >
-              Get started
+              {t.header.getStarted}
             </a>
 
             {/* Mobile burger */}
@@ -139,14 +141,14 @@ export function Header() {
               onClick={() => setMobileOpen(false)}
               className="text-base text-foreground-muted px-3 py-2.5 rounded-md hover:bg-background-secondary transition-colors"
             >
-              Log in
+              {t.header.logIn}
             </Link>
             <a
               href="#cta"
               onClick={() => setMobileOpen(false)}
               className="text-base font-medium bg-foreground text-white px-3 py-2.5 rounded-md text-center transition-colors hover:bg-foreground/85"
             >
-              Get started
+              {t.header.getStarted}
             </a>
           </div>
         </nav>

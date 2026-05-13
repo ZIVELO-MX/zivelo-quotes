@@ -1,7 +1,12 @@
+"use client"
+
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { useLanguage } from "@/app/language-provider"
 
 export function CTASection() {
+  const { t } = useLanguage()
+
   return (
     <section
       id="cta"
@@ -17,11 +22,10 @@ export function CTASection() {
             id="cta-heading"
             className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground text-balance"
           >
-            See what a great quote looks like.
+            {t.cta.title}
           </h2>
           <p className="mt-4 text-base text-foreground-muted leading-relaxed max-w-md mx-auto text-pretty">
-            No sign-up needed. Explore the interactive demo quote and experience
-            what your clients will see.
+            {t.cta.description}
           </p>
         </div>
 
@@ -30,14 +34,14 @@ export function CTASection() {
             href="/q/demo"
             className="inline-flex items-center gap-2 bg-foreground text-white hover:bg-foreground/85 text-sm font-medium px-6 py-2.5 rounded-md transition-colors duration-150"
           >
-            View demo quote
+            {t.footer.demo}
             <ArrowRight size={14} />
           </Link>
           <Link
             href="/dashboard"
             className="inline-flex items-center text-sm font-medium text-foreground border border-border hover:bg-background px-6 py-2.5 rounded-md transition-colors duration-150"
           >
-            Access dashboard
+            {t.footer.dashboard}
           </Link>
         </div>
 

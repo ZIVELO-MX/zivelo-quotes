@@ -1,7 +1,12 @@
+"use client"
+
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { useLanguage } from "@/app/language-provider"
 
 export function HeroSection() {
+  const { t } = useLanguage()
+
   return (
     <section
       id="hero"
@@ -22,14 +27,12 @@ export function HeroSection() {
           id="hero-heading"
           className="text-[2.75rem] sm:text-6xl md:text-7xl font-bold tracking-[-0.03em] leading-[1.05] text-foreground text-balance"
         >
-          Quotes that close deals.{" "}
-          <span className="text-accent">Not PDFs.</span>
+          {t.hero.title}
         </h1>
 
         {/* Sub */}
         <p className="mt-6 text-lg sm:text-xl text-foreground-muted leading-relaxed max-w-xl mx-auto text-pretty">
-          Zivelo Quotes turns your proposals into interactive, branded pages
-          that clients can explore, understand, and approve — no attachments needed.
+          {t.hero.subtitle}
         </p>
 
         {/* CTAs */}
@@ -38,14 +41,14 @@ export function HeroSection() {
             href="#cta"
             className="inline-flex items-center gap-2 bg-foreground text-white hover:bg-foreground/85 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-150"
           >
-            Get started free
+            {t.hero.cta}
             <ArrowRight size={14} />
           </a>
           <Link
             href="/q/demo"
             className="inline-flex items-center gap-2 text-sm font-medium text-foreground border border-border hover:bg-background-secondary px-5 py-2.5 rounded-md transition-colors duration-150"
           >
-            View demo quote
+            {t.footer.demo}
           </Link>
         </div>
       </div>

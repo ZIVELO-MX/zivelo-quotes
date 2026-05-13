@@ -1,9 +1,29 @@
-// Root layout - delegates to [locale]/layout.tsx
-// This file exists to satisfy Next.js requirements
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { LanguageProvider } from './language-provider'
+import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+
+export const metadata: Metadata = {
+  title: 'Zivelo Quotes — Interactive Proposal Pages',
+  description:
+    'Create, share, and present beautiful interactive quotes and proposals with Zivelo Quotes.',
+}
+
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
-  return children
+}>) {
+  return (
+    <html lang="es" className="bg-background">
+      <body className={`${inter.variable} font-sans antialiased`}>
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
+    </html>
+  )
 }
