@@ -30,7 +30,7 @@ export function LanguageSelector() {
       {/* Trigger */}
       <button
         onClick={() => setOpen(prev => !prev)}
-        className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200"
+        className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200"
         style={{
           color: "#5a5a5a",
           border: "1px solid rgba(0,0,0,0.12)",
@@ -52,11 +52,11 @@ export function LanguageSelector() {
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <Globe size={12} strokeWidth={1.5} />
-        {current.flag && <span className="text-xs">{current.flag}</span>}
+        <Globe size={16} strokeWidth={1.5} />
+        {current.flag && <span className="text-sm">{current.flag}</span>}
         {current.label}
         <ChevronDown
-          size={12}
+          size={16}
           strokeWidth={1.5}
           style={{
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
@@ -88,7 +88,7 @@ export function LanguageSelector() {
                 setActive(lang.code)
                 setOpen(false)
               }}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 text-xs font-medium transition-colors duration-150 text-left"
+              className="w-full flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium transition-colors duration-150 text-left"
               style={{
                 color: active === lang.code ? "#1d1d1b" : "#5a5a5a",
                 background: "transparent",
@@ -102,7 +102,7 @@ export function LanguageSelector() {
                 {lang.label}
               </span>
               {active === lang.code && (
-                <Check size={12} strokeWidth={2} style={{ color: "#CC0000" }} />
+                <Check size={16} strokeWidth={2} style={{ color: "#CC0000" }} />
               )}
             </button>
           ))}
