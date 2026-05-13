@@ -3,9 +3,15 @@
 import { Eye, Layout, Sparkles, Share2 } from "lucide-react"
 import { useLanguage } from "@/app/language-provider"
 
+const iconComponents = {
+  Eye,
+  Map: Layout,
+  Sparkles,
+  Share2,
+}
+
 export function SolutionSection() {
   const { t } = useLanguage()
-
   const REASONS = t.solution.reasons
 
   return (
@@ -27,13 +33,7 @@ export function SolutionSection() {
 
         <div className="mt-16 grid gap-12 md:gap-16">
           {REASONS.map(({ icon, title, description }, i) => {
-            const iconMap: Record<string, typeof Eye> = {
-              Eye,
-              Map: Layout,
-              Sparkles,
-              Share2,
-            }
-            const IconComponent = iconMap[icon] || Eye
+            const IconComponent = iconComponents[icon as keyof typeof iconComponents] || Eye
 
             return (
               <div
