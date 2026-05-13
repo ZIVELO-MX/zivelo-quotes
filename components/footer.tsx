@@ -10,9 +10,9 @@ const PRODUCT_LINKS = [
 ]
 
 const COMPANY_LINKS = [
-  { label: "About", href: "#" },
-  { label: "Projects", href: "#" },
-  { label: "Services", href: "#" },
+  { label: "About", href: "https://www.zivelo.dev/#about" },
+  { label: "Projects", href: "https://www.zivelo.dev/#projects" },
+  { label: "Services", href: "https://www.zivelo.dev/#services" },
 ]
 
 const SOCIAL_LINKS = [
@@ -63,7 +63,7 @@ export function Footer() {
             </p>
 
             <a
-              href="https://zivelo.dev"
+              href="https://www.zivelo.dev"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm transition-colors duration-200 w-fit"
@@ -170,12 +170,25 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div
-          className="mt-16 pt-8 text-center"
+          className="mt-16 pt-8"
           style={{ borderTop: "1px solid rgba(0,0,0,0.1)" }}
         >
-          <p className="text-sm" style={{ color: "#8a8a8a" }}>
-            &copy; {year} Zivelo. All rights reserved.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm" style={{ color: "#8a8a8a" }}>
+              &copy; {year} Zivelo. All rights reserved.
+            </p>
+            <a
+              href="https://www.zivelo.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium transition-colors duration-200 flex items-center gap-1"
+              style={{ color: "#1d1d1b" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#CC0000")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#1d1d1b")}
+            >
+              Explore more →
+            </a>
+          </div>
         </div>
 
       </div>
