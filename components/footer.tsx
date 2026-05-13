@@ -1,71 +1,181 @@
 import Image from "next/image"
+import { Linkedin, Twitter, Instagram } from "lucide-react"
 
-const NAV_LINKS = [
-  { label: "Home", href: "#hero" },
-  { label: "Problem", href: "#problem" },
-  { label: "Why it feels different", href: "#why" },
-  { label: "Product", href: "#features" },
-  { label: "Demo", href: "/q/demo" },
+const PRODUCT_LINKS = [
+  { label: "Demo quote", href: "/q/demo" },
+  { label: "Features", href: "#features" },
+  { label: "Dashboard", href: "#" },
+]
+
+const COMPANY_LINKS = [
+  { label: "About", href: "#" },
+  { label: "Projects", href: "#" },
+  { label: "Services", href: "#" },
+]
+
+const SOCIAL_LINKS = [
+  { label: "LinkedIn", href: "https://linkedin.com/company/zivelo", icon: Linkedin },
+  { label: "X", href: "https://x.com/zivelo", icon: Twitter },
+  { label: "Instagram", href: "https://instagram.com/zivelo", icon: Instagram },
 ]
 
 export function Footer() {
-  return (
-    <footer className="border-t border-border py-12 px-5">
-      <div className="max-w-5xl mx-auto">
-        {/* Top row: logo + nav */}
-        <div className="flex flex-col sm:flex-row items-start justify-between gap-8 mb-10">
-          {/* Logo */}
-          <a href="#hero" aria-label="Back to top">
-            <Image
-              src="/logos/zivelo-bars-dark-compact.svg"
-              alt="Zivelo"
-              width={88}
-              height={28}
-              className="object-contain"
-              style={{ height: "auto" }}
-            />
-          </a>
+  const year = new Date().getFullYear()
 
-          {/* Nav */}
-          <nav
-            className="flex flex-wrap items-start gap-x-8 gap-y-2"
-            aria-label="Footer navigation"
-          >
-            {NAV_LINKS.map((link) => (
+  return (
+    <footer
+      className="border-t px-5"
+      style={{
+        background: "#f5f5f5",
+        borderColor: "rgba(0,0,0,0.1)",
+        paddingTop: "64px",
+        paddingBottom: "64px",
+      }}
+    >
+      <div className="max-w-7xl mx-auto">
+
+        {/* Main grid: 5 cols on desktop, 2 on tablet, 1 on mobile */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12">
+
+          {/* Brand — spans 2 cols */}
+          <div className="lg:col-span-2 flex flex-col gap-5">
+            <a href="#hero" aria-label="Zivelo home">
+              <Image
+                src="/logos/zivelo-bars-dark-full.svg"
+                alt="Zivelo"
+                width={120}
+                height={28}
+                style={{ height: "28px", width: "auto" }}
+              />
+            </a>
+
+            <p
+              className="text-sm leading-relaxed max-w-sm"
+              style={{ color: "#5a5a5a" }}
+            >
+              Interactive quote experiences for modern teams.
+            </p>
+
+            <p className="text-xs" style={{ color: "#8a8a8a" }}>
+              Built and maintained by Zivelo.
+            </p>
+
+            <a
+              href="https://zivelo.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm transition-colors duration-200 w-fit"
+              style={{ fontWeight: 500, color: "#1d1d1b" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#CC0000")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#1d1d1b")}
+            >
+              Explore more →
+            </a>
+
+            {/* Social icons */}
+            <div className="flex items-center gap-4 mt-1">
+              {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="transition-colors duration-200"
+                  style={{ color: "#5a5a5a" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#CC0000")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#5a5a5a")}
+                >
+                  <Icon size={20} strokeWidth={1.5} />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Product */}
+          <div className="flex flex-col gap-3">
+            <p
+              className="text-xs font-semibold uppercase tracking-widest mb-1"
+              style={{ color: "#1d1d1b", letterSpacing: "0.1em" }}
+            >
+              Product
+            </p>
+            {PRODUCT_LINKS.map(link => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm text-foreground-muted hover:text-foreground transition-colors duration-150"
+                className="text-sm transition-colors duration-200"
+                style={{ color: "#5a5a5a" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#1d1d1b")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#5a5a5a")}
               >
                 {link.label}
               </a>
             ))}
-          </nav>
+          </div>
+
+          {/* Company */}
+          <div className="flex flex-col gap-3">
+            <p
+              className="text-xs font-semibold uppercase tracking-widest mb-1"
+              style={{ color: "#1d1d1b", letterSpacing: "0.1em" }}
+            >
+              Company
+            </p>
+            {COMPANY_LINKS.map(link => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm transition-colors duration-200"
+                style={{ color: "#5a5a5a" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#1d1d1b")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#5a5a5a")}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
 
           {/* Contact */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-3">
+            <p
+              className="text-xs font-semibold uppercase tracking-widest mb-1"
+              style={{ color: "#1d1d1b", letterSpacing: "0.1em" }}
+            >
+              Contact
+            </p>
             <a
               href="mailto:contacto@zivelo.dev"
-              className="text-sm text-foreground-muted hover:text-foreground transition-colors duration-150"
+              className="text-sm transition-colors duration-200"
+              style={{ color: "#5a5a5a" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#1d1d1b")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#5a5a5a")}
             >
               contacto@zivelo.dev
             </a>
             <a
               href="tel:+5213921107274"
-              className="text-sm text-foreground-muted hover:text-foreground transition-colors duration-150 flex items-center gap-1.5"
+              className="text-sm transition-colors duration-200 flex items-center gap-1.5"
+              style={{ color: "#5a5a5a" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#1d1d1b")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#5a5a5a")}
             >
-              <span aria-label="Mexico">🇲🇽</span>
+              <span aria-label="Mexico flag" role="img">🇲🇽</span>
               +52 1 392 110 7274
             </a>
           </div>
         </div>
 
-        {/* Bottom row: copyright */}
-        <div className="border-t border-border pt-6">
-          <p className="text-xs text-foreground-dim">
-            &copy; {new Date().getFullYear()} Zivelo. All rights reserved.
+        {/* Bottom bar */}
+        <div
+          className="mt-16 pt-8 text-center"
+          style={{ borderTop: "1px solid rgba(0,0,0,0.1)" }}
+        >
+          <p className="text-sm" style={{ color: "#8a8a8a" }}>
+            &copy; {year} Zivelo. All rights reserved.
           </p>
         </div>
+
       </div>
     </footer>
   )
