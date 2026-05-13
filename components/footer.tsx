@@ -2,9 +2,7 @@ import Image from "next/image"
 
 const NAV_LINKS = [
   { label: "Product", href: "#features" },
-  { label: "How it works", href: "#solution" },
-  { label: "Roadmap", href: "#roadmap" },
-  { label: "Demo", href: "/q/demo" },
+  { label: "Why it feels different", href: "#why" },
 ]
 
 export function Footer() {
