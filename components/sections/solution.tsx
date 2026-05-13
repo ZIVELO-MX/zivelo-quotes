@@ -27,12 +27,13 @@ export function SolutionSection() {
 
         <div className="mt-16 grid gap-12 md:gap-16">
           {REASONS.map(({ icon, title, description }, i) => {
-            const IconComponent = {
+            const iconMap: Record<string, typeof Eye> = {
               Eye,
               Map: Layout,
               Sparkles,
               Share2,
-            }[icon as keyof typeof { Eye: typeof Eye; Map: typeof Layout; Sparkles: typeof Sparkles; Share2: typeof Share2 }] || Eye
+            }
+            const IconComponent = iconMap[icon] || Eye
 
             return (
               <div
