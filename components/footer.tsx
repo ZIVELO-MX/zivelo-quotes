@@ -37,7 +37,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto">
 
         {/* Main grid: 5 cols on desktop, 2 on tablet, 1 on mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-16">
 
           {/* Brand — spans 2 cols */}
           <div className="lg:col-span-2 flex flex-col gap-5">
@@ -169,7 +169,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div
-          className="pt-8 text-center"
+          className="mt-20 pt-12 text-center"
           style={{ borderTop: "1px solid rgba(0,0,0,0.1)" }}
         >
           <p className="text-sm" style={{ color: "#8a8a8a" }}>
