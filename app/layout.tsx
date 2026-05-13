@@ -1,28 +1,9 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-})
-
-export const metadata: Metadata = {
-  title: 'Zivelo Quotes — Interactive Proposal Pages',
-  description:
-    'Create, share, and present beautiful interactive quotes and proposals with Zivelo Quotes.',
-}
-
+// Root layout - delegates to [locale]/layout.tsx
+// This file exists to satisfy Next.js requirements
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
-  return (
-    <html suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased bg-background`}>
-        {children}
-      </body>
-    </html>
-  )
+}) {
+  return children
 }
