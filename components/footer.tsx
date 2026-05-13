@@ -89,7 +89,7 @@ export function Footer() {
                 onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#CC0000")}
                 onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#1d1d1b")}
               >
-                EN
+                English
               </button>
               <button
                 className="text-xs font-medium px-2.5 py-1.5 rounded transition-colors duration-200"
@@ -103,7 +103,7 @@ export function Footer() {
                   e.currentTarget.style.color = "#5a5a5a"
                 }}
               >
-                ES
+                🇲🇽 Español
               </button>
             </div>
           </div>
