@@ -1,59 +1,61 @@
-import { Sparkles, Layers, BarChart2 } from "lucide-react"
+import { Eye, Layout, Sparkles, Share2 } from "lucide-react"
 
-const PILLARS = [
+const REASONS = [
+  {
+    icon: Eye,
+    title: "Present ideas visually",
+    body: "Show services, pricing, timelines, examples, and deliverables in a way clients can actually explore and understand.",
+  },
+  {
+    icon: Layout,
+    title: "Make proposals easier to navigate",
+    body: "Instead of overwhelming documents, organize information into clean visual sections that guide the client naturally through the proposal.",
+  },
   {
     icon: Sparkles,
-    title: "Fully branded proposal pages",
-    body: "Every quote is a beautiful web page — your logo, your colors, your story. Clients receive a link, not an attachment.",
+    title: "Create a stronger first impression",
+    body: "Every proposal feels polished, modern, and professional from the very first click.",
   },
   {
-    icon: Layers,
-    title: "Visual, structured content",
-    body: "Line items, pricing tables, timelines, and context — all presented in a scannable, modern layout.",
-  },
-  {
-    icon: BarChart2,
-    title: "Insights & engagement",
-    body: "Know when clients open your quote, which sections they dwell on, and what questions they leave.",
+    icon: Share2,
+    title: "Share proposals with confidence",
+    body: "Send a simple link instead of large files or messy message threads. Every proposal is designed to look clean and presentable when shared.",
   },
 ]
 
 export function SolutionSection() {
   return (
     <section
-      id="solution"
+      id="why"
       className="py-24 px-5 border-t border-border"
-      aria-labelledby="solution-heading"
+      aria-labelledby="why-heading"
     >
       <div className="max-w-5xl mx-auto">
-        <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
-          How it works
-        </p>
         <h2
-          id="solution-heading"
-          className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
+          id="why-heading"
+          className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance"
         >
-          Proposals that are a pleasure to receive.
+          Why it feels different
         </h2>
-        <p className="mt-4 text-base text-foreground-muted leading-relaxed max-w-lg text-pretty">
-          Zivelo Quotes transforms a spreadsheet into an interactive proposal page
-          that&apos;s shareable via link, optimised for mobile, and impossible to ignore.
-        </p>
 
-        <div className="mt-12 grid sm:grid-cols-3 gap-8">
-          {PILLARS.map(({ icon: Icon, title, body }, i) => (
-            <div key={title} className="flex flex-col gap-4">
-              <div className="flex items-center gap-3 mb-1">
-                <span className="text-xs font-bold text-foreground-dim tabular-nums w-5">
-                  0{i + 1}
-                </span>
-                <div className="h-px flex-1 bg-border" />
+        <div className="mt-16 grid gap-12 md:gap-16">
+          {REASONS.map(({ icon: Icon, title, body }, i) => (
+            <div
+              key={title}
+              className={[
+                "grid md:grid-cols-[1fr_2fr] gap-6 md:gap-12 items-start",
+                i < REASONS.length - 1 ? "pb-12 md:pb-16 border-b border-border" : "",
+              ].join(" ")}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg border border-border bg-background-secondary flex items-center justify-center text-foreground-muted">
+                  <Icon size={18} />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground">{title}</h3>
               </div>
-              <div className="w-9 h-9 rounded-lg border border-border bg-background-secondary flex items-center justify-center text-foreground-muted">
-                <Icon size={16} />
-              </div>
-              <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-              <p className="text-sm text-foreground-muted leading-relaxed">{body}</p>
+              <p className="text-base text-foreground-muted leading-relaxed md:pt-2">
+                {body}
+              </p>
             </div>
           ))}
         </div>

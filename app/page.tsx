@@ -3,7 +3,6 @@ import { HeroSection } from "@/components/sections/hero"
 import { ProblemSection } from "@/components/sections/problem"
 import { SolutionSection } from "@/components/sections/solution"
 import { FeaturesSection } from "@/components/sections/features"
-import { FutureSection } from "@/components/sections/future"
 import { CTASection } from "@/components/sections/cta"
 import { Footer } from "@/components/footer"
 
@@ -15,7 +14,6 @@ export default function HomePage() {
       <ProblemSection />
       <SolutionSection />
       <FeaturesSection />
-      <FutureSection />
       <CTASection />
       <Footer />
     </main>
