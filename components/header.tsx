@@ -6,8 +6,8 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 
 const NAV_LINKS = [
-  { label: "Product", href: "#features" },
   { label: "Why it feels different", href: "#why" },
+  { label: "Product", href: "#features" },
 ]
 
 export function Header() {

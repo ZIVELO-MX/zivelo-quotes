@@ -31,9 +31,12 @@ export function SolutionSection() {
       aria-labelledby="why-heading"
     >
       <div className="max-w-5xl mx-auto">
+        <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
+          The solution
+        </p>
         <h2
           id="why-heading"
-          className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance"
+          className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
         >
           Why it feels different
         </h2>
