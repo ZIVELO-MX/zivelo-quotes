@@ -80,6 +80,32 @@ export function Footer() {
                 </a>
               ))}
             </div>
+
+            {/* Language selector */}
+            <div className="flex items-center gap-2 mt-3">
+              <button
+                className="text-xs font-medium px-2.5 py-1.5 rounded transition-colors duration-200"
+                style={{ color: "#f5f5f5", backgroundColor: "#1d1d1b" }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#CC0000")}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#1d1d1b")}
+              >
+                EN
+              </button>
+              <button
+                className="text-xs font-medium px-2.5 py-1.5 rounded transition-colors duration-200"
+                style={{ color: "#5a5a5a", backgroundColor: "transparent", border: "1px solid #5a5a5a" }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.backgroundColor = "#f0f0f0"
+                  e.currentTarget.style.color = "#1d1d1b"
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.backgroundColor = "transparent"
+                  e.currentTarget.style.color = "#5a5a5a"
+                }}
+              >
+                ES
+              </button>
+            </div>
           </div>
 
           {/* Product */}
