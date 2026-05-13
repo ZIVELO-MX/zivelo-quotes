@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { Linkedin, Twitter, Instagram } from "lucide-react"
+import { LanguageSelector } from "@/components/language-selector"
 
 const PRODUCT_LINKS = [
   { label: "Demo quote", href: "/q/demo" },
@@ -80,6 +81,8 @@ export function Footer() {
                 </a>
               ))}
             </div>
+
+            <LanguageSelector />
           </div>
 
           {/* Product */}
