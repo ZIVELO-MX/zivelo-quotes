@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Linkedin, Twitter, Instagram, Globe, ChevronDown } from "lucide-react"
+import { Linkedin, Twitter, Instagram } from "lucide-react"
 
 const PRODUCT_LINKS = [
   { label: "Demo quote", href: "/q/demo" },
@@ -80,18 +80,6 @@ export function Footer() {
                 </a>
               ))}
             </div>
-
-            {/* Language selector */}
-            <button
-              className="text-xs font-medium px-3 py-1.5 rounded flex items-center gap-2 transition-colors duration-200"
-              style={{ color: "#f5f5f5", backgroundColor: "#1d1d1b" }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#CC0000")}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#1d1d1b")}
-            >
-              <Globe size={14} />
-              English
-              <ChevronDown size={14} />
-            </button>
           </div>
 
           {/* Product */}
