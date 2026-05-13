@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import { Linkedin, Twitter, Instagram } from "lucide-react"
 
