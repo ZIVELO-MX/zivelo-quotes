@@ -170,7 +170,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div
-          className="mt-16 pt-8"
+          className="mt-16 pt-8 text-center"
           style={{ borderTop: "1px solid rgba(0,0,0,0.1)" }}
         >
           <p className="text-sm" style={{ color: "#8a8a8a" }}>
