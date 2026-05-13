@@ -62,18 +62,6 @@ export function Footer() {
               Built and maintained by Zivelo.
             </p>
 
-            <a
-              href="https://www.zivelo.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm transition-colors duration-200 w-fit"
-              style={{ fontWeight: 500, color: "#1d1d1b" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "#CC0000")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#1d1d1b")}
-            >
-              Explore more →
-            </a>
-
             {/* Social icons */}
             <div className="flex items-center gap-4 mt-1">
               {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
