@@ -161,9 +161,22 @@ export function Footer() {
           className="mt-16 pt-8 text-center"
           style={{ borderTop: "1px solid rgba(0,0,0,0.1)" }}
         >
-          <p className="text-sm" style={{ color: "#8a8a8a" }}>
-            &copy; {year} Zivelo. All rights reserved.
-          </p>
+          <div className="flex flex-col items-center gap-4">
+            <a
+              href="https://zivelo.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium transition-colors duration-200 inline-block"
+              style={{ color: "#1d1d1b" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#CC0000")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#1d1d1b")}
+            >
+              Explore more →
+            </a>
+            <p className="text-sm" style={{ color: "#8a8a8a" }}>
+              &copy; {year} Zivelo. All rights reserved.
+            </p>
+          </div>
         </div>
 
       </div>
