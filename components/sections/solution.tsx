@@ -31,6 +31,9 @@ export function SolutionSection() {
       aria-labelledby="why-heading"
     >
       <div className="max-w-5xl mx-auto">
+        <p className="text-sm font-semibold text-[#CC0000] tracking-wide uppercase mb-3">
+          The solution
+        </p>
         <h2
           id="why-heading"
           className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance"
