@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
-import { Linkedin, Twitter, Instagram } from "lucide-react"
+import { Linkedin, Twitter, Instagram, Globe } from "lucide-react"
 
 const PRODUCT_LINKS = [
   { label: "Demo quote", href: "/q/demo" },
@@ -22,6 +23,7 @@ const SOCIAL_LINKS = [
 ]
 
 export function Footer() {
+  const [openLanguage, setOpenLanguage] = useState(false)
   const year = new Date().getFullYear()
 
   return (
@@ -82,29 +84,44 @@ export function Footer() {
             </div>
 
             {/* Language selector */}
-            <div className="flex items-center gap-2 mt-3">
+            <div className="relative mt-3">
               <button
-                className="text-xs font-medium px-2.5 py-1.5 rounded transition-colors duration-200"
+                onClick={() => setOpenLanguage(!openLanguage)}
+                className="text-xs font-medium px-3 py-1.5 rounded flex items-center gap-2 transition-colors duration-200"
                 style={{ color: "#f5f5f5", backgroundColor: "#1d1d1b" }}
                 onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#CC0000")}
-                onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#1d1d1b")}
+                onMouseLeave={e => !openLanguage && (e.currentTarget.style.backgroundColor = "#1d1d1b")}
               >
+                <Globe size={14} />
                 English
               </button>
-              <button
-                className="text-xs font-medium px-2.5 py-1.5 rounded transition-colors duration-200"
-                style={{ color: "#5a5a5a", backgroundColor: "transparent", border: "1px solid #5a5a5a" }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.backgroundColor = "#f0f0f0"
-                  e.currentTarget.style.color = "#1d1d1b"
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.backgroundColor = "transparent"
-                  e.currentTarget.style.color = "#5a5a5a"
-                }}
-              >
-                🇲🇽 Español
-              </button>
+              
+              {openLanguage && (
+                <div
+                  className="absolute top-full left-0 mt-1 rounded border bg-white z-10"
+                  style={{ borderColor: "#e0e0e0", minWidth: "150px" }}
+                >
+                  <button
+                    onClick={() => setOpenLanguage(false)}
+                    className="w-full text-left text-xs font-medium px-3 py-2 transition-colors duration-200"
+                    style={{ color: "#f5f5f5", backgroundColor: "#1d1d1b" }}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#CC0000")}
+                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#1d1d1b")}
+                  >
+                    <Globe size={14} className="inline mr-2" />
+                    English
+                  </button>
+                  <button
+                    onClick={() => setOpenLanguage(false)}
+                    className="w-full text-left text-xs font-medium px-3 py-2 transition-colors duration-200"
+                    style={{ color: "#5a5a5a", borderTop: "1px solid #e0e0e0" }}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
+                  >
+                    🇲🇽 Español (MX)
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
