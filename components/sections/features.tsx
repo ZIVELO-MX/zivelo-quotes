@@ -1,5 +1,3 @@
-"use client"
-
 import {
   MousePointerClick,
   Link2,
@@ -8,45 +6,42 @@ import {
   LayoutDashboard,
   Globe,
 } from "lucide-react"
-import { useLanguage } from "@/app/language-provider"
+
+const FEATURES = [
+  {
+    icon: MousePointerClick,
+    title: "Interactive quote pages",
+    body: "Clients navigate structured sections — overview, deliverables, pricing, timeline — all in one beautiful page.",
+  },
+  {
+    icon: Link2,
+    title: "Public shareable links",
+    body: "Share a clean URL with any client. No login required. Works perfectly on mobile.",
+  },
+  {
+    icon: FileDown,
+    title: "PDF export",
+    body: "Generate a clean PDF version on demand for clients who need a document for their records.",
+  },
+  {
+    icon: ImageIcon,
+    title: "Custom Open Graph previews",
+    body: "Every quote generates a branded social card with your client name and project title.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Internal dashboard",
+    body: "Manage all your quotes, track status, and monitor engagement from one place.",
+  },
+  {
+    icon: Globe,
+    title: "White-label support",
+    body: "Custom domains and full client branding for agencies and resellers. Coming soon.",
+    soon: true,
+  },
+]
 
 export function FeaturesSection() {
-  const { t } = useLanguage()
-
-  const FEATURES = [
-    {
-      icon: MousePointerClick,
-      title: t.features.features[0].title,
-      body: t.features.features[0].description,
-    },
-    {
-      icon: Link2,
-      title: t.features.features[1].title,
-      body: t.features.features[1].description,
-    },
-    {
-      icon: FileDown,
-      title: t.features.features[2].title,
-      body: t.features.features[2].description,
-    },
-    {
-      icon: ImageIcon,
-      title: t.features.features[3].title,
-      body: t.features.features[3].description,
-    },
-    {
-      icon: LayoutDashboard,
-      title: t.features.features[4].title,
-      body: t.features.features[4].description,
-    },
-    {
-      icon: Globe,
-      title: t.features.features[5].title,
-      body: t.features.features[5].description,
-      soon: true,
-    },
-  ]
-
   return (
     <section
       id="features"
@@ -55,13 +50,13 @@ export function FeaturesSection() {
     >
       <div className="max-w-5xl mx-auto">
         <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
-          {t.features.label}
+          Features
         </p>
         <h2
           id="features-heading"
           className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
         >
-          {t.features.title}
+          Everything a modern proposal needs.
         </h2>
 
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">

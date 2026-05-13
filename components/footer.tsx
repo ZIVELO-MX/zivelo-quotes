@@ -2,19 +2,17 @@
 
 import Image from "next/image"
 import { Linkedin, Twitter, Instagram } from "lucide-react"
-import { LanguageSelector } from "./language-selector"
-import { useLanguage } from "@/app/language-provider"
 
 const PRODUCT_LINKS = [
-  { key: "demo", href: "/q/demo" },
-  { key: "features", href: "#features" },
-  { key: "dashboard", href: "#" },
+  { label: "Demo quote", href: "/q/demo" },
+  { label: "Features", href: "#features" },
+  { label: "Dashboard", href: "#" },
 ]
 
 const COMPANY_LINKS = [
-  { key: "about", href: "https://www.zivelo.dev/#about" },
-  { key: "projects", href: "https://www.zivelo.dev/#projects" },
-  { key: "services", href: "https://www.zivelo.dev/#services" },
+  { label: "About", href: "https://www.zivelo.dev/#about" },
+  { label: "Projects", href: "https://www.zivelo.dev/#projects" },
+  { label: "Services", href: "https://www.zivelo.dev/#services" },
 ]
 
 const SOCIAL_LINKS = [
@@ -24,7 +22,6 @@ const SOCIAL_LINKS = [
 ]
 
 export function Footer() {
-  const { t } = useLanguage()
   const year = new Date().getFullYear()
 
   return (
@@ -58,11 +55,11 @@ export function Footer() {
               className="text-sm leading-relaxed max-w-sm"
               style={{ color: "#5a5a5a" }}
             >
-              {t.footer.tagline}
+              Interactive quote experiences for modern teams.
             </p>
 
             <p className="text-xs" style={{ color: "#8a8a8a" }}>
-              {t.footer.built}
+              Built and maintained by Zivelo.
             </p>
 
             {/* Social icons */}
@@ -83,11 +80,6 @@ export function Footer() {
                 </a>
               ))}
             </div>
-
-            {/* Language selector */}
-            <div className="mt-2">
-              <LanguageSelector />
-            </div>
           </div>
 
           {/* Product */}
@@ -96,7 +88,7 @@ export function Footer() {
               className="text-xs font-semibold uppercase tracking-widest mb-1"
               style={{ color: "#1d1d1b", letterSpacing: "0.1em" }}
             >
-              {t.footer.product}
+              Product
             </p>
             {PRODUCT_LINKS.map(link => (
               <a
@@ -107,7 +99,7 @@ export function Footer() {
                 onMouseEnter={e => (e.currentTarget.style.color = "#1d1d1b")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#5a5a5a")}
               >
-                {t.footer[link.key as keyof typeof t.footer]}
+                {link.label}
               </a>
             ))}
           </div>
@@ -118,18 +110,18 @@ export function Footer() {
               className="text-xs font-semibold uppercase tracking-widest mb-1"
               style={{ color: "#1d1d1b", letterSpacing: "0.1em" }}
             >
-              {t.footer.company}
+              Company
             </p>
             {COMPANY_LINKS.map(link => (
               <a
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 className="text-sm transition-colors duration-200"
                 style={{ color: "#5a5a5a" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#1d1d1b")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#5a5a5a")}
               >
-                {t.footer[link.key as keyof typeof t.footer]}
+                {link.label}
               </a>
             ))}
           </div>
@@ -140,7 +132,7 @@ export function Footer() {
               className="text-xs font-semibold uppercase tracking-widest mb-1"
               style={{ color: "#1d1d1b", letterSpacing: "0.1em" }}
             >
-              {t.footer.contact}
+              Contact
             </p>
             <a
               href="mailto:contacto@zivelo.dev"
@@ -170,7 +162,7 @@ export function Footer() {
               onMouseEnter={e => (e.currentTarget.style.color = "#CC0000")}
               onMouseLeave={e => (e.currentTarget.style.color = "#1d1d1b")}
             >
-              {t.footer.exploreMore}
+              Explore more →
             </a>
           </div>
         </div>
@@ -181,7 +173,7 @@ export function Footer() {
           style={{ borderTop: "1px solid rgba(0,0,0,0.1)" }}
         >
           <p className="text-sm" style={{ color: "#8a8a8a" }}>
-            &copy; {year} Zivelo. {t.footer.copyright}
+            &copy; {year} Zivelo. All rights reserved.
           </p>
         </div>
 

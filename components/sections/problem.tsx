@@ -1,29 +1,24 @@
-"use client"
-
 import { FileX, Clock, Frown } from "lucide-react"
-import { useLanguage } from "@/app/language-provider"
+
+const PAINS = [
+  {
+    icon: FileX,
+    title: "Static PDFs nobody reads",
+    body: "Attachments get lost, aren't mobile-friendly, and give you zero signal on whether the client even opened them.",
+  },
+  {
+    icon: Clock,
+    title: "Generic templates, zero personality",
+    body: "Every proposal looks the same. Clients can't tell you apart from your competition.",
+  },
+  {
+    icon: Frown,
+    title: "Hard to present out loud",
+    body: "Walking a client through a PDF live is awkward. Scrolling through pages of text is not a great closing pitch.",
+  },
+]
 
 export function ProblemSection() {
-  const { t } = useLanguage()
-
-  const PAINS = [
-    {
-      icon: FileX,
-      title: t.problem.description.split('\n')[0],
-      body: t.problem.description.split('\n')[1],
-    },
-    {
-      icon: Clock,
-      title: t.problem.description.split('\n')[2],
-      body: t.problem.description.split('\n')[3],
-    },
-    {
-      icon: Frown,
-      title: t.problem.description.split('\n')[4],
-      body: t.problem.description.split('\n')[5],
-    },
-  ]
-
   return (
     <section
       id="problem"
@@ -32,14 +27,18 @@ export function ProblemSection() {
     >
       <div className="max-w-5xl mx-auto">
         <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
-          {t.problem.label}
+          The problem
         </p>
         <h2
           id="problem-heading"
           className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
         >
-          {t.problem.title}
+          Traditional quotes feel like a 2005 Word doc.
         </h2>
+        <p className="mt-4 text-base text-foreground-muted leading-relaxed max-w-lg text-pretty">
+          The way most agencies share proposals hasn&apos;t changed in decades.
+          Your clients&apos; expectations have.
+        </p>
 
         <div className="mt-12 grid sm:grid-cols-3 gap-px bg-border">
           {PAINS.map(({ icon: Icon, title, body }) => (
