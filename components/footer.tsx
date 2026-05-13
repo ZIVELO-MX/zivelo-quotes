@@ -153,22 +153,18 @@ export function Footer() {
               <span aria-label="Mexico flag" role="img">🇲🇽</span>
               +52 1 392 110 7274
             </a>
+            <a
+              href="https://zivelo.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium transition-colors duration-200 mt-2"
+              style={{ color: "#1d1d1b" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#CC0000")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#1d1d1b")}
+            >
+              Explore more →
+            </a>
           </div>
-        </div>
-
-        {/* Explore more button - after Contact section */}
-        <div className="mt-12 text-center mb-8">
-          <a
-            href="https://zivelo.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-medium transition-colors duration-200 inline-block"
-            style={{ color: "#1d1d1b" }}
-            onMouseEnter={e => (e.currentTarget.style.color = "#CC0000")}
-            onMouseLeave={e => (e.currentTarget.style.color = "#1d1d1b")}
-          >
-            Explore more →
-          </a>
         </div>
 
         {/* Bottom bar */}
