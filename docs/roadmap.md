@@ -2,50 +2,50 @@
 
 ## v0.0.1
 
-Initial research and architecture planning.
+Investigación inicial y planeación de arquitectura.
 
 ## v0.1.0 - MVP
 
-- Internal dashboard
-- Quote creation
-- Public quote pages
-- PDF export
-- Open Graph generation
-- Interactive presentation structure
+- Dashboard interno
+- Creación de cotizaciones
+- Páginas públicas de quote
+- Exportación a PDF
+- Generación de Open Graph
+- Estructura de presentación interactiva
 
 ## v0.2.0
 
-- Better templates
-- Improved branding
-- Rich media support
-- Better mobile experience
+- Mejores templates
+- Branding mejorado
+- Soporte para rich media
+- Mejor experiencia mobile
 
 ## v0.3.0
 
-- Private/public quote modes
-- Password-protected quotes
-- Better admin workflows
+- Modos private/public para quotes
+- Quotes protegidas con password
+- Mejores flujos de administración
 
 ## v0.5.0
 
 - White-label support
-- Basic multi-company structure
-- Shared branding system
+- Estructura básica multi-company
+- Sistema compartido de branding
 
 ## v0.7.0
 
 - Custom domains
 - Managed client workspaces
-- Deploy-per-client support
+- Soporte para deploy-per-client
 
 ## v1.0.0
 
-Full private SaaS platform with:
+Plataforma SaaS privada completa con:
 
 - White-label support
 - Dedicated deployments
-- Advanced templates
-- Modular quote engine
-- Reusable infrastructure for future Zivelo products
-- Mature branding system
-- Interactive proposal ecosystem
+- Templates avanzados
+- Quote engine modular
+- Infraestructura reutilizable para futuros productos de Zivelo
+- Sistema maduro de branding
+- Ecosistema interactivo de propuestas

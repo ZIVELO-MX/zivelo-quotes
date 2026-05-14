@@ -1,52 +1,52 @@
 # Zivelo Quotes
 
-Zivelo Quotes is a private SaaS and quote platform designed to centralize, standardize, and modernize the way Zivelo creates and presents proposals to clients.
+Zivelo Quotes es una plataforma privada de SaaS y cotizaciones diseñada para centralizar, estandarizar y modernizar la forma en que Zivelo crea y presenta propuestas a clientes.
 
-The initial goal is to solve Zivelo's internal quoting workflow while building reusable infrastructure that can later evolve into a client-facing platform and reusable commercial product.
+El objetivo inicial es resolver el flujo interno de cotizaciones de Zivelo mientras se construye infraestructura reutilizable que más adelante pueda evolucionar hacia una plataforma para clientes y un producto comercial reutilizable.
 
-The platform focuses on delivering interactive, visually rich quote experiences instead of static PDFs or traditional documents.
+La plataforma se enfoca en entregar experiencias de cotización interactivas y visualmente ricas, en lugar de PDFs estáticos o documentos tradicionales.
 
-## Core Vision
+## Visión General
 
-The platform should allow Zivelo to:
+La plataforma debe permitir que Zivelo pueda:
 
-- Create professional quotes internally
-- Share visually rich proposals with clients
-- Present services as interactive experiences
-- Reuse infrastructure across future projects
-- Potentially offer the platform to clients in the future
+- Crear cotizaciones profesionales de forma interna
+- Compartir propuestas visualmente ricas con clientes
+- Presentar servicios como experiencias interactivas
+- Reutilizar infraestructura en proyectos futuros
+- Ofrecer potencialmente la plataforma a clientes en el futuro
 
-The long-term objective is to stop rebuilding proposal systems from scratch and instead maintain a reusable quote infrastructure.
+El objetivo a largo plazo es dejar de reconstruir sistemas de propuestas desde cero y mantener una infraestructura reutilizable para cotizaciones.
 
-## Product Positioning
+## Posicionamiento Del Producto
 
-Zivelo Quotes is positioned as:
+Zivelo Quotes se posiciona como:
 
-- A private SaaS managed by Zivelo
-- A reusable quote platform
-- A foundation for future reusable business modules
+- Un SaaS privado administrado por Zivelo
+- Una plataforma reutilizable de cotizaciones
+- Una base para futuros módulos de negocio reutilizables
 
-The system is not intended to be a public self-service SaaS during the MVP phase.
+Durante la fase MVP, el sistema no está pensado como un SaaS público de autoservicio.
 
-## Quote Experience
+## Experiencia De Cotización
 
-Quotes should feel closer to:
+Las cotizaciones deben sentirse más cercanas a:
 
-- Interactive presentations
-- Modern landing pages
-- Ecommerce-style checkout flows
+- Presentaciones interactivas
+- Landing pages modernas
+- Flujos de checkout estilo ecommerce
 
-Instead of:
+En lugar de:
 
-- Traditional PDFs
-- Static documents
-- Plain proposal templates
+- PDFs tradicionales
+- Documentos estáticos
+- Plantillas simples de propuesta
 
-The client experience should allow visual presentation of ideas, examples, components, mockups, and wireframes.
+La experiencia del cliente debe permitir la presentación visual de ideas, ejemplos, componentes, mockups y wireframes.
 
-## URL Structure
+## Estructura De URLs
 
-Platform:
+Plataforma:
 
 ```txt
 quotes.zivelo.dev
@@ -58,7 +58,7 @@ Dashboard:
 quotes.zivelo.dev/dashboard
 ```
 
-Public quotes:
+Cotizaciones públicas:
 
 ```txt
 quotes.zivelo.dev/q/cafe-luna
@@ -66,86 +66,86 @@ quotes.zivelo.dev/q/gutven-web-corporativa
 quotes.zivelo.dev/q/clinica-smile
 ```
 
-The public quote route follows:
+La ruta pública de cotizaciones sigue esta estructura:
 
 ```txt
 /q/{quote-slug}
 ```
 
-## Open Graph System
+## Sistema Open Graph
 
-Every quote should automatically generate a custom Open Graph image.
+Cada cotización debe generar automáticamente una imagen Open Graph personalizada.
 
-The generated image should improve sharing through WhatsApp and social platforms, create a premium first impression before opening the proposal, and reinforce branding and visual consistency.
+La imagen generada debe mejorar la forma en que se comparte la cotización por WhatsApp y plataformas sociales, crear una primera impresión premium antes de abrir la propuesta y reforzar la consistencia visual de la marca.
 
-Open Graph images should be generated dynamically from quote information such as:
+Las imágenes Open Graph deben generarse dinámicamente a partir de información de la cotización como:
 
-- Client name
-- Service name
-- Title
-- Branding colors
-- Hero content
+- Nombre del cliente
+- Nombre del servicio
+- Título
+- Colores de marca
+- Contenido hero
 - Logo
 - CTA
 
-## MVP Scope - v0.1.0
+## Alcance MVP - v0.1.0
 
-The MVP focuses on solving Zivelo's internal quoting workflow.
+El MVP se enfoca en resolver el flujo interno de cotizaciones de Zivelo.
 
-### Included
+### Incluido
 
-- Internal admin dashboard
-- Login-protected quote creation
-- Public shareable quote pages
-- Dynamic quote slugs
-- Interactive quote presentation
-- PDF export
-- Custom Open Graph generation
-- Quote templates
-- Reusable architecture
+- Dashboard interno de administración
+- Creación de cotizaciones protegida por login
+- Páginas públicas de cotización para compartir
+- Slugs dinámicos para cotizaciones
+- Presentación interactiva de cotizaciones
+- Exportación a PDF
+- Generación personalizada de Open Graph
+- Templates de cotizacion
+- Arquitectura reutilizable
 
-### Not Included
+### No Incluido
 
-- Payments
-- Client comments
-- Client accounts
+- Pagos
+- Comentarios de clientes
+- Cuentas de clientes
 - Analytics
-- Drag and drop builder
+- Builder drag and drop
 - Subscription billing
 - CRM
-- Automation systems
-- Multi-user organizations
-- Custom domains
+- Sistemas de automatización
+- Organizaciones multiusuario
+- Dominios personalizados
 
-## Technical Direction
+## Dirección Técnica
 
-The platform should be designed with:
+La plataforma debe diseñarse con:
 
 - Next.js
-- Reusable modules
+- Módulos reutilizables
 - Shared UI
-- Dynamic routing
-- Template-driven rendering
+- Rutas dinámicas
+- Render basado en templates
 
-The quote system should not be hardcoded around static pages. Quotes should behave as structured data rendered dynamically into interactive experiences.
+El sistema de cotizaciones no debe estar hardcodeado alrededor de páginas estáticas. Las cotizaciones deben comportarse como datos estructurados que se renderizan dinámicamente en experiencias interactivas.
 
-## Repository Strategy
+## Estrategia Del Repositorio
 
-This repository contains the quote platform, admin dashboard, public quote viewer, shared UI/components, and shared quote engine.
+Este repositorio contiene la plataforma de cotizaciones, el admin dashboard, el visor publico de cotizaciones, los shared UI/components y el shared quote engine.
 
-The goal is to keep the platform reusable and portable.
+El objetivo es mantener la plataforma reutilizable y portable.
 
-## Deployment Philosophy
+## Filosofia De Deploy
 
-The MVP should run as a centralized deployment:
+El MVP debe ejecutarse como un deploy centralizado:
 
 ```txt
 quotes.zivelo.dev
 ```
 
-Future architecture should support managed quote hosting, custom client domains, and dedicated deployments for premium clients.
+La arquitectura futura debe soportar hosting administrado de cotizaciones, dominios personalizados de clientes y deploys dedicados para clientes premium.
 
-## Documentation
+## Documentación
 
-- [Architecture](docs/architecture.md)
+- [Arquitectura](docs/architecture.md)
 - [Roadmap](docs/roadmap.md)

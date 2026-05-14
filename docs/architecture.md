@@ -1,20 +1,20 @@
-# Architecture
+# Arquitectura
 
-Zivelo Quotes should be designed as reusable infrastructure from day one.
+Zivelo Quotes debe diseñarse como infraestructura reutilizable desde el primer día.
 
-Even if the MVP runs as a single deployment, the architecture should support future scaling by separating quote logic, presentation, branding, templates, and deployment strategy.
+Aunque el MVP corra como un solo deploy, la arquitectura debe soportar crecimiento futuro separando la lógica de cotizaciones, presentación, branding, templates y estrategia de deploy.
 
-## Initial Application Shape
+## Forma Inicial De La Aplicación
 
-The first implementation target is a Next.js application with:
+El primer objetivo de implementación es una aplicación Next.js con:
 
-- An internal dashboard at `/dashboard`
-- Public quote pages at `/q/[quoteSlug]`
-- Dynamic Open Graph generation for each quote
-- PDF export for quote snapshots
-- A structured quote engine that renders data through templates
+- Un dashboard interno en `/dashboard`
+- Páginas públicas de cotización en `/q/[quoteSlug]`
+- Generación dinámica de Open Graph para cada cotización
+- Exportación a PDF para snapshots de cotización
+- Un quote engine estructurado que renderiza datos mediante templates
 
-## Suggested Module Boundaries
+## Límites De Módulos Sugeridos
 
 ```txt
 apps/web
@@ -44,13 +44,13 @@ packages/ui
   quote presentation components
 ```
 
-The repository can start as a single Next.js app and evolve into this package structure when the implementation needs it.
+El repositorio puede comenzar como una sola aplicación Next.js y evolucionar hacia esta estructura de paquetes cuando la implementación lo necesite.
 
-## Quote Data Model
+## Modelo De Datos De Quote
 
-Quotes should be structured data, not static pages. A quote should be renderable through different templates without changing the underlying commercial content.
+Las cotizaciones deben ser datos estructurados, no páginas estáticas. Una quote debe poder renderizarse con diferentes templates sin cambiar el contenido comercial subyacente.
 
-An initial quote model should include:
+Un modelo inicial de quote debe incluir:
 
 - Client information
 - Quote metadata
@@ -65,17 +65,19 @@ An initial quote model should include:
 - Public/private state
 - Export settings
 
-## Rendering Philosophy
+Estos nombres deben mantenerse en inglés cuando se conviertan en schemas, tipos, props, variables, keys de JSON o columnas de base de datos.
 
-Public quote pages should feel like interactive presentations, landing pages, and ecommerce-style checkout flows.
+## Filosofía De Render
 
-Templates should decide presentation. The quote engine should own the normalized data and the rules that all templates share.
+Las páginas públicas de quote deben sentirse como presentaciones interactivas, landing pages y flujos de checkout estilo ecommerce.
 
-## Deployment Modes
+Los templates deben decidir la presentación. El quote engine debe ser responsable de los datos normalizados y de las reglas compartidas por todos los templates.
+
+## Modos De Deploy
 
 ### MVP
 
-One centralized deployment:
+Un deploy centralizado:
 
 ```txt
 quotes.zivelo.dev
@@ -83,7 +85,7 @@ quotes.zivelo.dev
 
 ### Managed Mode
 
-Client quotes remain hosted by Zivelo:
+Las cotizaciones de clientes permanecen alojadas por Zivelo:
 
 ```txt
 quotes.zivelo.dev/q/project
@@ -92,11 +94,11 @@ quotes.client.com/q/project
 
 ### Dedicated Deployments
 
-Premium clients may later receive isolated deployments:
+Los clientes premium podrían recibir deploys aislados:
 
 ```txt
 client.com/q/project
 client.com/admin/quotes
 ```
 
-This future mode should allow separate infrastructure, custom branding, deeper integration, and advanced customization.
+Este modo futuro debe permitir infraestructura separada, custom branding, integración más profunda y personalización avanzada.
