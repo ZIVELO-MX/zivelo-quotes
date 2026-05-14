@@ -1,51 +1,243 @@
 # Roadmap
 
-## v0.0.1
+## Versión Actual
 
-Investigación inicial y planeación de arquitectura.
+| Campo | Estado |
+| --- | --- |
+| Versión actual | v0.0.1 - Fundaciones |
+| Avance actual | Documentación, arquitectura inicial y roadmap estable definidos. |
+| Siguiente fase | v0.0.5 - Producto Visible |
+| Siguiente foco | Crear la landing pública, la quote demo y el primer template visual. |
+| Meta inmediata | Tener una experiencia navegable que muestre el valor del producto antes de completar el dashboard. |
 
-## v0.1.0 - MVP
+Este roadmap organiza Zivelo Quotes como un producto que puede arrancar pequeño, validar su flujo interno y crecer hacia una plataforma reutilizable sin rehacer su base.
 
-- Dashboard interno
-- Creación de cotizaciones
-- Páginas públicas de quote
-- Exportación a PDF
-- Generación de Open Graph
-- Estructura de presentación interactiva
+El plan prioriza cuatro superficies iniciales:
 
-## v0.2.0
+- Landing pública del producto
+- Quote demo para mostrar la experiencia final
+- Dashboard interno de administración
+- Funcionalidad central para crear, publicar y compartir cotizaciones
 
-- Mejores templates
-- Branding mejorado
-- Soporte para rich media
-- Mejor experiencia mobile
+## Principios De Ejecución
 
-## v0.3.0
+| Principio | Decisión |
+| --- | --- |
+| Primero experiencia, luego complejidad | El MVP debe demostrar una cotización interactiva antes de agregar automatizaciones avanzadas. |
+| Datos estructurados | Las quotes deben vivir como datos renderizables por templates, no como páginas hardcodeadas. |
+| Dashboard funcional | El admin debe permitir operar el flujo real de Zivelo, aunque inicie con una edición simple. |
+| Demo estable | Debe existir una quote demo pulida que sirva para ventas, pruebas visuales y validación interna. |
+| Escalabilidad gradual | Multi-company, white-label y custom domains quedan preparados, pero no bloquean el MVP. |
 
-- Modos private/public para quotes
-- Quotes protegidas con password
-- Mejores flujos de administración
+## Fases
 
-## v0.5.0
+| Fase | Versión | Objetivo | Resultado Esperado |
+| --- | --- | --- | --- |
+| Fundaciones | v0.0.1 | Definir arquitectura, alcance y estructura base del producto. | Documentación clara, modelo inicial y ruta técnica validada. |
+| Producto visible | v0.0.5 | Crear landing y quote demo navegable. | Se puede mostrar el producto antes de tener todo el dashboard terminado. |
+| MVP operativo | v0.1.0 | Crear y compartir cotizaciones reales desde un dashboard interno. | Zivelo puede usar la plataforma para propuestas internas. |
+| Experiencia mejorada | v0.2.0 | Mejorar templates, mobile, branding y rich media. | Las cotizaciones se sienten más premium y flexibles. |
+| Control y privacidad | v0.3.0 | Agregar estados, privacidad y mejores flujos administrativos. | Mayor control sobre quotes publicadas y borradores. |
+| Plataforma reutilizable | v0.5.0 | Preparar base multi-company y white-label. | La plataforma puede adaptarse a más marcas y clientes. |
+| Infraestructura avanzada | v0.7.0 | Soportar dominios, workspaces y deploys administrados. | Base lista para clientes premium o despliegues dedicados. |
+| Producto maduro | v1.0.0 | Consolidar SaaS privado estable. | Plataforma completa, reutilizable y lista para operar a largo plazo. |
 
-- White-label support
-- Estructura básica multi-company
-- Sistema compartido de branding
+## v0.0.1 - Fundaciones
 
-## v0.7.0
+| Entregable | Descripción | Estado Objetivo |
+| --- | --- | --- |
+| README del producto | Definir visión, alcance MVP y posicionamiento. | Completo |
+| Arquitectura inicial | Documentar rutas, módulos sugeridos y modelo base de quote. | Completo |
+| Roadmap estable | Convertir la lista inicial en plan ejecutable por fases. | Completo |
+| Definición de MVP | Alinear qué entra y qué queda fuera del primer release operativo. | Completo |
 
-- Custom domains
-- Managed client workspaces
-- Soporte para deploy-per-client
+### Criterio De Salida
 
-## v1.0.0
+La fase termina cuando el equipo pueda construir sin dudas mayores sobre alcance, rutas principales, prioridades y entregables del MVP.
 
-Plataforma SaaS privada completa con:
+## v0.0.5 - Producto Visible
 
-- White-label support
-- Dedicated deployments
-- Templates avanzados
-- Quote engine modular
-- Infraestructura reutilizable para futuros productos de Zivelo
-- Sistema maduro de branding
-- Ecosistema interactivo de propuestas
+Esta fase crea la primera experiencia que puede mostrarse a clientes o stakeholders aunque la funcionalidad interna todavía no esté completa.
+
+| Entregable | Alcance | Prioridad |
+| --- | --- | --- |
+| Landing pública | Página principal en `/` que explique Zivelo Quotes y dirija a una demo. | Alta |
+| Quote demo | Cotización demo en `/q/demo` o slug equivalente con contenido realista. | Alta |
+| Template base | Primer template visual para una quote interactiva. | Alta |
+| Navegación mínima | Enlaces claros entre landing, demo y acceso al dashboard. | Media |
+| Open Graph base | Metadata social inicial para landing y demo. | Media |
+
+### Landing
+
+| Sección | Objetivo |
+| --- | --- |
+| Hero | Presentar Zivelo Quotes como una experiencia moderna de propuestas. |
+| Problema | Explicar la diferencia contra PDFs, documentos estáticos y propuestas tradicionales. |
+| Experiencia | Mostrar que una quote puede sentirse como landing, presentación y checkout. |
+| Casos de uso | Propuestas web, branding, ecommerce, automatizaciones y proyectos a medida. |
+| CTA | Llevar a la quote demo y al dashboard interno cuando exista login. |
+
+### Quote Demo
+
+| Elemento | Objetivo |
+| --- | --- |
+| Hero de cotización | Mostrar cliente, servicio, valor principal y CTA. |
+| Resumen ejecutivo | Explicar la propuesta en lenguaje claro. |
+| Alcance | Agrupar entregables por secciones. |
+| Pricing | Mostrar paquetes, line items o fases de inversión. |
+| Timeline | Presentar tiempos estimados por etapa. |
+| CTA final | Facilitar contacto, aprobación o siguiente paso. |
+
+### Criterio De Salida
+
+La fase termina cuando una persona pueda abrir la landing, entender el producto y navegar a una quote demo convincente sin depender de explicaciones externas.
+
+## v0.1.0 - MVP Operativo
+
+El MVP debe permitir que Zivelo cree, edite, publique y comparta cotizaciones reales desde un flujo interno.
+
+| Entregable | Alcance | Prioridad |
+| --- | --- | --- |
+| Dashboard interno | Área `/dashboard` protegida por login. | Alta |
+| Listado de quotes | Vista con estado, cliente, servicio, slug y última actualización. | Alta |
+| Creación de quote | Formulario para crear una cotización con datos principales. | Alta |
+| Edición básica | Edición de contenido, secciones, line items, pricing y CTA. | Alta |
+| Publicación | Estados draft/published y URL pública por slug. | Alta |
+| Página pública | Ruta `/q/[quoteSlug]` renderizada desde datos estructurados. | Alta |
+| Exportación PDF | Generar snapshot compartible de la cotización. | Media |
+| Open Graph dinámico | Imagen o metadata personalizada por quote. | Media |
+| Persistencia inicial | Base de datos o almacenamiento elegido para operar el MVP. | Alta |
+
+### Dashboard
+
+| Vista | Funcionalidad Requerida |
+| --- | --- |
+| `/dashboard` | Resumen de cotizaciones recientes y accesos rápidos. |
+| `/dashboard/quotes` | Tabla de quotes con filtros simples por estado. |
+| `/dashboard/quotes/new` | Creación de una nueva cotización. |
+| `/dashboard/quotes/[id]` | Edición de contenido, pricing, secciones y ajustes públicos. |
+| `/dashboard/settings` | Configuración inicial de branding y datos de Zivelo. |
+
+### Funcionalidad Central
+
+| Función | Descripción | MVP |
+| --- | --- | --- |
+| Quote schema | Estructura común para contenido, pricing, branding, CTA y estado. | Si |
+| Slugs dinámicos | Cada quote debe tener URL pública legible. | Si |
+| Estados | Draft y published como mínimo. | Si |
+| Templates | Render inicial mediante un template base. | Si |
+| Branding | Colores, logo y datos visibles por quote o defaults globales. | Si |
+| PDF | Exportación básica de la vista pública. | Si |
+| Open Graph | Metadata dinámica y base para imagen personalizada. | Si |
+| Password/public-private | Protección avanzada por quote. | No, v0.3.0 |
+| Analytics | Métricas de visitas y actividad. | No |
+| Pagos | Cobro o checkout real. | No |
+
+### Criterio De Salida
+
+La fase termina cuando Zivelo pueda crear una cotización desde el dashboard, publicarla, compartir su URL pública y exportarla como PDF sin editar código.
+
+## v0.2.0 - Experiencia Mejorada
+
+| Entregable | Descripción |
+| --- | --- |
+| Templates mejorados | Variantes visuales para diferentes tipos de proyecto. |
+| Branding avanzado | Mejor manejo de logos, paletas, estilos y tokens visuales. |
+| Rich media | Soporte para imágenes, videos, mockups, embeds o previews. |
+| Mobile refinado | Experiencia pública y dashboard más robustos en pantallas pequeñas. |
+| Componentes reutilizables | Consolidar UI compartida para dashboard y quotes. |
+
+### Criterio De Salida
+
+Las cotizaciones deben sentirse suficientemente premium para usarse con clientes reales de diferentes tipos de proyecto, no solo con una demo controlada.
+
+## v0.3.0 - Control Y Privacidad
+
+| Entregable | Descripción |
+| --- | --- |
+| Quotes private/public | Control claro de visibilidad por cotización. |
+| Protección con password | Acceso restringido a quotes sensibles. |
+| Mejor flujo de administración | Acciones rápidas para duplicar, archivar, previsualizar y publicar. |
+| Historial básico | Registro simple de cambios importantes o timestamps útiles. |
+| Validaciones | Reglas para evitar publicar quotes incompletas. |
+
+### Criterio De Salida
+
+El equipo debe poder manejar propuestas sensibles con mayor control y menor riesgo operativo.
+
+## v0.5.0 - Plataforma Reutilizable
+
+| Entregable | Descripción |
+| --- | --- |
+| White-label support | Base para adaptar identidad visual por cliente o marca. |
+| Multi-company básico | Separación inicial de datos y branding por organización. |
+| Branding compartido | Sistema de tokens reutilizables entre landing, dashboard y quotes. |
+| Quote engine modular | Separación más clara entre datos, reglas y presentación. |
+| Templates por industria | Variantes por tipo de servicio o cliente. |
+
+### Criterio De Salida
+
+La plataforma debe poder adaptarse a más de una marca o cliente sin duplicar la aplicación completa.
+
+## v0.7.0 - Infraestructura Avanzada
+
+| Entregable | Descripción |
+| --- | --- |
+| Custom domains | Soporte para dominios personalizados por cliente. |
+| Managed client workspaces | Espacios administrados para clientes o marcas. |
+| Deploy-per-client | Base para despliegues dedicados cuando el caso lo requiera. |
+| Configuración por entorno | Separación clara de settings por deployment. |
+| Observabilidad inicial | Logs y monitoreo mínimos para operación confiable. |
+
+### Criterio De Salida
+
+Zivelo debe poder operar quotes en dominios o entornos diferenciados sin comprometer la base central del producto.
+
+## v1.0.0 - Producto Maduro
+
+| Pilar | Resultado Esperado |
+| --- | --- |
+| SaaS privado | Plataforma estable para uso interno y clientes administrados. |
+| White-label | Personalización visual madura. |
+| Dedicated deployments | Capacidad de separar infraestructura para clientes premium. |
+| Templates avanzados | Biblioteca robusta de experiencias de quote. |
+| Quote engine modular | Motor portable para futuros productos de Zivelo. |
+| Branding maduro | Sistema consistente entre landing, dashboard, quotes y OG. |
+| Propuestas interactivas | Experiencias ricas que superan documentos estáticos. |
+
+## Dependencias Principales
+
+| Dependencia | Bloquea | Decisión Necesaria |
+| --- | --- | --- |
+| Stack de datos | Creación y edición de quotes | Definir base de datos y ORM o servicio administrado. |
+| Autenticación | Dashboard interno | Elegir proveedor o estrategia de login. |
+| Render PDF | Exportación | Definir si se usa browser rendering, servicio externo o librería local. |
+| Open Graph | Previews sociales | Definir estrategia de imagen dinámica y hosting de assets. |
+| Branding | Landing, demo y quotes | Definir tokens visuales base de Zivelo. |
+
+## Orden Recomendado De Implementación
+
+| Orden | Trabajo | Razón |
+| --- | --- | --- |
+| 1 | Crear base Next.js y layout principal | Habilita landing, demo, dashboard y rutas públicas. |
+| 2 | Implementar landing | Da contexto inmediato al producto. |
+| 3 | Implementar quote demo hardcodeada sobre schema inicial | Valida experiencia visual antes de construir todo el editor. |
+| 4 | Crear quote schema y datos mock | Estabiliza el contrato del quote engine. |
+| 5 | Construir vista pública `/q/[quoteSlug]` | Convierte la demo en render dinámico. |
+| 6 | Construir dashboard/listado | Empieza el flujo operativo interno. |
+| 7 | Agregar creación y edición básica | Permite operar sin tocar código. |
+| 8 | Agregar publicación, PDF y Open Graph | Completa el flujo compartible del MVP. |
+
+## Fuera De Alcance Del MVP
+
+| Funcionalidad | Motivo |
+| --- | --- |
+| Pagos | No es necesario para validar propuestas internas. |
+| Comentarios de clientes | Puede agregarse después de validar el flujo principal. |
+| Cuentas de clientes | El MVP es un SaaS privado administrado por Zivelo. |
+| Analytics avanzado | Primero se necesita uso real y quotes publicadas. |
+| Builder drag and drop | Alto costo de complejidad para una primera versión. |
+| Subscription billing | No aplica al MVP interno. |
+| CRM | Debe integrarse después, no dirigir la arquitectura inicial. |
+| Organizaciones multiusuario | Queda preparado para v0.5.0. |
+| Dominios personalizados | Queda para infraestructura avanzada. |
