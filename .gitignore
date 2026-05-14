@@ -5,14 +5,18 @@ node_modules/
 .next/
 out/
 
-# Production
+# Build / Production
 dist/
 build/
 
-# Environment
+# Vercel
+.vercel/
+
+# Environment variables
 .env
 .env.*
 !.env.example
+.env*.local
 
 # Logs
 *.log
@@ -24,3 +28,10 @@ pnpm-debug.log*
 # System files
 .DS_Store
 Thumbs.db
+
+# v0 sandbox internal files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
