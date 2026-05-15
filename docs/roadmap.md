@@ -4,11 +4,11 @@
 
 | Campo | Estado |
 | --- | --- |
-| Versión actual | v0.0.1 - Fundaciones |
-| Avance actual | Documentación, arquitectura inicial y roadmap estable definidos. |
-| Siguiente fase | v0.0.5 - Producto Visible |
-| Siguiente foco | Crear la landing pública, la quote demo y el primer template visual. |
-| Meta inmediata | Tener una experiencia navegable que muestre el valor del producto antes de completar el dashboard. |
+| Versión actual | v0.0.5 - Producto Visible en progreso |
+| Avance actual | Landing pública con Open Graph, estructura refactorizada, i18n EN/ES y rutas placeholder para quote/dashboard. |
+| Siguiente fase | v0.1.0 - MVP Operativo, después de cerrar v0.0.5. |
+| Siguiente foco | Quote demo funcional, template base y navegación completa entre landing, demo y dashboard. |
+| Meta inmediata | Completar una experiencia navegable con quote demo que muestre el valor del producto. |
 
 Este roadmap organiza Zivelo Quotes como un producto que puede arrancar pequeño, validar su flujo interno y crecer hacia una plataforma reutilizable sin rehacer su base.
 
@@ -61,11 +61,11 @@ Esta fase crea la primera experiencia que puede mostrarse a clientes o stakehold
 
 | Entregable | Alcance | Prioridad |
 | --- | --- | --- |
-| Landing pública | Página principal en `/` que explique Zivelo Quotes y dirija a una demo. | Alta |
+| Landing pública | Página principal en `/` que explique Zivelo Quotes y dirija a una demo. | Completo |
 | Quote demo | Cotización demo en `/q/demo` o slug equivalente con contenido realista. | Alta |
 | Template base | Primer template visual para una quote interactiva. | Alta |
 | Navegación mínima | Enlaces claros entre landing, demo y acceso al dashboard. | Media |
-| Open Graph base | Metadata social inicial para landing y demo. | Media |
+| Open Graph base | Metadata social inicial para landing y demo. | Completo |
 
 ### Landing
 
