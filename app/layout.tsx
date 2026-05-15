@@ -10,18 +10,18 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Zivelo Quotes — Interactive Proposal Pages",
+  title: "Zivelo Quotes — Cotizaciones interactivas",
   description:
-    "Create, share, and present beautiful interactive quotes and proposals with Zivelo Quotes.",
+    "Crea, comparte y presenta cotizaciones y propuestas interactivas con Zivelo Quotes.",
   metadataBase: new URL("https://quotes.zivelo.dev"),
   openGraph: {
-    title: "Zivelo Quotes — Interactive Proposal Pages",
+    title: "Zivelo Quotes — Cotizaciones interactivas",
     description:
-      "Create, share, and present beautiful interactive quotes and proposals with Zivelo Quotes.",
+      "Crea, comparte y presenta cotizaciones y propuestas interactivas con Zivelo Quotes.",
     url: "https://quotes.zivelo.dev",
     siteName: "Zivelo Quotes",
     type: "website",
-    locale: "en_US",
+    locale: "es_ES",
     images: [
       {
         url: "/og-landing.svg",
@@ -33,9 +33,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zivelo Quotes — Interactive Proposal Pages",
+    title: "Zivelo Quotes — Cotizaciones interactivas",
     description:
-      "Create, share, and present beautiful interactive quotes and proposals with Zivelo Quotes.",
+      "Crea, comparte y presenta cotizaciones y propuestas interactivas con Zivelo Quotes.",
     images: ["/og-landing.svg"],
   },
 }
@@ -46,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-background" suppressHydrationWarning>
+          <html lang="es" className="bg-background" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"

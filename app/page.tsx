@@ -5,7 +5,6 @@ import { ProblemSection } from "@/components/landing/problem"
 import { SolutionSection } from "@/components/landing/solution"
 import { FeaturesSection } from "@/components/landing/features"
 import { CTASection } from "@/components/landing/cta"
-import { FutureSection } from "@/components/landing/future"
 
 export default function HomePage() {
   return (
@@ -15,7 +14,6 @@ export default function HomePage() {
       <ProblemSection />
       <SolutionSection />
       <FeaturesSection />
-      <FutureSection />
       <CTASection />
       <Footer />
     </main>

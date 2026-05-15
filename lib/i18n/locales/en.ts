@@ -81,19 +81,6 @@ export const en = {
   "cta.secondary": "Access dashboard",
   "cta.disclaimer": "Zivelo Quotes is currently in private beta \u2014 invite only.",
 
-  // Future
-  "future.label": "Roadmap",
-  "future.title": "Built to scale with your business.",
-  "future.subtitle": "Zivelo Quotes starts as an internal tool and evolves into a platform that supports white-label clients, custom domains, and enterprise-grade deployments.",
-  "future.item1.label": "Custom domains",
-  "future.item1.desc": "quotes.yourbrand.com",
-  "future.item2.label": "Client branding",
-  "future.item2.desc": "Full white-label visual identity",
-  "future.item3.label": "Dedicated deployments",
-  "future.item3.desc": "Isolated infrastructure per client",
-  "future.item4.label": "Private quote views",
-  "future.item4.desc": "Password or email-gated proposals",
-
   // Footer
   "footer.tagline": "Interactive quote experiences for modern teams.",
   "footer.built-by": "Built and maintained by Zivelo.",

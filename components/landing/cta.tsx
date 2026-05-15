@@ -10,7 +10,7 @@ export function CTASection() {
   return (
     <section
       id="cta"
-      className="py-24 px-5 border-t border-border bg-background-secondary"
+      className="py-24 px-5 border-t border-border"
       aria-labelledby="cta-heading"
     >
       <div className="max-w-2xl mx-auto text-center flex flex-col items-center gap-7">
