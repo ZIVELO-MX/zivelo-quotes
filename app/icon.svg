@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pencilRed" x1="512" y1="184" x2="512" y2="840" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D72228"/>
+      <stop offset="1" stop-color="#F01822"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="224" fill="#fff"/>
+
+  <g transform="translate(518 537) scale(1.28) translate(-518 -537)">
+    <!-- Top rounded cap -->
+    <path
+      d="M445 255C445 215.788 476.788 184 516 184H520C559.212 184 591 215.788 591 255V317H445V255Z"
+      fill="url(#pencilRed)"
+    />
+
+    <!-- Pencil body -->
+    <rect
+      x="445"
+      y="343"
+      width="146"
+      height="425"
+      fill="url(#pencilRed)"
+    />
+
+    <!-- Pencil tip -->
+    <path
+      d="M518 890L455 792H581L518 890Z"
+      fill="url(#pencilRed)"
+    />
+  </g>
+</svg>
