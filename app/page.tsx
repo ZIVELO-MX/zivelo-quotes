@@ -1,10 +1,11 @@
-import { Header } from "@/components/header"
-import { HeroSection } from "@/components/sections/hero"
-import { ProblemSection } from "@/components/sections/problem"
-import { SolutionSection } from "@/components/sections/solution"
-import { FeaturesSection } from "@/components/sections/features"
-import { CTASection } from "@/components/sections/cta"
-import { Footer } from "@/components/footer"
+import { Header } from "@/components/layout/header"
+import { Footer } from "@/components/layout/footer"
+import { HeroSection } from "@/components/landing/hero"
+import { ProblemSection } from "@/components/landing/problem"
+import { SolutionSection } from "@/components/landing/solution"
+import { FeaturesSection } from "@/components/landing/features"
+import { CTASection } from "@/components/landing/cta"
+import { FutureSection } from "@/components/landing/future"
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <ProblemSection />
       <SolutionSection />
       <FeaturesSection />
+      <FutureSection />
       <CTASection />
       <Footer />
     </main>

@@ -1,24 +1,29 @@
-import { FileX, Clock, Frown } from "lucide-react"
+"use client"
 
-const PAINS = [
-  {
-    icon: FileX,
-    title: "Static PDFs nobody reads",
-    body: "Attachments get lost, aren't mobile-friendly, and give you zero signal on whether the client even opened them.",
-  },
-  {
-    icon: Clock,
-    title: "Generic templates, zero personality",
-    body: "Every proposal looks the same. Clients can't tell you apart from your competition.",
-  },
-  {
-    icon: Frown,
-    title: "Hard to present out loud",
-    body: "Walking a client through a PDF live is awkward. Scrolling through pages of text is not a great closing pitch.",
-  },
-]
+import { FileX, Clock, Frown } from "lucide-react"
+import { useTranslate } from "@/lib/i18n"
 
 export function ProblemSection() {
+  const t = useTranslate()
+
+  const PAINS = [
+    {
+      icon: FileX,
+      title: t("problem.pain1.title"),
+      body: t("problem.pain1.body"),
+    },
+    {
+      icon: Clock,
+      title: t("problem.pain2.title"),
+      body: t("problem.pain2.body"),
+    },
+    {
+      icon: Frown,
+      title: t("problem.pain3.title"),
+      body: t("problem.pain3.body"),
+    },
+  ]
+
   return (
     <section
       id="problem"
@@ -27,17 +32,16 @@ export function ProblemSection() {
     >
       <div className="max-w-5xl mx-auto">
         <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
-          The problem
+          {t("problem.label")}
         </p>
         <h2
           id="problem-heading"
           className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
         >
-          Traditional quotes feel like a 2005 Word doc.
+          {t("problem.title")}
         </h2>
         <p className="mt-4 text-base text-foreground-muted leading-relaxed max-w-lg text-pretty">
-          The way most agencies share proposals hasn&apos;t changed in decades.
-          Your clients&apos; expectations have.
+          {t("problem.subtitle")}
         </p>
 
         <div className="mt-12 grid sm:grid-cols-3 gap-px bg-border">

@@ -1,7 +1,12 @@
+"use client"
+
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { useTranslate } from "@/lib/i18n"
 
 export function CTASection() {
+  const t = useTranslate()
+
   return (
     <section
       id="cta"
@@ -11,17 +16,16 @@ export function CTASection() {
       <div className="max-w-2xl mx-auto text-center flex flex-col items-center gap-7">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
-            Get started
+            {t("cta.label")}
           </p>
           <h2
             id="cta-heading"
             className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground text-balance"
           >
-            See what a great quote looks like.
+            {t("cta.title")}
           </h2>
           <p className="mt-4 text-base text-foreground-muted leading-relaxed max-w-md mx-auto text-pretty">
-            No sign-up needed. Explore the interactive demo quote and experience
-            what your clients will see.
+            {t("cta.subtitle")}
           </p>
         </div>
 
@@ -30,19 +34,19 @@ export function CTASection() {
             href="/q/demo"
             className="inline-flex items-center gap-2 bg-foreground text-white hover:bg-foreground/85 text-sm font-medium px-6 py-2.5 rounded-md transition-colors duration-150"
           >
-            View demo quote
+            {t("cta.primary")}
             <ArrowRight size={14} />
           </Link>
           <Link
             href="/dashboard"
             className="inline-flex items-center text-sm font-medium text-foreground border border-border hover:bg-background px-6 py-2.5 rounded-md transition-colors duration-150"
           >
-            Access dashboard
+            {t("cta.secondary")}
           </Link>
         </div>
 
         <p className="text-xs text-foreground-dim">
-          Zivelo Quotes is currently in private beta — invite only.
+          {t("cta.disclaimer")}
         </p>
       </div>
     </section>

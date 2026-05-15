@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f7f7f5"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#CC0000"/>
+      <stop offset="1" stop-color="#AA0000"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Accent bar top -->
+  <rect width="1200" height="6" fill="#CC0000"/>
+
+  <!-- Decorative circle -->
+  <circle cx="1050" cy="180" r="280" fill="#CC0000" opacity="0.04"/>
+  <circle cx="1080" cy="150" r="200" fill="#CC0000" opacity="0.03"/>
+  <circle cx="1100" cy="120" r="140" fill="#CC0000" opacity="0.04"/>
+
+  <!-- Zivelo logo -->
+  <g transform="translate(80, 60)">
+    <rect x="19.06" y="64.52" width="33.39" height="6.65" rx="3.33" fill="url(#accent)" opacity="0.6"/>
+    <rect x="0" y="111.88" width="33.39" height="6.65" rx="3.33" fill="url(#accent)" opacity="0.8"/>
+    <rect x="5.55" y="88.2" width="33.39" height="6.65" rx="3.33" fill="url(#accent)"/>
+    <rect x="14.41" y="100.04" width="18.98" height="6.65" rx="3.33" fill="url(#accent)" opacity="0.7"/>
+    <rect x="27.2" y="76.36" width="18.98" height="6.65" rx="3.33" fill="url(#accent)" opacity="0.5"/>
+    <path d="M25.79,100.65l40.62-53.14v-.51H27.58v-21.08h71.91v18.65l-39.98,52.37v.51h41.9v21.08H25.79v-17.88Z" fill="#1d1d1b"/>
+    <rect x="74.65" y="0" width="26.18" height="19.67" fill="#CC0000"/>
+    <path d="M73.26,25.93h27.59l14.94,56.2c.89,3.19,1.66,7.66,2.55,10.86h.51l2.43-10.86,14.18-56.2h27.08l-28.1,92.6h-33.34l-27.85-92.6Z" fill="#1d1d1b"/>
+    <path d="M127.34,72.17c0-28.36,17.12-48.15,46.62-48.15s44.2,19.67,43.17,54.29h-62.08c1.41,14.05,7.15,22.1,18.39,22.1,8.94,0,14.69-4.73,16.48-13.41h26.44c-3.45,20.95-19.42,33.47-42.41,33.47-29.51,0-46.62-19.93-46.62-48.28ZM190.31,59.78c-1.66-10.35-7.54-15.71-16.35-15.71s-15.46,5.75-18.01,15.71h34.36Z" fill="#1d1d1b"/>
+    <path d="M255.3,98.35c6.9,0,14.31-1.53,21.46-3.96h.51v21.2c-9.84,3.32-18.52,4.85-27.33,4.85-22.74,0-34.62-10.22-34.62-33.98V25.93h26.18v57.86c0,11.37,3.96,14.56,13.8,14.56Z" fill="#1d1d1b"/>
+    <path d="M253.18,72.17c0-27.72,17.5-48.15,46.24-48.15s46.24,20.44,46.24,48.15-17.5,48.28-46.24,48.28-46.24-20.56-46.24-48.28ZM318.32,72.17c0-15.46-6-27.08-18.9-27.08s-18.9,11.62-18.9,27.08,6,27.21,18.9,27.21,18.9-11.75,18.9-27.21Z" fill="#1d1d1b"/>
+  </g>
+
+  <!-- Main title -->
+  <text x="80" y="340" font-family="Inter, Helvetica, Arial, sans-serif" font-size="56" font-weight="800" fill="#1d1d1b" letter-spacing="-2">
+    Zivelo Quotes
+  </text>
+
+  <!-- Subtitle -->
+  <text x="80" y="400" font-family="Inter, Helvetica, Arial, sans-serif" font-size="28" font-weight="400" fill="#6b6b6b" letter-spacing="-0.5">
+    Interactive Proposal Pages
+  </text>
+
+  <!-- Tagline -->
+  <text x="80" y="450" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#a0a0a0">
+    Create · Share · Present beautiful interactive quotes
+  </text>
+
+  <!-- Bottom accent bar -->
+  <rect x="80" y="490" width="100" height="4" rx="2" fill="#CC0000"/>
+</svg>

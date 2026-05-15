@@ -1,33 +1,38 @@
-import { Eye, Layout, Sparkles, Share2 } from "lucide-react"
+"use client"
 
-const REASONS = [
-  {
-    icon: Eye,
-    number: "01",
-    title: "Present ideas visually",
-    body: "Show services, pricing, timelines, examples, and deliverables in a way clients can actually explore and understand.",
-  },
-  {
-    icon: Layout,
-    number: "02",
-    title: "Make proposals easier to navigate",
-    body: "Instead of overwhelming documents, organize information into clean visual sections that guide the client naturally through the proposal.",
-  },
-  {
-    icon: Sparkles,
-    number: "03",
-    title: "Create a stronger first impression",
-    body: "Every proposal feels polished, modern, and professional from the very first click.",
-  },
-  {
-    icon: Share2,
-    number: "04",
-    title: "Share proposals with confidence",
-    body: "Send a simple link instead of large files or messy message threads. Every proposal is designed to look clean and presentable when shared.",
-  },
-]
+import { Eye, Layout, Sparkles, Share2 } from "lucide-react"
+import { useTranslate } from "@/lib/i18n"
 
 export function SolutionSection() {
+  const t = useTranslate()
+
+  const REASONS = [
+    {
+      icon: Eye,
+      number: "01",
+      title: t("solution.reason1.title"),
+      body: t("solution.reason1.body"),
+    },
+    {
+      icon: Layout,
+      number: "02",
+      title: t("solution.reason2.title"),
+      body: t("solution.reason2.body"),
+    },
+    {
+      icon: Sparkles,
+      number: "03",
+      title: t("solution.reason3.title"),
+      body: t("solution.reason3.body"),
+    },
+    {
+      icon: Share2,
+      number: "04",
+      title: t("solution.reason4.title"),
+      body: t("solution.reason4.body"),
+    },
+  ]
+
   return (
     <section
       id="why"
@@ -36,17 +41,17 @@ export function SolutionSection() {
     >
       <div className="max-w-5xl mx-auto">
         <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
-          The solution
+          {t("solution.label")}
         </p>
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <h2
             id="why-heading"
             className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
           >
-            Why it feels different
+            {t("solution.title")}
           </h2>
           <p className="text-sm text-foreground-muted max-w-xs text-pretty shrink-0">
-            Four reasons clients respond better to Zivelo proposals.
+            {t("solution.subtitle")}
           </p>
         </div>
 

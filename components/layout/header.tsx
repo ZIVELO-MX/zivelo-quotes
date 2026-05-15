@@ -4,17 +4,19 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
-
-const NAV_LINKS = [
-  { label: "Home", href: "#hero" },
-  { label: "Problem", href: "#problem" },
-  { label: "Solution", href: "#why" },
-  { label: "Product", href: "#features" },
-]
+import { useTranslate } from "@/lib/i18n"
 
 export function Header() {
+  const t = useTranslate()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  const NAV_LINKS = [
+    { label: t("nav.home"), href: "#hero" },
+    { label: t("nav.problem"), href: "#problem" },
+    { label: t("nav.solution"), href: "#why" },
+    { label: t("nav.product"), href: "#features" },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -38,7 +40,6 @@ export function Header() {
         ].join(" ")}
       >
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
-          {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center" aria-label="Zivelo home">
             <Image
               src="/logos/zivelo-bars-dark-full.svg"
@@ -51,7 +52,6 @@ export function Header() {
             />
           </Link>
 
-          {/* Desktop nav — centered */}
           <nav
             className="hidden md:flex items-center gap-1"
             aria-label="Main navigation"
@@ -60,29 +60,27 @@ export function Header() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm text-foreground-muted hover:text-foreground px-3 py-1.5 rounded-md hover:bg-background-secondary transition-colors duration-150"
+                className="text-sm text-foreground-muted hover:text-foreground hover:bg-background-secondary px-3 py-1.5 rounded-md transition-colors duration-150"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* Right side CTA */}
           <div className="flex items-center gap-2">
             <Link
               href="/dashboard"
-              className="hidden md:inline-flex text-sm text-foreground-muted hover:text-foreground px-3 py-1.5 rounded-md hover:bg-background-secondary transition-colors duration-150"
+              className="hidden md:inline-flex text-sm text-foreground-muted hover:text-foreground hover:bg-background-secondary px-3 py-1.5 rounded-md transition-colors duration-150"
             >
-              Log in
+              {t("header.login")}
             </Link>
             <a
               href="#cta"
               className="inline-flex items-center text-sm font-medium bg-foreground text-white hover:bg-foreground/85 px-4 py-1.5 rounded-md transition-colors duration-150"
             >
-              Get started
+              {t("header.get-started")}
             </a>
 
-            {/* Mobile burger */}
             <button
               onClick={() => setMobileOpen(true)}
               className="md:hidden w-8 h-8 flex items-center justify-center rounded-md hover:bg-background-secondary transition-colors"
@@ -94,7 +92,6 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile menu */}
       <div
         role="dialog"
         aria-modal="true"
@@ -139,14 +136,14 @@ export function Header() {
               onClick={() => setMobileOpen(false)}
               className="text-base text-foreground-muted px-3 py-2.5 rounded-md hover:bg-background-secondary transition-colors"
             >
-              Log in
+              {t("header.login")}
             </Link>
             <a
               href="#cta"
               onClick={() => setMobileOpen(false)}
               className="text-base font-medium bg-foreground text-white px-3 py-2.5 rounded-md text-center transition-colors hover:bg-foreground/85"
             >
-              Get started
+              {t("header.get-started")}
             </a>
           </div>
         </nav>

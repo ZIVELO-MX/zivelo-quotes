@@ -1,3 +1,5 @@
+"use client"
+
 import {
   MousePointerClick,
   Link2,
@@ -6,42 +8,45 @@ import {
   LayoutDashboard,
   Globe,
 } from "lucide-react"
-
-const FEATURES = [
-  {
-    icon: MousePointerClick,
-    title: "Interactive quote pages",
-    body: "Clients navigate structured sections — overview, deliverables, pricing, timeline — all in one beautiful page.",
-  },
-  {
-    icon: Link2,
-    title: "Public shareable links",
-    body: "Share a clean URL with any client. No login required. Works perfectly on mobile.",
-  },
-  {
-    icon: FileDown,
-    title: "PDF export",
-    body: "Generate a clean PDF version on demand for clients who need a document for their records.",
-  },
-  {
-    icon: ImageIcon,
-    title: "Custom Open Graph previews",
-    body: "Every quote generates a branded social card with your client name and project title.",
-  },
-  {
-    icon: LayoutDashboard,
-    title: "Internal dashboard",
-    body: "Manage all your quotes, track status, and monitor engagement from one place.",
-  },
-  {
-    icon: Globe,
-    title: "White-label support",
-    body: "Custom domains and full client branding for agencies and resellers. Coming soon.",
-    soon: true,
-  },
-]
+import { useTranslate } from "@/lib/i18n"
 
 export function FeaturesSection() {
+  const t = useTranslate()
+
+  const FEATURES = [
+    {
+      icon: MousePointerClick,
+      title: t("features.feat1.title"),
+      body: t("features.feat1.body"),
+    },
+    {
+      icon: Link2,
+      title: t("features.feat2.title"),
+      body: t("features.feat2.body"),
+    },
+    {
+      icon: FileDown,
+      title: t("features.feat3.title"),
+      body: t("features.feat3.body"),
+    },
+    {
+      icon: ImageIcon,
+      title: t("features.feat4.title"),
+      body: t("features.feat4.body"),
+    },
+    {
+      icon: LayoutDashboard,
+      title: t("features.feat5.title"),
+      body: t("features.feat5.body"),
+    },
+    {
+      icon: Globe,
+      title: t("features.feat6.title"),
+      body: t("features.feat6.body"),
+      soon: true,
+    },
+  ]
+
   return (
     <section
       id="features"
@@ -50,13 +55,13 @@ export function FeaturesSection() {
     >
       <div className="max-w-5xl mx-auto">
         <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
-          Features
+          {t("features.label")}
         </p>
         <h2
           id="features-heading"
           className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance max-w-xl"
         >
-          Everything a modern proposal needs.
+          {t("features.title")}
         </h2>
 
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
@@ -73,7 +78,7 @@ export function FeaturesSection() {
                   <h3 className="text-sm font-semibold text-foreground">{title}</h3>
                   {soon && (
                     <span className="text-[10px] font-medium text-foreground-dim border border-border rounded-full px-2 py-0.5">
-                      Soon
+                      {t("features.badge-soon")}
                     </span>
                   )}
                 </div>
