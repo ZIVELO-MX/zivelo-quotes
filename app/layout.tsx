@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   description:
     "Crea, comparte y presenta cotizaciones y propuestas interactivas con Zivelo Quotes.",
   metadataBase: new URL("https://quotes.zivelo.dev"),
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     title: "Zivelo Quotes — Cotizaciones interactivas",
     description:
