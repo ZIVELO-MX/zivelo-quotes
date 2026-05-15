@@ -5,7 +5,7 @@ import { Globe, ChevronDown, Check } from "lucide-react"
 import { useLocale, type Locale } from "@/lib/i18n"
 
 const LANGUAGES: { code: Locale; label: string; flag?: string }[] = [
-  { code: "en", label: "English" },
+  { code: "en", label: "English", flag: "🇬🇧" },
   { code: "es", label: "Español", flag: "🇲🇽" },
 ]
 

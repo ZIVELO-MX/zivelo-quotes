@@ -81,19 +81,6 @@ export const es = {
   "cta.secondary": "Acceder al dashboard",
   "cta.disclaimer": "Zivelo Quotes está actualmente en beta privada — solo por invitación.",
 
-  // Future
-  "future.label": "Hoja de ruta",
-  "future.title": "Construido para escalar con tu negocio.",
-  "future.subtitle": "Zivelo Quotes comienza como una herramienta interna y evoluciona a una plataforma que soporta clientes white-label, dominios personalizados y despliegues de nivel empresarial.",
-  "future.item1.label": "Dominios personalizados",
-  "future.item1.desc": "quotes.tumarca.com",
-  "future.item2.label": "Branding para clientes",
-  "future.item2.desc": "Identidad visual white-label completa",
-  "future.item3.label": "Despliegues dedicados",
-  "future.item3.desc": "Infraestructura aislada por cliente",
-  "future.item4.label": "Vistas privadas de cotización",
-  "future.item4.desc": "Propuestas protegidas con contraseña o email",
-
   // Footer
   "footer.tagline": "Experiencias interactivas de cotización para equipos modernos.",
   "footer.built-by": "Construido y mantenido por Zivelo.",
