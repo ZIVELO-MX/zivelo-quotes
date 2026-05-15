@@ -4,11 +4,11 @@
 
 | Campo | Estado |
 | --- | --- |
-| Versión actual | v0.0.5 - Producto Visible en progreso |
-| Avance actual | Landing pública con Open Graph, estructura refactorizada, i18n EN/ES y rutas placeholder para quote/dashboard. |
-| Siguiente fase | v0.1.0 - MVP Operativo, después de cerrar v0.0.5. |
-| Siguiente foco | Quote demo funcional, template base y navegación completa entre landing, demo y dashboard. |
-| Meta inmediata | Completar una experiencia navegable con quote demo que muestre el valor del producto. |
+| Versión actual | v0.0.5 - Producto Visible — fase cerrada |
+| Avance actual | Landing pública, quote demo hardcodeada en `/q/demo`, wireframe y schema diseñados, i18n EN/ES, navegación entre landing y demo. |
+| Siguiente fase | v0.1.0 - MVP Operativo |
+| Siguiente foco | Dashboard interno, creación y edición de quotes desde admin, persistencia en base de datos. |
+| Meta inmediata | Zivelo puede crear, publicar y compartir cotizaciones reales desde el dashboard. |
 
 Este roadmap organiza Zivelo Quotes como un producto que puede arrancar pequeño, validar su flujo interno y crecer hacia una plataforma reutilizable sin rehacer su base.
 
@@ -62,9 +62,10 @@ Esta fase crea la primera experiencia que puede mostrarse a clientes o stakehold
 | Entregable | Alcance | Prioridad |
 | --- | --- | --- |
 | Landing pública | Página principal en `/` que explique Zivelo Quotes y dirija a una demo. | Completo |
-| Quote demo | Cotización demo en `/q/demo` o slug equivalente con contenido realista. | Alta |
-| Template base | Primer template visual para una quote interactiva. | Alta |
-| Navegación mínima | Enlaces claros entre landing, demo y acceso al dashboard. | Media |
+| Quote wireframe | Documento de diseño visual para la cotización demo. | Completo |
+| Quote schema | Definición de tipos TS y estructura de base de datos para quotes. | Completo |
+| Quote demo | Cotización demo en `/q/demo` con hero, resumen, cards expandibles, pricing y acciones. | Completo |
+| Navegación mínima | Enlaces claros entre landing, demo y acceso al dashboard. | Completo |
 | Open Graph base | Metadata social inicial para landing y demo. | Completo |
 
 ### Landing
@@ -85,7 +86,6 @@ Esta fase crea la primera experiencia que puede mostrarse a clientes o stakehold
 | Resumen ejecutivo | Explicar la propuesta en lenguaje claro. |
 | Alcance | Agrupar entregables por secciones. |
 | Pricing | Mostrar paquetes, line items o fases de inversión. |
-| Timeline | Presentar tiempos estimados por etapa. |
 | CTA final | Facilitar contacto, aprobación o siguiente paso. |
 
 ### Criterio De Salida
@@ -221,8 +221,8 @@ Zivelo debe poder operar quotes en dominios o entornos diferenciados sin comprom
 | --- | --- | --- |
 | 1 | Crear base Next.js y layout principal | Habilita landing, demo, dashboard y rutas públicas. |
 | 2 | Implementar landing | Da contexto inmediato al producto. |
-| 3 | Implementar quote demo hardcodeada sobre schema inicial | Valida experiencia visual antes de construir todo el editor. |
-| 4 | Crear quote schema y datos mock | Estabiliza el contrato del quote engine. |
+| 3 | Implementar quote demo hardcodeada sobre schema inicial | Valida experiencia visual antes de construir todo el editor. | Hecho |
+| 4 | Crear quote schema y datos mock | Estabiliza el contrato del quote engine. | Hecho |
 | 5 | Construir vista pública `/q/[quoteSlug]` | Convierte la demo en render dinámico. |
 | 6 | Construir dashboard/listado | Empieza el flujo operativo interno. |
 | 7 | Agregar creación y edición básica | Permite operar sin tocar código. |
