@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Footer } from "@/components/layout/footer"
+import { GeneratePdfButton } from "@/components/quote/generate-pdf-button"
 import {
   ChevronDown,
   ChevronUp,
@@ -234,10 +235,7 @@ export default function DemoPage() {
             <MessageCircle size={14} />
             Hacer una pregunta
           </button>
-          <button className="w-full sm:w-auto rounded-md border border-border text-foreground-muted text-sm font-medium px-5 py-2.5 hover:bg-background-secondary transition-colors inline-flex items-center justify-center gap-2">
-            <FileText size={14} />
-            Descargar PDF
-          </button>
+          <GeneratePdfButton quote={DEMO_QUOTE} />
         </div>
       </div>
 
