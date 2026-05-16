@@ -5,7 +5,7 @@
 | Campo | Estado |
 | --- | --- |
 | Versión actual | v0.0.5 - Producto Visible — fase cerrada |
-| Avance actual | Landing pública, quote demo hardcodeada en `/q/demo`, wireframe y schema diseñados, i18n EN/ES, navegación entre landing y demo. |
+| Avance actual | Landing pública, quote demo hardcodeada en `/q/demo`, wireframe y schema diseñados, i18n EN/ES, navegación entre landing y demo, exportación PDF funcional con preview, logo y tabla. |
 | Siguiente fase | v0.1.0 - MVP Operativo |
 | Siguiente foco | Dashboard interno, creación y edición de quotes desde admin, persistencia en base de datos. |
 | Meta inmediata | Zivelo puede crear, publicar y compartir cotizaciones reales desde el dashboard. |
@@ -104,7 +104,7 @@ El MVP debe permitir que Zivelo cree, edite, publique y comparta cotizaciones re
 | Edición básica | Edición de contenido, secciones, line items, pricing y CTA. | Alta |
 | Publicación | Estados draft/published y URL pública por slug. | Alta |
 | Página pública | Ruta `/q/[quoteSlug]` renderizada desde datos estructurados. | Alta |
-| Exportación PDF | Generar snapshot compartible de la cotización. | Media |
+| Exportación PDF | Generar snapshot compartible de la cotización con logo, tabla y adjuntos. | Hecho |
 | Open Graph dinámico | Imagen o metadata personalizada por quote. | Media |
 | Persistencia inicial | Base de datos o almacenamiento elegido para operar el MVP. | Alta |
 
