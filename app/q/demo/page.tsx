@@ -60,7 +60,7 @@ export default function DemoPage() {
                   onClick={() =>
                     setExpandedIndex(isExpanded ? null : index)
                   }
-                  className="w-full text-left px-6 py-5 hover:bg-background-secondary transition-colors"
+                  className="w-full text-left px-6 py-5 hover:bg-background-secondary hover:cursor-pointer transition-colors"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
@@ -147,13 +147,23 @@ export default function DemoPage() {
         </div>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
-          <button className="w-full sm:flex-1 rounded-md bg-accent text-white text-sm font-medium py-2.5 hover:bg-accent-hover transition-colors">
+          <a
+            href={`https://wa.me/${DEMO_QUOTE.phone.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola, quiero aprobar la propuesta "${DEMO_QUOTE.title}".`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:flex-1 rounded-md bg-accent text-white text-sm font-medium py-2.5 hover:bg-accent-hover hover:cursor-pointer transition-colors text-center"
+          >
             Aprobar propuesta
-          </button>
-          <button className="w-full sm:w-auto rounded-md border border-border text-foreground-muted text-sm font-medium px-5 py-2.5 hover:bg-background-secondary transition-colors inline-flex items-center justify-center gap-2">
+          </a>
+          <a
+            href={`https://wa.me/${DEMO_QUOTE.phone.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola, tengo una pregunta sobre la propuesta "${DEMO_QUOTE.title}".`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto rounded-md border border-border text-foreground-muted text-sm font-medium px-5 py-2.5 hover:bg-background-secondary hover:cursor-pointer transition-colors inline-flex items-center justify-center gap-2"
+          >
             <MessageCircle size={14} />
             Hacer una pregunta
-          </button>
+          </a>
           <GeneratePdfButton quote={DEMO_QUOTE} />
         </div>
       </div>

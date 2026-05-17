@@ -17,6 +17,7 @@ export type DemoQuote = {
   validUntil: string
   status: "active"
   currency: string
+  phone: string
   items: QuoteItem[]
   branding: {
     logoPath: string
@@ -38,6 +39,7 @@ export const DEMO_QUOTE: DemoQuote = {
   validUntil: "30 Jun 2026",
   status: "active",
   currency: "MXN",
+  phone: "+5213921107274",
   branding: {
     logoPath: "public/logos/zivelo-bars-dark-full.svg",
   },

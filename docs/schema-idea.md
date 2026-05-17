@@ -34,6 +34,8 @@ const quote = {
 
   currency: 'MXN',
 
+  phone: '+5213921107274',
+
   logoUrl: '/logos/zivelo-bars-dark-full.svg',
 
   items: [
@@ -168,6 +170,7 @@ Examples of calculated values:
 - valid_until
 - status
 - currency
+- phone
 - logo_url
 - items (jsonb)
 - actions (jsonb)
