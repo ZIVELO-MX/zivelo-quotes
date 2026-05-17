@@ -1,27 +1,12 @@
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
+import type { QuoteData, QuoteItem } from "@/lib/demo-quote-data"
 
-type QuoteAttachment = { label: string; url: string }
-
-type QuoteItem = {
-  title: string
-  shortDescription: string
-  description: string
-  bullets: string[]
-  price: number
-  attachments: QuoteAttachment[]
-  links: string[]
-}
-
-type QuoteData = {
-  projectLabel: string
-  title: string
-  summary: string
-  preparedBy: string
-  validUntil: string
-  currency: string
-  items: QuoteItem[]
-  logoUrl?: string
+function getLogoUrl(logoPath: string): string {
+  if (logoPath.startsWith("http://") || logoPath.startsWith("https://")) {
+    return logoPath
+  }
+  return "/" + logoPath.replace(/^public\//, "")
 }
 
 async function svgToPngDataUrl(svgPath: string): Promise<string> {
@@ -78,7 +63,7 @@ export async function generateQuotePdf(quote: QuoteData): Promise<Blob> {
   const margin = 20
   let y = margin
 
-  const logoUrl = quote.logoUrl || "/logos/zivelo-bars-dark-full.svg"
+  const logoUrl = getLogoUrl(quote.branding.logoPath)
   const logoDataUrl = await svgToPngDataUrl(logoUrl)
 
   const logoWidth = 50
