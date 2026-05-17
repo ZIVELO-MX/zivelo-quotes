@@ -5,7 +5,7 @@
 | Campo | Estado |
 | --- | --- |
 | Versión actual | v0.0.5 - Producto Visible — fase cerrada |
-| Avance actual | Landing pública, quote demo hardcodeada en `/q/demo`, wireframe y schema diseñados, i18n EN/ES, navegación entre landing y demo, exportación PDF funcional con preview, logo y tabla. |
+| Avance actual | Landing pública, quote demo hardcodeada en `/q/demo`, wireframe y schema diseñados, i18n EN/ES, navegación entre landing y demo, exportación PDF funcional con preview, logo y tabla, OG image premium para `/q/demo`. |
 | Siguiente fase | v0.1.0 - MVP Operativo |
 | Siguiente foco | Dashboard interno, creación y edición de quotes desde admin, persistencia en base de datos. |
 | Meta inmediata | Zivelo puede crear, publicar y compartir cotizaciones reales desde el dashboard. |
@@ -67,6 +67,7 @@ Esta fase crea la primera experiencia que puede mostrarse a clientes o stakehold
 | Quote demo | Cotización demo en `/q/demo` con hero, resumen, cards expandibles, pricing y acciones. | Completo |
 | Navegación mínima | Enlaces claros entre landing, demo y acceso al dashboard. | Completo |
 | Open Graph base | Metadata social inicial para landing y demo. | Completo |
+| Open Graph premium | Imagen OG personalizada para `/q/demo` con logo, headline, items y CTA. | Completo |
 
 ### Landing
 
@@ -86,6 +87,7 @@ Esta fase crea la primera experiencia que puede mostrarse a clientes o stakehold
 | Resumen ejecutivo | Explicar la propuesta en lenguaje claro. |
 | Alcance | Agrupar entregables por secciones. |
 | Pricing | Mostrar paquetes, line items o fases de inversión. |
+| Open Graph dinámico | Imagen social 1200×630 con logo Zivelo, headline, recipient, cards de items y CTA. |
 | CTA final | Facilitar contacto, aprobación o siguiente paso. |
 
 ### Criterio De Salida
@@ -212,7 +214,7 @@ Zivelo debe poder operar quotes en dominios o entornos diferenciados sin comprom
 | Stack de datos | Creación y edición de quotes | Definir base de datos y ORM o servicio administrado. |
 | Autenticación | Dashboard interno | Elegir proveedor o estrategia de login. |
 | Render PDF | Exportación | Definir si se usa browser rendering, servicio externo o librería local. |
-| Open Graph | Previews sociales | Definir estrategia de imagen dinámica y hosting de assets. |
+| Open Graph | Previews sociales | OG image 1200×630 generada con `ImageResponse` + Satori, logo inline como base64, Inter desde CDN. |
 | Branding | Landing, demo y quotes | Definir tokens visuales base de Zivelo. |
 
 ## Orden Recomendado De Implementación
