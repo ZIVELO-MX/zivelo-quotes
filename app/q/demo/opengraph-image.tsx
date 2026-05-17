@@ -40,11 +40,30 @@ function truncateSummary(text: string, maxLen = 100): string {
   return truncated.trimEnd() + "."
 }
 
-function getLogoDataUrl(logoPath: string): string {
-  const fullPath = join(process.cwd(), logoPath)
-  const svg = readFileSync(fullPath, "utf-8")
-  const base64 = Buffer.from(svg).toString("base64")
-  return `data:image/svg+xml;base64,${base64}`
+async function getLogoDataUrl(logoPath: string): Promise<string | null> {
+  const isRemote = logoPath.startsWith("http://") || logoPath.startsWith("https://")
+
+  if (isRemote) {
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 3000)
+      const response = await fetch(logoPath, { signal: controller.signal })
+      clearTimeout(timeout)
+      const svg = await response.text()
+      const base64 = Buffer.from(svg).toString("base64")
+      return `data:image/svg+xml;base64,${base64}`
+    } catch {
+      return null
+    }
+  }
+
+  try {
+    const svg = readFileSync(join(process.cwd(), logoPath), "utf-8")
+    const base64 = Buffer.from(svg).toString("base64")
+    return `data:image/svg+xml;base64,${base64}`
+  } catch {
+    return null
+  }
 }
 
 function getCardWidth(itemCount: number): number {
@@ -56,8 +75,7 @@ function getCardWidth(itemCount: number): number {
 export default async function OpenGraphImage() {
   const interFonts = await loadInterFont()
 
-  const logoDataUrl = getLogoDataUrl(DEMO_QUOTE.branding.logoPath)
-
+  const logoDataUrl = await getLogoDataUrl(DEMO_QUOTE.branding.logoPath)
   const summary = truncateSummary(DEMO_QUOTE.summary)
   const recipient = DEMO_QUOTE.recipientName
   const items = DEMO_QUOTE.items.slice(0, 3)
@@ -127,22 +145,25 @@ export default async function OpenGraphImage() {
         }}
       />
 
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "flex-start",
-          paddingLeft: 60,
-          paddingTop: 30,
-        }}
-      >
-        <img
-          src={logoDataUrl}
-          width={160}
-          height={56}
-          alt="Zivelo"
-        />
-      </div>
+      {logoDataUrl && (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-start",
+            paddingLeft: 60,
+            paddingTop: 30,
+          }}
+        >
+          <img
+            src={logoDataUrl}
+            width={160}
+            height={56}
+            alt="Zivelo"
+            style={{ objectFit: "contain" }}
+          />
+        </div>
+      )}
 
       <div style={{ flex: 1 }} />
 

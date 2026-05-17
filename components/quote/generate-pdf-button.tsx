@@ -3,29 +3,7 @@
 import { useState } from "react"
 import { FileText, Loader2 } from "lucide-react"
 import { generateQuotePdf } from "@/lib/pdf/generate-quote-pdf"
-
-type QuoteAttachment = { label: string; url: string }
-
-type QuoteItem = {
-  title: string
-  shortDescription: string
-  description: string
-  bullets: string[]
-  price: number
-  attachments: QuoteAttachment[]
-  links: string[]
-}
-
-type QuoteData = {
-  projectLabel: string
-  title: string
-  summary: string
-  preparedBy: string
-  validUntil: string
-  currency: string
-  items: QuoteItem[]
-  logoUrl?: string
-}
+import type { QuoteData } from "@/lib/demo-quote-data"
 
 type GeneratePdfButtonProps = {
   quote: QuoteData

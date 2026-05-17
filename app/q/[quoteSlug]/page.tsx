@@ -1,5 +1,12 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import { Footer } from "@/components/layout/footer"
+import { QuoteHero, QuoteSummary, QuotePricing } from "@/components/quote"
+import { QuoteItemsList } from "@/components/quote/quote-items-list"
+import { QuoteActions } from "@/components/quote/quote-actions"
+import { DEMO_QUOTE, calculateTotal } from "@/lib/demo-quote-data"
+
+const total = calculateTotal(DEMO_QUOTE.items)
 
 type Props = {
   params: Promise<{ quoteSlug: string }>
@@ -17,24 +24,21 @@ export default async function QuotePage({ params }: Props) {
   const { quoteSlug } = await params
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center max-w-md mx-auto px-5">
-        <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">
-          Quote
-        </p>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground text-balance mb-2">
-          {quoteSlug}
-        </h1>
-        <p className="text-sm text-foreground-muted leading-relaxed mb-8">
-          This quote is being prepared. Check back soon or contact us for more information.
-        </p>
-        <Link
-          href="/"
-          className="inline-flex text-sm font-medium bg-foreground text-white hover:bg-foreground/85 px-5 py-2.5 rounded-md transition-colors"
-        >
-          Back to home
-        </Link>
+    <main className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto px-5 pt-24 pb-24">
+        <QuoteHero
+          projectLabel={DEMO_QUOTE.projectLabel}
+          title={DEMO_QUOTE.title}
+          preparedBy={DEMO_QUOTE.preparedBy}
+          validUntil={DEMO_QUOTE.validUntil}
+          status={DEMO_QUOTE.status}
+        />
+        <QuoteSummary summary={DEMO_QUOTE.summary} />
+        <QuoteItemsList items={DEMO_QUOTE.items} />
+        <QuotePricing total={total} />
+        <QuoteActions phone={DEMO_QUOTE.phone} title={DEMO_QUOTE.title} quote={DEMO_QUOTE} />
       </div>
-    </div>
+      <Footer />
+    </main>
   )
 }

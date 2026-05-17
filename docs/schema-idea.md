@@ -23,20 +23,24 @@ const quote = {
 
   title: 'ACME Corp — Propuesta de Sitio Web',
 
+  recipientName: 'ACME Corp',
+
   summary:
     'Propuesta integral para el desarrollo de presencia digital corporativa: dirección de marca, sitio web corporativo y soporte de lanzamiento.',
 
   preparedBy: 'Zivelo',
 
-  validUntil: '2026-06-30',
+  validUntil: '30 Jun 2026',
 
-  status: 'active',
+  status: 'active', // 'active' | 'draft' | 'expired'
 
   currency: 'MXN',
 
   phone: '+5213921107274',
 
-  logoUrl: '/logos/zivelo-bars-dark-full.svg',
+  branding: {
+    logoPath: 'public/logos/zivelo-bars-dark-full.svg',
+  },
 
   items: [
     {
@@ -142,7 +146,9 @@ the card expands showing:
 The following values should be calculated dynamically instead of stored directly:
 
 ```ts
-const total = quote.items.reduce((sum, item) => sum + item.price, 0);
+function calculateTotal(items: QuoteItem[]) {
+  return items.reduce((sum, item) => sum + item.price, 0)
+}
 ```
 
 Examples of calculated values:
@@ -165,13 +171,14 @@ Examples of calculated values:
 - slug
 - project_label
 - title
+- recipient_name
 - summary
 - prepared_by
 - valid_until
 - status
 - currency
 - phone
-- logo_url
+- branding (jsonb)
 - items (jsonb)
 - actions (jsonb)
 - created_at

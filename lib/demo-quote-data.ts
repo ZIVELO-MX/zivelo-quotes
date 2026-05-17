@@ -8,14 +8,14 @@ export type QuoteItem = {
   links: string[]
 }
 
-export type DemoQuote = {
+export type QuoteData = {
   projectLabel: string
   title: string
   recipientName: string
   summary: string
   preparedBy: string
   validUntil: string
-  status: "active"
+  status: "active" | "draft" | "expired"
   currency: string
   phone: string
   items: QuoteItem[]
@@ -27,6 +27,12 @@ export type DemoQuote = {
     askQuestion: boolean
     downloadPdf: boolean
   }
+}
+
+export type DemoQuote = QuoteData
+
+export function calculateTotal(items: QuoteItem[]) {
+  return items.reduce((sum, item) => sum + item.price, 0)
 }
 
 export const DEMO_QUOTE: DemoQuote = {
