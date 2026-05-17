@@ -33,23 +33,33 @@ function truncateSummary(text: string, maxLen = 100): string {
   if (lastBreak > maxLen * 0.5) {
     return truncated.slice(0, lastBreak + 1)
   }
+  const lastSpace = truncated.lastIndexOf(" ")
+  if (lastSpace > maxLen * 0.5) {
+    return truncated.slice(0, lastSpace).trimEnd() + "."
+  }
   return truncated.trimEnd() + "."
 }
 
-function getRecipientName(title: string): string {
-  return title.split(/\u2014|—/)[0].trim()
+function getLogoDataUrl(logoPath: string): string {
+  const fullPath = join(process.cwd(), logoPath)
+  const svg = readFileSync(fullPath, "utf-8")
+  const base64 = Buffer.from(svg).toString("base64")
+  return `data:image/svg+xml;base64,${base64}`
+}
+
+function getCardWidth(itemCount: number): number {
+  if (itemCount === 1) return 380
+  if (itemCount === 2) return 340
+  return 280
 }
 
 export default async function OpenGraphImage() {
   const interFonts = await loadInterFont()
 
-  const logoPath = join(process.cwd(), "public", "logos", "zivelo-bars-dark-full.svg")
-  const logoSvg = readFileSync(logoPath, "utf-8")
-  const logoBase64 = Buffer.from(logoSvg).toString("base64")
-  const logoDataUrl = `data:image/svg+xml;base64,${logoBase64}`
+  const logoDataUrl = getLogoDataUrl(DEMO_QUOTE.branding.logoPath)
 
   const summary = truncateSummary(DEMO_QUOTE.summary)
-  const recipient = getRecipientName(DEMO_QUOTE.title)
+  const recipient = DEMO_QUOTE.recipientName
   const items = DEMO_QUOTE.items.slice(0, 3)
 
   return new ImageResponse(
@@ -181,19 +191,23 @@ export default async function OpenGraphImage() {
       <div
         style={{
           display: "flex",
+          justifyContent: "center",
           gap: 18,
           marginTop: 26,
         }}
       >
-        {items.map((item) => (
+        {items.map((item) => {
+          const cardWidth = getCardWidth(items.length)
+          return (
           <div
             key={item.title}
+
             style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              width: 280,
+              width: cardWidth,
               height: 100,
               background: "#ffffff",
               border: "1px solid #e9e9e7",
@@ -224,7 +238,8 @@ export default async function OpenGraphImage() {
               {item.title}
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
 
       <div
@@ -251,7 +266,7 @@ export default async function OpenGraphImage() {
             lineHeight: 1,
           }}
         >
-          Descubre todos los detalles  →
+          Descubre todos los detalles →
         </span>
       </div>
 

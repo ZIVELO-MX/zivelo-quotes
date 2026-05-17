@@ -11,12 +11,16 @@ export type QuoteItem = {
 export type DemoQuote = {
   projectLabel: string
   title: string
+  recipientName: string
   summary: string
   preparedBy: string
   validUntil: string
   status: "active"
   currency: string
   items: QuoteItem[]
+  branding: {
+    logoPath: string
+  }
   actions: {
     approve: boolean
     askQuestion: boolean
@@ -27,12 +31,16 @@ export type DemoQuote = {
 export const DEMO_QUOTE: DemoQuote = {
   projectLabel: "Propuesta \u00b7 Proyecto Web",
   title: "ACME Corp \u2014 Propuesta de Sitio Web",
+  recipientName: "ACME Corp",
   summary:
     "Propuesta integral para el desarrollo de presencia digital corporativa: direcci\u00f3n de marca, sitio web corporativo y soporte de lanzamiento.",
   preparedBy: "Zivelo",
   validUntil: "30 Jun 2026",
   status: "active",
   currency: "MXN",
+  branding: {
+    logoPath: "public/logos/zivelo-bars-dark-full.svg",
+  },
   items: [
     {
       title: "Direcci\u00f3n de marca",
