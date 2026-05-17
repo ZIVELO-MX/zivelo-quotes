@@ -5,7 +5,7 @@
 | Campo | Estado |
 | --- | --- |
 | Versión actual | v0.0.5 - Producto Visible — fase cerrada |
-| Avance actual | Landing pública, quote demo hardcodeada en `/q/demo`, wireframe y schema diseñados, i18n EN/ES, navegación entre landing y demo, exportación PDF funcional con preview, logo y tabla, OG image premium para `/q/demo`. |
+| Avance actual | Landing pública, quote demo hardcodeada en `/q/demo`, wireframe y schema diseñados, i18n EN/ES, navegación entre landing y demo, exportación PDF funcional con preview, logo y tabla, OG image premium para `/q/demo`, WhatsApp integration en botones de acción. |
 | Siguiente fase | v0.1.0 - MVP Operativo |
 | Siguiente foco | Dashboard interno, creación y edición de quotes desde admin, persistencia en base de datos. |
 | Meta inmediata | Zivelo puede crear, publicar y compartir cotizaciones reales desde el dashboard. |
@@ -68,6 +68,7 @@ Esta fase crea la primera experiencia que puede mostrarse a clientes o stakehold
 | Navegación mínima | Enlaces claros entre landing, demo y acceso al dashboard. | Completo |
 | Open Graph base | Metadata social inicial para landing y demo. | Completo |
 | Open Graph premium | Imagen OG personalizada para `/q/demo` con logo, headline, items y CTA. | Completo |
+| WhatsApp actions | Los botones "Aprobar propuesta" y "Hacer una pregunta" abren WhatsApp con mensaje template. | Completo |
 
 ### Landing
 
