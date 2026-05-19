@@ -1,11 +1,10 @@
 import { ImageResponse } from "next/og"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
-import { DEMO_QUOTE } from "@/lib/demo-quote-data"
+import { prisma } from "@/lib/prisma"
 
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
-export const alt = "¡Tenemos tu cotización! — Zivelo Quotes"
 
 const INTER_FONT_URLS = [
   ["Inter", "https://cdn.jsdelivr.net/npm/@fontsource/inter/files/inter-latin-400-normal.woff", 400],
@@ -72,13 +71,23 @@ function getCardWidth(itemCount: number): number {
   return 280
 }
 
-export default async function OpenGraphImage() {
-  const interFonts = await loadInterFont()
+type Props = {
+  params: Promise<{ quoteSlug: string }>
+}
 
-  const logoDataUrl = await getLogoDataUrl(DEMO_QUOTE.branding.logoPath)
-  const summary = truncateSummary(DEMO_QUOTE.summary)
-  const recipient = DEMO_QUOTE.recipientName
-  const items = DEMO_QUOTE.items.slice(0, 3)
+export default async function OpenGraphImage({ params }: Props) {
+  const { quoteSlug } = await params
+
+  const row = await prisma.quote.findUnique({ where: { slug: quoteSlug } })
+  if (!row) return new ImageResponse(<div style={{ fontSize: 32, color: "#999" }}>Not found</div>, size)
+
+  const items = (row.items as Array<{ title: string }>) ?? []
+  const branding = row.branding as { logoPath?: string } | undefined
+  const summary = typeof row.summary === "string" ? truncateSummary(row.summary) : ""
+
+  const interFonts = await loadInterFont()
+  const logoDataUrl = branding?.logoPath ? await getLogoDataUrl(branding.logoPath) : null
+  const displayItems = items.slice(0, 3)
 
   return new ImageResponse(
     <div
@@ -190,7 +199,7 @@ export default async function OpenGraphImage() {
           textAlign: "center",
         }}
       >
-        {recipient}
+        {row.recipientName}
       </div>
 
       <div
@@ -209,59 +218,59 @@ export default async function OpenGraphImage() {
         {summary}
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 18,
-          marginTop: 26,
-        }}
-      >
-        {items.map((item) => {
-          const cardWidth = getCardWidth(items.length)
-          return (
-          <div
-            key={item.title}
-
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              width: cardWidth,
-              height: 100,
-              background: "#ffffff",
-              border: "1px solid #e9e9e7",
-              borderRadius: 12,
-              boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-              paddingLeft: 20,
-              paddingRight: 20,
-            }}
-          >
-            <div
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: "#CC0000",
-                marginBottom: 10,
-              }}
-            />
-            <div
-              style={{
-                fontSize: 16,
-                fontWeight: 600,
-                color: "#191919",
-                lineHeight: 1.3,
-                textAlign: "center",
-              }}
-            >
-              {item.title}
-            </div>
-          </div>
-          )
-        })}
-      </div>
+      {displayItems.length > 0 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 18,
+            marginTop: 26,
+          }}
+        >
+          {displayItems.map((item: { title: string }) => {
+            return (
+              <div
+                key={item.title}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: getCardWidth(displayItems.length),
+                  height: 100,
+                  background: "#ffffff",
+                  border: "1px solid #e9e9e7",
+                  borderRadius: 12,
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                }}
+              >
+                <div
+                  style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: "#CC0000",
+                    marginBottom: 10,
+                  }}
+                />
+                <div
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 600,
+                    color: "#191919",
+                    lineHeight: 1.3,
+                    textAlign: "center",
+                  }}
+                >
+                  {item.title}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
 
       <div
         style={{
