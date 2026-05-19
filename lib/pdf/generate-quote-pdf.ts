@@ -2,33 +2,39 @@ import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
 import type { QuoteData, QuoteItem } from "@/lib/demo-quote-data"
 
-function getLogoUrl(logoPath: string): string {
+function getLogoUrl(logoPath: string | null | undefined): string | null {
+  if (!logoPath) return null
   if (logoPath.startsWith("http://") || logoPath.startsWith("https://")) {
     return logoPath
   }
   return "/" + logoPath.replace(/^public\//, "")
 }
 
-async function svgToPngDataUrl(svgPath: string): Promise<string> {
-  const response = await fetch(svgPath)
-  const svgText = await response.text()
-  const blob = new Blob([svgText], { type: "image/svg+xml" })
-  const url = URL.createObjectURL(blob)
+async function svgToPngDataUrl(svgPath: string): Promise<string | null> {
+  try {
+    const response = await fetch(svgPath)
+    if (!response.ok) return null
+    const svgText = await response.text()
+    const blob = new Blob([svgText], { type: "image/svg+xml" })
+    const url = URL.createObjectURL(blob)
 
-  const img = new Image()
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve()
-    img.onerror = () => reject(new Error(`Failed to load SVG: ${svgPath}`))
-    img.src = url
-  })
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image()
+      img.onload = () => resolve(img)
+      img.onerror = () => reject()
+      img.src = url
+    })
 
-  const canvas = document.createElement("canvas")
-  canvas.width = img.width
-  canvas.height = img.height
-  const ctx = canvas.getContext("2d")!
-  ctx.drawImage(img, 0, 0)
-  URL.revokeObjectURL(url)
-  return canvas.toDataURL("image/png")
+    const canvas = document.createElement("canvas")
+    canvas.width = img.width
+    canvas.height = img.height
+    const ctx = canvas.getContext("2d")!
+    ctx.drawImage(img, 0, 0)
+    URL.revokeObjectURL(url)
+    return canvas.toDataURL("image/png")
+  } catch {
+    return null
+  }
 }
 
 function formatPrice(price: number) {
@@ -63,12 +69,15 @@ export async function generateQuotePdf(quote: QuoteData): Promise<Blob> {
   const margin = 20
   let y = margin
 
-  const logoUrl = getLogoUrl(quote.branding.logoPath)
-  const logoDataUrl = await svgToPngDataUrl(logoUrl)
+  const logoUrl = getLogoUrl(quote.branding?.logoPath)
+  const logoDataUrl = logoUrl ? await svgToPngDataUrl(logoUrl) : null
 
-  const logoWidth = 50
-  const logoHeight = 17
-  doc.addImage(logoDataUrl, "PNG", margin, y - 2, logoWidth, logoHeight)
+  let logoHeight = 0
+  if (logoDataUrl) {
+    const logoWidth = 50
+    logoHeight = 17
+    doc.addImage(logoDataUrl, "PNG", margin, y - 2, logoWidth, logoHeight)
+  }
 
   const today = new Date()
   const dateStr = today.toLocaleDateString("es-MX", {
@@ -78,11 +87,12 @@ export async function generateQuotePdf(quote: QuoteData): Promise<Blob> {
   })
   doc.setFontSize(9)
   doc.setTextColor(120, 120, 120)
-  doc.text(`Generado: ${dateStr}`, pageWidth - margin, y + 4, {
+  const dateY = logoDataUrl ? y + 4 : y
+  doc.text(`Generado: ${dateStr}`, pageWidth - margin, dateY, {
     align: "right",
   })
 
-  y += logoHeight + 14
+  y += (logoDataUrl ? logoHeight : 0) + 14
 
   doc.setFontSize(11)
   doc.setTextColor(204, 0, 0)

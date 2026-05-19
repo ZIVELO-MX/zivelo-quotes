@@ -5,9 +5,9 @@
 | Campo | Estado |
 | --- | --- |
 | Versión actual | v0.0.5 - Producto Visible — fase cerrada |
-| Avance actual | Landing pública, quote demo hardcodeada en `/q/demo`, componentes de quote extraídos como módulos reutilizables (`QuoteHero`, `QuoteSummary`, `QuoteItemsList`, `QuotePricing`, `QuoteActions`), ruta pública `/q/[quoteSlug]` funcional renderizando desde datos estructurados, wireframe y schema diseñados, i18n EN/ES, navegación entre landing y demo, exportación PDF funcional con preview, logo y tabla, OG image premium para `/q/demo` con timeout y manejo de errores (logo condicional), WhatsApp integration en botones de acción. |
+| Avance actual | Landing pública, componentes de quote reutilizables, ruta `/q/[quoteSlug]` renderiza desde DB (Prisma + Supabase PostgreSQL via pooler IPv4), tabla `Quote` con `items`/`branding`/`actions` como JSONB, seed insertado, i18n EN/ES, PDF export, OG image premium, WhatsApp integration. Datos hardcodeados eliminados — todas las quotes se sirven desde base de datos. |
 | Siguiente fase | v0.1.0 - MVP Operativo |
-| Siguiente foco | Persistencia en base de datos, autenticación, dashboard interno con creación y edición de quotes. |
+| Siguiente foco | Autenticación (Supabase Auth o similar), dashboard interno con listado, creación y edición de quotes. |
 | Meta inmediata | Zivelo puede crear, publicar y compartir cotizaciones reales desde el dashboard. |
 
 Este roadmap organiza Zivelo Quotes como un producto que puede arrancar pequeño, validar su flujo interno y crecer hacia una plataforma reutilizable sin rehacer su base.
@@ -226,7 +226,7 @@ Zivelo debe poder operar quotes en dominios o entornos diferenciados sin comprom
 | 2 | Implementar landing | Da contexto inmediato al producto. |
 | 3 | Implementar quote demo hardcodeada sobre schema inicial | Valida experiencia visual antes de construir todo el editor. | Hecho |
 | 4 | Crear quote schema y datos mock | Estabiliza el contrato del quote engine. | Hecho |
-| 5 | Construir vista pública `/q/[quoteSlug]` | Convierte la demo en render dinámico. | Hecho (hardcodeado, pendiente conectar DB) |
+| 5 | Construir vista pública `/q/[quoteSlug]` + conexión DB | Convierte la demo en render dinámico desde base de datos. | Hecho |
 | 6 | Construir dashboard/listado | Empieza el flujo operativo interno. |
 | 7 | Agregar creación y edición básica | Permite operar sin tocar código. |
 | 8 | Agregar publicación, PDF y Open Graph | Completa el flujo compartible del MVP. |
