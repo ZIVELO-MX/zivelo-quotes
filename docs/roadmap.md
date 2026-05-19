@@ -4,10 +4,10 @@
 
 | Campo | Estado |
 | --- | --- |
-| Versión actual | v0.0.5 - Producto Visible — fase cerrada |
-| Avance actual | Landing pública, componentes de quote reutilizables, ruta `/q/[quoteSlug]` renderiza desde DB (Prisma + Supabase PostgreSQL via pooler IPv4), tabla `Quote` con `items`/`branding`/`actions` como JSONB, seed insertado, i18n EN/ES, PDF export, OG image premium, WhatsApp integration. Datos hardcodeados eliminados — todas las quotes se sirven desde base de datos. |
+| Versión actual | v0.1.0 - MVP Operativo — fase en curso |
+| Avance actual | Landing pública, ruta `/q/[quoteSlug]` desde DB (Prisma + Supabase PostgreSQL), i18n EN/ES, PDF export, OG image premium, WhatsApp integration. Dashboard layout con navegación, página de creación de quotes (`/dashboard/quotes/new`) con formulario completo (react-hook-form + zod, items dinámicos, tags, switch toggles, validación), Server Action para persistir vía Prisma, login placeholder (`/dashboard/login`). |
 | Siguiente fase | v0.1.0 - MVP Operativo |
-| Siguiente foco | Autenticación (Supabase Auth o similar), dashboard interno con listado, creación y edición de quotes. |
+| Siguiente foco | Listado de quotes, edición, autenticación real con Supabase Auth. |
 | Meta inmediata | Zivelo puede crear, publicar y compartir cotizaciones reales desde el dashboard. |
 
 Este roadmap organiza Zivelo Quotes como un producto que puede arrancar pequeño, validar su flujo interno y crecer hacia una plataforma reutilizable sin rehacer su base.
@@ -35,6 +35,7 @@ El plan prioriza cuatro superficies iniciales:
 | --- | --- | --- | --- |
 | Fundaciones | v0.0.1 | Definir arquitectura, alcance y estructura base del producto. | Documentación clara, modelo inicial y ruta técnica validada. |
 | Producto visible | v0.0.5 | Crear landing y quote demo navegable. | Se puede mostrar el producto antes de tener todo el dashboard terminado. |
+| Autenticación y organizaciones | v0.0.7 | Registro de usuarios, organizaciones, roles y permisos. | Zivelo puede gestionar quién accede al dashboard y con qué nivel de control. |
 | MVP operativo | v0.1.0 | Crear y compartir cotizaciones reales desde un dashboard interno. | Zivelo puede usar la plataforma para propuestas internas. |
 | Experiencia mejorada | v0.2.0 | Mejorar templates, mobile, branding y rich media. | Las cotizaciones se sienten más premium y flexibles. |
 | Control y privacidad | v0.3.0 | Agregar estados, privacidad y mejores flujos administrativos. | Mayor control sobre quotes publicadas y borradores. |
@@ -95,21 +96,41 @@ Esta fase crea la primera experiencia que puede mostrarse a clientes o stakehold
 
 La fase termina cuando una persona pueda abrir la landing, entender el producto y navegar a una quote demo convincente sin depender de explicaciones externas.
 
+## v0.0.7 - Autenticación y Organizaciones
+
+Base de usuarios, organizaciones y control de acceso antes de abrir el dashboard a operación real.
+
+| Entregable | Descripción |
+| --- | --- |
+| Modelo de datos | Esquema de usuarios, organizaciones, roles y permisos en Prisma. |
+| Registro de organizaciones | Flujo para crear una nueva organización con un usuario admin inicial. |
+| Autenticación | Login y registro con email + contraseña (Supabase Auth). |
+| Sesión y protección | Middleware que redirige al login si no hay sesión activa. |
+| Roles base | Admin (control total), Editor (crear/editar quotes), Viewer (solo lectura). |
+| Permisos por acción | Cada acción del dashboard validada contra el rol del usuario. |
+| Un usuario / una organización | Un usuario pertenece a una sola organización y no puede cambiarla por sí mismo. |
+| Gestión de usuarios | Pantalla en dashboard para que admins inviten, creen y desactiven usuarios de su organización. |
+| Google SSO | Inicio de sesión con Google como alternativa al email+password. |
+
+### Criterio De Salida
+
+Zivelo puede crear una organización, invitar usuarios con distintos roles, y cada usuario accede al dashboard con los permisos correspondientes. Sin esta fase el dashboard no puede operar con múltiples personas ni proteger datos entre organizaciones.
+
 ## v0.1.0 - MVP Operativo
 
 El MVP debe permitir que Zivelo cree, edite, publique y comparta cotizaciones reales desde un flujo interno.
 
 | Entregable | Alcance | Prioridad |
 | --- | --- | --- |
-| Dashboard interno | Área `/dashboard` protegida por login. | Alta |
-| Listado de quotes | Vista con estado, cliente, servicio, slug y última actualización. | Alta |
-| Creación de quote | Formulario para crear una cotización con datos principales. | Alta |
-| Edición básica | Edición de contenido, secciones, line items, pricing y CTA. | Alta |
-| Publicación | Estados draft/published y URL pública por slug. | Alta |
+| Dashboard interno | Área `/dashboard` protegida por login. Layout con navegación. Login placeholder. | Media |
+| Creación de quote | Formulario en `/dashboard/quotes/new` con react-hook-form + zod, items dinámicos, tags, switch toggles, Server Action. | Hecho |
+| Edición básica | Edición de contenido, secciones, line items, pricing y CTA. | |
+| Publicación | Estados draft/published y URL pública por slug. | Hecho |
 | Página pública | Ruta `/q/[quoteSlug]` renderizada desde datos estructurados. | Alta |
+| Listado de quotes | Vista con estado, cliente, slug y última actualización. | Alta |
 | Exportación PDF | Generar snapshot compartible de la cotización con logo, tabla y adjuntos. | Hecho |
-| Open Graph dinámico | Imagen o metadata personalizada por quote. | Media |
-| Persistencia inicial | Base de datos o almacenamiento elegido para operar el MVP. | Alta |
+| Open Graph dinámico | Imagen o metadata personalizada por quote. | Hecho |
+| Persistencia inicial | Base de datos (Prisma + Supabase PostgreSQL). | Hecho |
 
 ### Dashboard
 
@@ -149,6 +170,7 @@ La fase termina cuando Zivelo pueda crear una cotización desde el dashboard, pu
 | Rich media | Soporte para imágenes, videos, mockups, embeds o previews. |
 | Mobile refinado | Experiencia pública y dashboard más robustos en pantallas pequeñas. |
 | Componentes reutilizables | Consolidar UI compartida para dashboard y quotes. |
+| Preview en creación | Vista previa en vivo de la cotización dentro de `/dashboard/quotes/new`. |
 
 ### Criterio De Salida
 
@@ -227,9 +249,9 @@ Zivelo debe poder operar quotes en dominios o entornos diferenciados sin comprom
 | 3 | Implementar quote demo hardcodeada sobre schema inicial | Valida experiencia visual antes de construir todo el editor. | Hecho |
 | 4 | Crear quote schema y datos mock | Estabiliza el contrato del quote engine. | Hecho |
 | 5 | Construir vista pública `/q/[quoteSlug]` + conexión DB | Convierte la demo en render dinámico desde base de datos. | Hecho |
-| 6 | Construir dashboard/listado | Empieza el flujo operativo interno. |
-| 7 | Agregar creación y edición básica | Permite operar sin tocar código. |
-| 8 | Agregar publicación, PDF y Open Graph | Completa el flujo compartible del MVP. |
+| 6 | Agregar creación de quote con formulario | Permite crear cotizaciones desde el dashboard. | Hecho |
+| 7 | Construir listado de quotes | Visualiza y gestiona todas las cotizaciones. |
+| 8 | Agregar edición básica | Permite modificar cotizaciones existentes. |
 
 ## Fuera De Alcance Del MVP
 
