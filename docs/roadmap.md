@@ -35,6 +35,7 @@ El plan prioriza cuatro superficies iniciales:
 | --- | --- | --- | --- |
 | Fundaciones | v0.0.1 | Definir arquitectura, alcance y estructura base del producto. | Documentación clara, modelo inicial y ruta técnica validada. |
 | Producto visible | v0.0.5 | Crear landing y quote demo navegable. | Se puede mostrar el producto antes de tener todo el dashboard terminado. |
+| Autenticación y organizaciones | v0.0.7 | Registro de usuarios, organizaciones, roles y permisos. | Zivelo puede gestionar quién accede al dashboard y con qué nivel de control. |
 | MVP operativo | v0.1.0 | Crear y compartir cotizaciones reales desde un dashboard interno. | Zivelo puede usar la plataforma para propuestas internas. |
 | Experiencia mejorada | v0.2.0 | Mejorar templates, mobile, branding y rich media. | Las cotizaciones se sienten más premium y flexibles. |
 | Control y privacidad | v0.3.0 | Agregar estados, privacidad y mejores flujos administrativos. | Mayor control sobre quotes publicadas y borradores. |
@@ -94,6 +95,26 @@ Esta fase crea la primera experiencia que puede mostrarse a clientes o stakehold
 ### Criterio De Salida
 
 La fase termina cuando una persona pueda abrir la landing, entender el producto y navegar a una quote demo convincente sin depender de explicaciones externas.
+
+## v0.0.7 - Autenticación y Organizaciones
+
+Base de usuarios, organizaciones y control de acceso antes de abrir el dashboard a operación real.
+
+| Entregable | Descripción |
+| --- | --- |
+| Modelo de datos | Esquema de usuarios, organizaciones, roles y permisos en Prisma. |
+| Registro de organizaciones | Flujo para crear una nueva organización con un usuario admin inicial. |
+| Autenticación | Login y registro con email + contraseña (Supabase Auth). |
+| Sesión y protección | Middleware que redirige al login si no hay sesión activa. |
+| Roles base | Admin (control total), Editor (crear/editar quotes), Viewer (solo lectura). |
+| Permisos por acción | Cada acción del dashboard validada contra el rol del usuario. |
+| Un usuario / una organización | Un usuario pertenece a una sola organización y no puede cambiarla por sí mismo. |
+| Gestión de usuarios | Pantalla en dashboard para que admins inviten, creen y desactiven usuarios de su organización. |
+| Google SSO | Inicio de sesión con Google como alternativa al email+password. |
+
+### Criterio De Salida
+
+Zivelo puede crear una organización, invitar usuarios con distintos roles, y cada usuario accede al dashboard con los permisos correspondientes. Sin esta fase el dashboard no puede operar con múltiples personas ni proteger datos entre organizaciones.
 
 ## v0.1.0 - MVP Operativo
 
