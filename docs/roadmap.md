@@ -4,10 +4,10 @@
 
 | Campo | Estado |
 | --- | --- |
-| Versión actual | v0.0.5 - Producto Visible — fase cerrada |
-| Avance actual | Landing pública, componentes de quote reutilizables, ruta `/q/[quoteSlug]` renderiza desde DB (Prisma + Supabase PostgreSQL via pooler IPv4), tabla `Quote` con `items`/`branding`/`actions` como JSONB, seed insertado, i18n EN/ES, PDF export, OG image premium, WhatsApp integration. Datos hardcodeados eliminados — todas las quotes se sirven desde base de datos. |
+| Versión actual | v0.1.0 - MVP Operativo — fase en curso |
+| Avance actual | Landing pública, ruta `/q/[quoteSlug]` desde DB (Prisma + Supabase PostgreSQL), i18n EN/ES, PDF export, OG image premium, WhatsApp integration. Dashboard layout con navegación, página de creación de quotes (`/dashboard/quotes/new`) con formulario completo (react-hook-form + zod, items dinámicos, tags, switch toggles, validación), Server Action para persistir vía Prisma, login placeholder (`/dashboard/login`). |
 | Siguiente fase | v0.1.0 - MVP Operativo |
-| Siguiente foco | Autenticación (Supabase Auth o similar), dashboard interno con listado, creación y edición de quotes. |
+| Siguiente foco | Listado de quotes, edición, autenticación real con Supabase Auth. |
 | Meta inmediata | Zivelo puede crear, publicar y compartir cotizaciones reales desde el dashboard. |
 
 Este roadmap organiza Zivelo Quotes como un producto que puede arrancar pequeño, validar su flujo interno y crecer hacia una plataforma reutilizable sin rehacer su base.
@@ -101,15 +101,15 @@ El MVP debe permitir que Zivelo cree, edite, publique y comparta cotizaciones re
 
 | Entregable | Alcance | Prioridad |
 | --- | --- | --- |
-| Dashboard interno | Área `/dashboard` protegida por login. | Alta |
-| Listado de quotes | Vista con estado, cliente, servicio, slug y última actualización. | Alta |
-| Creación de quote | Formulario para crear una cotización con datos principales. | Alta |
-| Edición básica | Edición de contenido, secciones, line items, pricing y CTA. | Alta |
-| Publicación | Estados draft/published y URL pública por slug. | Alta |
+| Dashboard interno | Área `/dashboard` protegida por login. Layout con navegación. Login placeholder. | Media |
+| Creación de quote | Formulario en `/dashboard/quotes/new` con react-hook-form + zod, items dinámicos, tags, switch toggles, Server Action. | Hecho |
+| Edición básica | Edición de contenido, secciones, line items, pricing y CTA. | |
+| Publicación | Estados draft/published y URL pública por slug. | Hecho |
 | Página pública | Ruta `/q/[quoteSlug]` renderizada desde datos estructurados. | Alta |
+| Listado de quotes | Vista con estado, cliente, slug y última actualización. | Alta |
 | Exportación PDF | Generar snapshot compartible de la cotización con logo, tabla y adjuntos. | Hecho |
-| Open Graph dinámico | Imagen o metadata personalizada por quote. | Media |
-| Persistencia inicial | Base de datos o almacenamiento elegido para operar el MVP. | Alta |
+| Open Graph dinámico | Imagen o metadata personalizada por quote. | Hecho |
+| Persistencia inicial | Base de datos (Prisma + Supabase PostgreSQL). | Hecho |
 
 ### Dashboard
 
@@ -227,9 +227,9 @@ Zivelo debe poder operar quotes en dominios o entornos diferenciados sin comprom
 | 3 | Implementar quote demo hardcodeada sobre schema inicial | Valida experiencia visual antes de construir todo el editor. | Hecho |
 | 4 | Crear quote schema y datos mock | Estabiliza el contrato del quote engine. | Hecho |
 | 5 | Construir vista pública `/q/[quoteSlug]` + conexión DB | Convierte la demo en render dinámico desde base de datos. | Hecho |
-| 6 | Construir dashboard/listado | Empieza el flujo operativo interno. |
-| 7 | Agregar creación y edición básica | Permite operar sin tocar código. |
-| 8 | Agregar publicación, PDF y Open Graph | Completa el flujo compartible del MVP. |
+| 6 | Agregar creación de quote con formulario | Permite crear cotizaciones desde el dashboard. | Hecho |
+| 7 | Construir listado de quotes | Visualiza y gestiona todas las cotizaciones. |
+| 8 | Agregar edición básica | Permite modificar cotizaciones existentes. |
 
 ## Fuera De Alcance Del MVP
 
