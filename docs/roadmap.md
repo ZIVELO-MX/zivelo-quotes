@@ -149,6 +149,7 @@ La fase termina cuando Zivelo pueda crear una cotización desde el dashboard, pu
 | Rich media | Soporte para imágenes, videos, mockups, embeds o previews. |
 | Mobile refinado | Experiencia pública y dashboard más robustos en pantallas pequeñas. |
 | Componentes reutilizables | Consolidar UI compartida para dashboard y quotes. |
+| Preview en creación | Vista previa en vivo de la cotización dentro de `/dashboard/quotes/new`. |
 
 ### Criterio De Salida
 
