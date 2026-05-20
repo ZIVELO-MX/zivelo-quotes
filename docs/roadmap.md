@@ -125,7 +125,7 @@ Validar la lógica core del producto con tests automatizados antes del release o
 | --- | --- | --- |
 | Setup de testing | Instalar vitest, configurar `@/` alias, scripts `test`, `test:quote`, `test:watch`. | Hecho |
 | Tests de schemas Zod | Happy path y unhappy path de `formSchema` e `itemSchema`: reglas de validación, defaults, valores inválidos. | Hecho |
-| Tests de server actions | Validación server-side de `createQuote` con mocks de Prisma. | |
+| Tests de server actions | Validación server-side de `createQuote` con mocks de Prisma (`vi.mock()`). | Hecho |
 | Tests de componentes | Tests de renderizado e interacción de `QuoteCreateForm` (react-hook-form + shadcn Form). | |
 | Tests de páginas públicas | Validar render de `/q/[quoteSlug]` con datos mock. | |
 | Integración continua | Ejecutar `pnpm test` en CI (pre-commit hook o GitHub Actions). | |
@@ -135,7 +135,12 @@ Validar la lógica core del producto con tests automatizados antes del release o
 | Herramienta | Uso |
 | --- | --- |
 | `vitest` 4.x | Test runner, assertions, mocks |
+| `vi.mock()` | Mocking de Prisma y módulos externos |
 | `zod` | Tests directos de schemas (sin mocking necesario) |
+
+### Documento asociado
+
+Ver [`docs/test-plan.md`](./test-plan.md) para el plan detallado de cobertura por fase.
 
 ### Criterio De Salida
 
