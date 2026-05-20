@@ -30,6 +30,8 @@
   --muted-foreground: #6b6b6b;
   --input: #e9e9e7;
   --ring: #cc0000;
+  --destructive: #cc0000;
+  --destructive-foreground: #ffffff;
   --radius: 0.5rem;
 }
 
@@ -62,6 +64,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);

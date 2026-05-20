@@ -4,8 +4,8 @@
 
 | Campo | Estado |
 | --- | --- |
-| Versión actual | v0.1.0 - MVP Operativo — fase en curso |
-| Avance actual | Landing pública, ruta `/q/[quoteSlug]` desde DB (Prisma + Supabase PostgreSQL), i18n EN/ES, PDF export, OG image premium, WhatsApp integration. Dashboard layout con navegación, página de creación de quotes (`/dashboard/quotes/new`) con formulario completo (react-hook-form + zod, items dinámicos, tags, switch toggles, validación), Server Action para persistir vía Prisma, login placeholder (`/dashboard/login`). |
+| Versión actual | v0.0.8 → v0.1.0 — Tests y validación + MVP Operativo — fases en curso |
+| Avance actual | Landing pública, ruta `/q/[quoteSlug]` desde DB (Prisma + Supabase PostgreSQL), i18n EN/ES, PDF export, OG image premium, WhatsApp integration. Dashboard layout con navegación, página de creación de quotes (`/dashboard/quotes/new`) con formulario completo (react-hook-form + zod, items dinámicos, tags, switch toggles, validación), Server Action para persistir vía Prisma, login placeholder (`/dashboard/login`). Tests automatizados de schemas Zod con vitest (15 tests: happy path + unhappy path de `formSchema` e `itemSchema`). |
 | Siguiente fase | v0.1.0 - MVP Operativo |
 | Siguiente foco | Listado de quotes, edición, autenticación real con Supabase Auth. |
 | Meta inmediata | Zivelo puede crear, publicar y compartir cotizaciones reales desde el dashboard. |
@@ -36,6 +36,7 @@ El plan prioriza cuatro superficies iniciales:
 | Fundaciones | v0.0.1 | Definir arquitectura, alcance y estructura base del producto. | Documentación clara, modelo inicial y ruta técnica validada. |
 | Producto visible | v0.0.5 | Crear landing y quote demo navegable. | Se puede mostrar el producto antes de tener todo el dashboard terminado. |
 | Autenticación y organizaciones | v0.0.7 | Registro de usuarios, organizaciones, roles y permisos. | Zivelo puede gestionar quién accede al dashboard y con qué nivel de control. |
+| Tests y validación | v0.0.8 | Validar la lógica core del producto con tests automatizados. | Schemas, validaciones y utilidades cubiertas por tests antes del release operativo. |
 | MVP operativo | v0.1.0 | Crear y compartir cotizaciones reales desde un dashboard interno. | Zivelo puede usar la plataforma para propuestas internas. |
 | Experiencia mejorada | v0.2.0 | Mejorar templates, mobile, branding y rich media. | Las cotizaciones se sienten más premium y flexibles. |
 | Control y privacidad | v0.3.0 | Agregar estados, privacidad y mejores flujos administrativos. | Mayor control sobre quotes publicadas y borradores. |
@@ -116,6 +117,32 @@ Base de usuarios, organizaciones y control de acceso antes de abrir el dashboard
 
 Zivelo puede crear una organización, invitar usuarios con distintos roles, y cada usuario accede al dashboard con los permisos correspondientes. Sin esta fase el dashboard no puede operar con múltiples personas ni proteger datos entre organizaciones.
 
+## v0.0.8 - Tests y Validación
+
+Validar la lógica core del producto con tests automatizados antes del release operativo. Esta fase se ejecuta en paralelo con los entregables del MVP y no bloquea el avance de funcionalidad, pero sus criterios deben cumplirse antes de declarar el MVP completo.
+
+| Entregable | Descripción | Prioridad |
+| --- | --- | --- |
+| Setup de testing | Instalar vitest, configurar `@/` alias, scripts `test`, `test:quote`, `test:watch`. | Hecho |
+| Tests de schemas Zod | Happy path y unhappy path de `formSchema` e `itemSchema`: reglas de validación, defaults, valores inválidos. | Hecho |
+| Tests de server actions | Validación server-side de `createQuote` con mocks de Prisma. | |
+| Tests de componentes | Tests de renderizado e interacción de `QuoteCreateForm` (react-hook-form + shadcn Form). | |
+| Tests de páginas públicas | Validar render de `/q/[quoteSlug]` con datos mock. | |
+| Integración continua | Ejecutar `pnpm test` en CI (pre-commit hook o GitHub Actions). | |
+
+### Stack de testing
+
+| Herramienta | Uso |
+| --- | --- |
+| `vitest` 4.x | Test runner, assertions, mocks |
+| `zod` | Tests directos de schemas (sin mocking necesario) |
+
+### Criterio De Salida
+
+Toda validación core (schemas, server actions) tiene cobertura de tests. `pnpm test` pasa sin errores. Los tests se ejecutan automáticamente antes de cada deploy.
+
+---
+
 ## v0.1.0 - MVP Operativo
 
 El MVP debe permitir que Zivelo cree, edite, publique y comparta cotizaciones reales desde un flujo interno.
@@ -124,6 +151,7 @@ El MVP debe permitir que Zivelo cree, edite, publique y comparta cotizaciones re
 | --- | --- | --- |
 | Dashboard interno | Área `/dashboard` protegida por login. Layout con navegación. Login placeholder. | Media |
 | Creación de quote | Formulario en `/dashboard/quotes/new` con react-hook-form + zod, items dinámicos, tags, switch toggles, Server Action. | Hecho |
+| Tests de validación | Tests automatizados de schemas Zod (happy path + unhappy path). | Hecho |
 | Edición básica | Edición de contenido, secciones, line items, pricing y CTA. | |
 | Publicación | Estados draft/published y URL pública por slug. | Hecho |
 | Página pública | Ruta `/q/[quoteSlug]` renderizada desde datos estructurados. | Alta |
@@ -250,8 +278,10 @@ Zivelo debe poder operar quotes en dominios o entornos diferenciados sin comprom
 | 4 | Crear quote schema y datos mock | Estabiliza el contrato del quote engine. | Hecho |
 | 5 | Construir vista pública `/q/[quoteSlug]` + conexión DB | Convierte la demo en render dinámico desde base de datos. | Hecho |
 | 6 | Agregar creación de quote con formulario | Permite crear cotizaciones desde el dashboard. | Hecho |
-| 7 | Construir listado de quotes | Visualiza y gestiona todas las cotizaciones. |
-| 8 | Agregar edición básica | Permite modificar cotizaciones existentes. |
+| 7 | Setup de testing (vitest, scripts, alias) | Habilita tests automatizados antes del release. | Hecho |
+| 8 | Tests de schemas Zod (happy + unhappy path) | Valida reglas de negocio en capa de datos. | Hecho |
+| 9 | Construir listado de quotes | Visualiza y gestiona todas las cotizaciones. |
+| 10 | Agregar edición básica | Permite modificar cotizaciones existentes. |
 
 ## Fuera De Alcance Del MVP
 

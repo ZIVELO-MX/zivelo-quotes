@@ -2,38 +2,30 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { formSchema } from "@/lib/schemas/quote"
+import { z } from "zod"
 import type { Prisma } from "@prisma/client"
 
-type CreateQuoteInput = {
-  slug: string
-  projectLabel: string
-  title: string
-  recipientName: string
-  summary: string
-  preparedBy: string
-  validUntil: string
-  status: string
-  currency: string
-  phone: string
-  branding: Prisma.InputJsonValue
-  items: Prisma.InputJsonValue[]
-  actions: Prisma.InputJsonValue
-}
-
-export async function createQuote(data: CreateQuoteInput) {
+export async function createQuote(data: unknown) {
   try {
-    const quote = await prisma.quote.create({ data: data as Prisma.QuoteCreateInput })
+    const parsed = formSchema.parse(data)
+    const quote = await prisma.quote.create({
+      data: parsed as Prisma.QuoteCreateInput,
+    })
     revalidatePath("/dashboard")
     return { success: true, slug: quote.slug }
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { success: false, error: error.errors[0]?.message ?? "Datos inválidos" }
+    }
     if (
       typeof error === "object" &&
       error !== null &&
       "code" in error &&
       (error as { code: string }).code === "P2002"
     ) {
-      return { success: false, error: "Slug already exists" }
+      return { success: false, error: "El slug ya existe" }
     }
-    return { success: false, error: "Failed to create quote" }
+    return { success: false, error: "Error al crear la cotización" }
   }
 }
