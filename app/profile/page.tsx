@@ -247,8 +247,8 @@ function WorkspaceSection() {
 // ── Section: Users & Permissions ──────────────────────────
 
 const ROLE_COLORS: Record<string, string> = {
-  Owner: "#dc2626",
-  Manager: "#cc0000",
+  Owner: "#cc0000",
+  Manager: "#2563eb",
   Editor: "#d97706",
   Viewer: "#9ca3af",
 }
@@ -300,7 +300,7 @@ function RoleDropdown({
         ].join(" ")}
         role="listbox"
       >
-        <div className="max-h-48 overflow-y-auto">
+        <div className="max-h-60 overflow-y-auto">
           {options.map((opt, i) => (
           <button
             key={opt}
