@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Footer } from "@/components/layout/footer"
+import { MinimalFooter } from "@/components/layout/minimal-footer"
 
 export default function DashboardLayout({
   children,
@@ -50,9 +50,8 @@ export default function DashboardLayout({
           </Link>
         </div>
       </header>
-      <main className="flex-1">{children}</main>
-      {/* TODO: Replace with minimal dashboard footer */}
-      <Footer />
+      <main className="flex-1 flex flex-col">{children}</main>
+      <MinimalFooter />
     </div>
   )
 }
