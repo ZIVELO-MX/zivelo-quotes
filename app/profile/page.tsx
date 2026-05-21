@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { toast } from "sonner"
 import {
@@ -13,6 +13,7 @@ import {
   Share2,
   X,
   MoreHorizontal,
+  Check,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { HARDCODED_USERS } from "@/lib/auth/hardcoded-users"
@@ -245,6 +246,92 @@ function WorkspaceSection() {
 
 // ── Section: Users & Permissions ──────────────────────────
 
+const ROLE_COLORS: Record<string, string> = {
+  Owner: "bg-red-500",
+  Manager: "bg-blue-500",
+  Editor: "bg-amber-500",
+  Viewer: "bg-gray-400",
+}
+
+function RoleDropdown({
+  value,
+  onChange,
+  options,
+}: {
+  value: string
+  onChange: (v: string) => void
+  options: string[]
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 text-gray-700 border border-gray-200 hover:text-gray-900 hover:bg-black/[0.04] hover:border-gray-300 hover:shadow-sm w-full"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        <span className={`block h-2 w-2 rounded-full ${ROLE_COLORS[value] ?? "bg-gray-400"}`} />
+        {value}
+        <ChevronDown
+          size={16}
+          strokeWidth={1.5}
+          className="ml-auto transition-transform duration-200"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+        />
+      </button>
+      <div
+        className={[
+          "absolute top-full left-0 mt-2 rounded-xl overflow-hidden z-50 min-w-[180px] bg-white/92 backdrop-blur-md border border-gray-200/80 shadow-lg transition-all duration-200 ease-in-out",
+          open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none",
+        ].join(" ")}
+        role="listbox"
+      >
+        {options.map((opt, i) => (
+          <button
+            key={opt}
+            type="button"
+            role="option"
+            aria-selected={value === opt}
+            onClick={() => {
+              onChange(opt)
+              setOpen(false)
+            }}
+            className={[
+              "w-full flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium transition-colors duration-150 text-left",
+              value === opt ? "text-gray-900" : "text-gray-500",
+              i > 0 ? "border-t border-gray-200/60" : "",
+            ].join(" ")}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(0,0,0,0.04)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            <span className="flex items-center gap-2">
+              <span className={`block h-2 w-2 rounded-full ${ROLE_COLORS[opt] ?? "bg-gray-400"}`} />
+              {opt}
+            </span>
+            {value === opt && (
+              <Check size={16} strokeWidth={2} className="text-gray-400 shrink-0" />
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function AddParticipantModal({
   open,
   onClose,
@@ -261,7 +348,7 @@ function AddParticipantModal({
   if (!open) return null
 
   const roleOptions = userRole === "Owner"
-    ? ["Manager", "Editor", "Viewer"]
+    ? ["Owner", "Manager", "Editor", "Viewer"]
     : ["Editor", "Viewer"]
 
   function handleCreate() {
@@ -327,19 +414,7 @@ function AddParticipantModal({
                 <label htmlFor="invite-role" className="block text-sm font-medium text-gray-900 mb-1.5">
                   Rol
                 </label>
-                <div className="relative">
-                  <select
-                    id="invite-role"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 w-full appearance-none bg-white transition-shadow duration-200 cursor-pointer"
-                  >
-                    {roleOptions.map((r) => (
-                      <option key={r} value={r}>{r}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="size-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
+                <RoleDropdown value={role} onChange={setRole} options={roleOptions} />
               </div>
               <p className="text-xs text-gray-400">
                 Esta invitación generará un enlace que podrás compartir por WhatsApp.
