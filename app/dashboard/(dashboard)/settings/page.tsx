@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, useRef, useEffect } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import { toast } from "sonner"
 import {
@@ -17,7 +18,7 @@ import {
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { HARDCODED_USERS } from "@/lib/auth/hardcoded-users"
-import { AppSidebar, type SectionId } from "@/components/dashboard/app-sidebar"
+import { SettingsNav, type SectionId } from "@/components/settings/settings-nav"
 
 // ── Helpers ───────────────────────────────────────────────
 
@@ -295,7 +296,7 @@ function RoleDropdown({
       </button>
       <div
         className={[
-          "absolute top-full left-0 mt-2 rounded-xl overflow-hidden z-50 min-w-[180px] bg-white/92 backdrop-blur-md border border-gray-200/80 shadow-lg transition-all duration-200 ease-in-out",
+          "absolute top-full left-0 right-0 sm:right-auto mt-2 rounded-xl overflow-hidden z-50 min-w-[180px] bg-white/92 backdrop-blur-md border border-gray-200/80 shadow-lg transition-all duration-200 ease-in-out",
           open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none",
         ].join(" ")}
         role="listbox"
@@ -489,12 +490,12 @@ function UsersSection() {
 
   return (
     <motion.div key="users" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 gap-3">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Usuarios y permisos</h1>
           <p className="text-sm text-gray-500 mt-1">Gestiona los usuarios, roles e invitaciones del espacio de trabajo.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <SecondaryButton type="button" onClick={() => toast.info("Importación no disponible aún")}>
             Importar
           </SecondaryButton>
@@ -653,24 +654,37 @@ function SecuritySection() {
 
 // ── Main page ─────────────────────────────────────────────
 
-export default function ProfilePage() {
+export default function SettingsPage() {
   const { user } = useAuth()
-  const [activeSection, setActiveSection] = useState<SectionId>("profile")
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const activeSection = searchParams.get("section") as SectionId | null
 
   if (!user) return null
 
+  function handleSelect(section: SectionId) {
+    router.push(`/dashboard/settings?section=${section}`, { scroll: false })
+  }
+
+  function handleBack() {
+    router.push("/dashboard/settings", { scroll: false })
+  }
+
   return (
-    <div className="flex flex-1 min-h-full gap-6 p-6 max-w-5xl mx-auto w-full">
-      <AppSidebar active={activeSection} onSelect={setActiveSection} user={user} />
+    <div className="flex flex-1 min-h-full gap-4 sm:gap-6 p-4 sm:p-6 max-w-5xl mx-auto w-full flex-col sm:flex-row">
+      <SettingsNav
+        user={user}
+        activeSection={activeSection}
+        onSelect={handleSelect}
+        onBack={handleBack}
+      />
       <div className="flex-1 min-w-0">
-        <AnimatePresence mode="wait">
-          {activeSection === "profile" && <ProfileSection key="profile" />}
-          {activeSection === "workspace" && <WorkspaceSection key="workspace" />}
-          {activeSection === "users" && (user.role === "Owner" || user.role === "Manager") && (
-            <UsersSection key="users" />
-          )}
-          {activeSection === "security" && <SecuritySection key="security" />}
-        </AnimatePresence>
+        {activeSection === "profile" && <ProfileSection key="profile" />}
+        {activeSection === "workspace" && <WorkspaceSection key="workspace" />}
+        {activeSection === "users" && (user.role === "Owner" || user.role === "Manager") && (
+          <UsersSection key="users" />
+        )}
+        {activeSection === "security" && <SecuritySection key="security" />}
       </div>
     </div>
   )

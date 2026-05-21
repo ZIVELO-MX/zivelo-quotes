@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -7,6 +8,9 @@ import {
   UserIcon,
   LogOutIcon,
   ChevronDownIcon,
+  MenuIcon,
+  FilePlusIcon,
+  FilesIcon,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -16,10 +20,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 export function DashboardHeader() {
   const { user, logout } = useAuth()
   const router = useRouter()
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   if (!user) return null
 
@@ -38,7 +49,53 @@ export function DashboardHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-2 sm:gap-8">
+          <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
+            <SheetTrigger asChild>
+              <button
+                className="sm:hidden w-8 h-8 flex items-center justify-center rounded-md hover:bg-background-secondary transition-colors cursor-pointer"
+                aria-label="Abrir menú de navegación"
+              >
+                <MenuIcon size={18} className="text-foreground" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-64 p-0">
+              <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
+              <div className="flex flex-col h-full">
+                <div className="flex items-center gap-3 px-5 h-14 border-b border-border">
+                  <Image
+                    src="/logos/zivelo-bars-dark-full.svg"
+                    alt="Zivelo"
+                    width={100}
+                    height={28}
+                    priority
+                    className="object-contain"
+                    style={{ height: "auto" }}
+                  />
+                </div>
+                <nav className="flex flex-col p-3 gap-1">
+                  {user.role !== "Viewer" && (
+                    <Link
+                      href="/dashboard/quotes/new"
+                      onClick={() => setMobileNavOpen(false)}
+                      className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-foreground-muted hover:text-foreground hover:bg-background-secondary transition-colors"
+                    >
+                      <FilePlusIcon size={18} />
+                      Nueva cotización
+                    </Link>
+                  )}
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileNavOpen(false)}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-foreground-muted hover:text-foreground hover:bg-background-secondary transition-colors"
+                  >
+                    <FilesIcon size={18} />
+                    Cotizaciones
+                  </Link>
+                </nav>
+              </div>
+            </SheetContent>
+          </Sheet>
           <Link
             href="/dashboard"
             className="flex-shrink-0 flex items-center"
@@ -88,7 +145,7 @@ export function DashboardHeader() {
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-44">
-            <DropdownMenuItem onSelect={() => router.push("/profile")} className="cursor-pointer">
+            <DropdownMenuItem onSelect={() => router.push("/dashboard/settings")} className="cursor-pointer">
               <UserIcon className="size-4" />
               Perfil
             </DropdownMenuItem>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/layout/theme-provider"
 import { LanguageProvider } from "@/lib/i18n"
@@ -45,6 +45,12 @@ export const metadata: Metadata = {
       "Crea, comparte y presenta cotizaciones y propuestas interactivas con Zivelo Quotes.",
     images: ["/og-landing.svg"],
   },
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 export default function RootLayout({
