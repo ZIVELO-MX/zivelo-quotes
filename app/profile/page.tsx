@@ -300,7 +300,7 @@ function RoleDropdown({
         ].join(" ")}
         role="listbox"
       >
-        <div className="max-h-60 overflow-y-auto">
+        <div className="max-h-60 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
           {options.map((opt, i) => (
           <button
             key={opt}
