@@ -426,7 +426,7 @@ function BrandSection() {
                 <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
               </label>
             ) : (
-              <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50/30 px-5 py-4">
+              <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50/30 px-5 py-4 flex-wrap">
                 <div className="flex h-14 w-28 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white px-3">
                   <img
                     src={logoPreview || "/logos/zivelo-bars-dark-full.svg"}
@@ -779,7 +779,47 @@ function TeamSection() {
         Los usuarios mostrados son datos de demostración. La funcionalidad de base de datos estará disponible próximamente.
       </p>
 
-      <div className="bg-white border border-gray-100 rounded-2xl overflow-x-auto">
+      {/* Mobile card view */}
+      <div className="sm:hidden space-y-3">
+        {members.map((m) => {
+          const initials = getInitials(m.name)
+          const isCurrentUser = m.email === user.email
+          return (
+            <div key={m.email} className="bg-white border border-gray-100 rounded-2xl p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-9 h-9 rounded-full bg-gray-900 text-white flex items-center justify-center text-xs font-semibold shrink-0">
+                  {initials}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {m.name}
+                    {isCurrentUser && <span className="text-gray-400 font-normal ml-1">(tú)</span>}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">{m.email}</p>
+                </div>
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium text-white shrink-0" style={{ backgroundColor: ROLE_COLORS[m.role] ?? "#9ca3af" }}>
+                  {m.role}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span
+                  className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                    m.status === "Activo"
+                      ? "bg-gray-100 text-gray-700"
+                      : "bg-amber-50 text-amber-700"
+                  }`}
+                >
+                  {m.status}
+                </span>
+                <span className="text-gray-400">{m.lastActive ? "Activo hoy" : "Sin actividad"}</span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden sm:block bg-white border border-gray-100 rounded-2xl overflow-x-auto">
         <table className="w-full min-w-[640px]">
           <thead>
             <tr className="bg-gray-50">
@@ -1125,7 +1165,11 @@ export default function SettingsPage() {
           </Link>
         </div>
 
-        {activeSection === null && <SettingsIndex onSelect={handleSelect} role={user.role} />}
+        {activeSection === null && (
+          <div className="hidden sm:block">
+            <SettingsIndex onSelect={handleSelect} role={user.role} />
+          </div>
+        )}
 
         <AnimatePresence mode="wait">
           {activeSection === "general" && <GeneralSection key="general" />}

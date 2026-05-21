@@ -179,8 +179,44 @@ export default function QuotesPage() {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white border border-gray-100 rounded-2xl overflow-x-auto">
+      {/* Mobile card view */}
+      <div className="sm:hidden space-y-3">
+        {filtered.length === 0 ? (
+          <div className="bg-white border border-gray-100 rounded-2xl px-5 py-12 text-center text-sm text-gray-400">
+            No se encontraron cotizaciones.
+          </div>
+        ) : (
+          filtered.map((q) => {
+            const colors = STATUS_COLORS[q.status]
+            return (
+              <div
+                key={q.id}
+                className="bg-white border border-gray-100 rounded-2xl p-4 cursor-pointer transition-colors hover:bg-gray-50/50"
+                onClick={() => toast.info(`Vista de detalle — próximamente (${q.id})`)}
+              >
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-gray-900 truncate">{q.title}</p>
+                    <p className="text-xs text-gray-500 truncate mt-0.5">{q.client}</p>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-900 shrink-0">{formatPrice(q.total, q.currency)}</p>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-gray-500">
+                  <span className={`inline-flex items-center gap-1.5 ${colors.text}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                    {STATUS_LABELS[q.status]}
+                  </span>
+                  <span>·</span>
+                  <span>{q.validUntil || "Sin vencimiento"}</span>
+                </div>
+              </div>
+            )
+          })
+        )}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden sm:block bg-white border border-gray-100 rounded-2xl overflow-x-auto">
         <table className="w-full min-w-[640px]">
           <thead>
             <tr className="bg-gray-50">
