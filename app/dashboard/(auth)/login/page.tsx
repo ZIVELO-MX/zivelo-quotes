@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,6 +20,7 @@ export default function LoginPage() {
   const router = useRouter()
   const [identifier, setIdentifier] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<{ identifier?: string; password?: string }>({})
 
   function handleSubmit(e: React.FormEvent) {
@@ -69,7 +71,7 @@ export default function LoginPage() {
               autoComplete="username"
               value={identifier}
               onChange={(e) => { setIdentifier(e.target.value); setErrors((prev) => ({ ...prev, identifier: undefined })) }}
-              className={errors.identifier ? "border-accent! focus-visible:ring-accent/50!" : ""}
+              className={`text-base ${errors.identifier ? "border-accent! focus-visible:ring-accent/50!" : ""}`}
             />
             {errors.identifier && (
               <p className="text-xs text-accent">{errors.identifier}</p>
@@ -77,14 +79,25 @@ export default function LoginPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Contraseña</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => { setPassword(e.target.value); setErrors((prev) => ({ ...prev, password: undefined })) }}
-              className={errors.password ? "border-accent! focus-visible:ring-accent/50!" : ""}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); setErrors((prev) => ({ ...prev, password: undefined })) }}
+                className={`pr-10 text-base ${errors.password ? "border-accent! focus-visible:ring-accent/50!" : ""}`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground-dim hover:text-foreground transition-colors cursor-pointer"
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-xs text-accent">{errors.password}</p>
             )}
@@ -116,7 +129,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => toast.info("Función no disponible — próximamente")}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-foreground-muted transition-all duration-200 hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm cursor-pointer"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border px-4 py-3 sm:py-2.5 text-sm font-medium text-foreground-muted transition-all duration-200 hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm cursor-pointer min-h-[44px]"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -129,7 +142,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => toast.info("Función no disponible — próximamente")}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-foreground-muted transition-all duration-200 hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm cursor-pointer"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border px-4 py-3 sm:py-2.5 text-sm font-medium text-foreground-muted transition-all duration-200 hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm cursor-pointer min-h-[44px]"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
               <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.167 6.839 9.49.5.09.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.253-.447-1.27.098-2.646 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.547 1.376.203 2.393.1 2.646.64.698 1.028 1.59 1.028 2.682 0 3.841-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.577.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />

@@ -30,7 +30,7 @@ export function LanguageSelector() {
     <div ref={ref} className="relative mt-3">
       <button
         onClick={() => setOpen(prev => !prev)}
-        className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 text-foreground-muted border border-border hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm"
+        className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 text-foreground-muted border border-border hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm cursor-pointer"
         aria-haspopup="listbox"
         aria-expanded={open}
       >
@@ -47,7 +47,7 @@ export function LanguageSelector() {
 
       {open && (
         <div
-          className="absolute bottom-full left-0 mb-2 rounded-xl overflow-hidden z-50 min-w-[148px] bg-white/92 backdrop-blur-md border border-border/80 shadow-lg"
+          className="absolute bottom-full left-0 right-0 sm:left-0 sm:right-auto mb-2 rounded-xl overflow-hidden z-50 min-w-[148px] bg-white/92 backdrop-blur-md border border-border/80 shadow-lg"
           role="listbox"
         >
           {LANGUAGES.map((lang, i) => (
