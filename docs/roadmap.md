@@ -164,6 +164,7 @@ El MVP debe permitir que Zivelo cree, edite, publique y comparta cotizaciones re
 | Exportación PDF | Generar snapshot compartible de la cotización con logo, tabla y adjuntos. | Hecho |
 | Open Graph dinámico | Imagen o metadata personalizada por quote. | Hecho |
 | Persistencia inicial | Base de datos (Prisma + Supabase PostgreSQL). | Hecho |
+| RLS en Quote table | Row Level Security habilitado con políticas: anon solo lectura de publicadas, authenticated full CRUD. | Hecho |
 
 ### Dashboard
 
@@ -283,10 +284,11 @@ Zivelo debe poder operar quotes en dominios o entornos diferenciados sin comprom
 | 4 | Crear quote schema y datos mock | Estabiliza el contrato del quote engine. | Hecho |
 | 5 | Construir vista pública `/q/[quoteSlug]` + conexión DB | Convierte la demo en render dinámico desde base de datos. | Hecho |
 | 6 | Agregar creación de quote con formulario | Permite crear cotizaciones desde el dashboard. | Hecho |
-| 7 | Setup de testing (vitest, scripts, alias) | Habilita tests automatizados antes del release. | Hecho |
-| 8 | Tests de schemas Zod (happy + unhappy path) | Valida reglas de negocio en capa de datos. | Hecho |
-| 9 | Construir listado de quotes | Visualiza y gestiona todas las cotizaciones. |
-| 10 | Agregar edición básica | Permite modificar cotizaciones existentes. |
+| 7 | Habilitar RLS en Quote table | Protege datos con Row Level Security: anon solo lectura de publicadas, authenticated full CRUD. | Hecho |
+| 8 | Setup de testing (vitest, scripts, alias) | Habilita tests automatizados antes del release. | Hecho |
+| 9 | Tests de schemas Zod (happy + unhappy path) | Valida reglas de negocio en capa de datos. | Hecho |
+| 10 | Construir listado de quotes | Visualiza y gestiona todas las cotizaciones. |
+| 11 | Agregar edición básica | Permite modificar cotizaciones existentes. |
 
 ## Fuera De Alcance Del MVP
 
