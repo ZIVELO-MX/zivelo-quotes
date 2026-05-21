@@ -425,13 +425,13 @@ function UsersSection() {
             Exportar
           </SecondaryButton>
           <PrimaryButton type="button" onClick={() => setModalOpen(true)}>
-            Añadir participante
+            Añadir
           </PrimaryButton>
         </div>
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
-        <table className="w-full">
+      <div className="bg-white border border-gray-100 rounded-2xl overflow-x-auto">
+        <table className="w-full min-w-[640px]">
           <thead>
             <tr className="bg-gray-50">
               <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-4 py-3 text-left">Nombre</th>
@@ -550,13 +550,24 @@ function SecuritySection() {
         <div className="bg-white border border-red-200 rounded-2xl p-6">
           <h2 className="text-sm font-semibold text-red-600 mb-1">Zona de peligro</h2>
           <p className="text-sm text-gray-500 mb-4">Elimina esta cuenta de forma permanente.</p>
-          <button
-            type="button"
-            onClick={() => toast.info("No disponible aún")}
-            className="border border-red-200 text-red-600 hover:bg-red-50 h-10 px-4 rounded-lg text-sm font-medium transition-colors cursor-pointer"
-          >
-            Eliminar cuenta
-          </button>
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => toast.info("No disponible aún")}
+              className="border border-red-200 text-red-600 hover:bg-red-50 h-10 px-4 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+            >
+              Eliminar cuenta
+            </button>
+            {user.role === "Owner" && (
+              <button
+                type="button"
+                onClick={() => toast.info("No disponible aún")}
+                className="border border-red-200 text-red-600 hover:bg-red-50 h-10 px-4 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+              >
+                Eliminar organización
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>

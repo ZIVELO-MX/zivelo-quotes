@@ -54,12 +54,14 @@ export function DashboardHeader() {
             />
           </Link>
           <nav className="hidden items-center gap-1 sm:flex">
-            <Link
-              href="/dashboard/quotes/new"
-              className="rounded-md px-3 py-1.5 text-sm text-foreground-muted hover:text-foreground transition-colors"
-            >
-              Nueva cotización
-            </Link>
+            {user.role !== "Viewer" && (
+              <Link
+                href="/dashboard/quotes/new"
+                className="rounded-md px-3 py-1.5 text-sm text-foreground-muted hover:text-foreground transition-colors"
+              >
+                Nueva cotización
+              </Link>
+            )}
             <Link
               href="/dashboard"
               className="rounded-md px-3 py-1.5 text-sm text-foreground-muted hover:text-foreground transition-colors"
