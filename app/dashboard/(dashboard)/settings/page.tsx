@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
+import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
 import { toast } from "sonner"
 import {
@@ -9,12 +10,22 @@ import {
   Building2,
   Users,
   Shield,
+  Palette,
+  GripHorizontal,
   ChevronDown,
   Copy,
   Share2,
   X,
   MoreHorizontal,
   Check,
+  LogOut,
+  ArrowLeft,
+  ChevronRight,
+  ImageIcon,
+  Upload,
+  Globe,
+  DollarSign,
+  Phone,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { HARDCODED_USERS } from "@/lib/auth/hardcoded-users"
@@ -100,47 +111,32 @@ function SecondaryButton({ children, ...props }: React.ComponentProps<"button">)
   )
 }
 
-// ── Section: Profile ──────────────────────────────────────
+// ── Section: Account ──────────────────────────────────────
 
-function ProfileSection() {
+function AccountSection() {
   const { user, updateUser } = useAuth()
   if (!user) return null
 
   const [name, setName] = useState(user.name)
-  const initials = getInitials(user.name)
 
   function handleSave() {
     updateUser({ name })
-    toast.success("Perfil actualizado")
+    toast.success("Cuenta actualizada")
   }
 
   return (
-    <motion.div key="profile" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
-      <h1 className="text-2xl font-semibold text-gray-900">Perfil</h1>
+    <motion.div key="account" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
+      <h1 className="text-2xl font-semibold text-gray-900">Cuenta</h1>
       <p className="text-sm text-gray-500 mt-1">Gestiona tu información personal.</p>
 
       <div className="bg-white border border-gray-100 rounded-2xl p-6 mt-6">
-        <div className="flex items-center gap-4 pb-6 border-b border-gray-100">
-          <button
-            type="button"
-            onClick={() => toast.info("Actualización de foto de perfil no disponible aún")}
-            className="w-16 h-16 rounded-full bg-gray-900 text-white flex items-center justify-center text-lg font-semibold shrink-0 transition-all duration-200 hover:ring-2 hover:ring-gray-300 hover:brightness-110 cursor-pointer active:scale-95"
-          >
-            {initials}
-          </button>
+        <div className="space-y-5">
           <div>
-            <p className="text-base font-medium text-gray-900">{user.name}</p>
-            <p className="text-sm text-gray-500">{user.email}</p>
-          </div>
-        </div>
-
-        <div className="mt-6 space-y-5">
-          <div>
-            <label htmlFor="full-name" className="block text-sm font-medium text-gray-900 mb-1.5">
+            <label htmlFor="account-name" className="block text-sm font-medium text-gray-900 mb-1.5">
               Nombre completo
             </label>
             <input
-              id="full-name"
+              id="account-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -148,20 +144,366 @@ function ProfileSection() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-1.5">
-              Correo electrónico
-            </label>
+            <label className="block text-sm font-medium text-gray-900 mb-1.5">Correo electrónico</label>
             <input
-              id="email"
               type="email"
               defaultValue={user.email}
               disabled
-              className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 w-full opacity-60 cursor-not-allowed transition-shadow duration-200"
+              className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 opacity-60 cursor-not-allowed w-full"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-900 mb-1.5">Rol actual</label>
+            <input
+              type="text"
+              defaultValue={user.role}
+              disabled
+              className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 opacity-60 cursor-not-allowed w-full"
             />
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap gap-3">
+          <PrimaryButton type="button" onClick={handleSave}>
+            Guardar cambios
+          </PrimaryButton>
+          <button
+            type="button"
+            onClick={() => toast.info("Función de cierre de sesión simulada")}
+            className="flex items-center gap-2 border border-gray-200 text-gray-700 hover:bg-gray-50 h-10 px-4 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+          >
+            <LogOut size={16} />
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+// ── Currency Dropdown ─────────────────────────────────────
+
+const CURRENCIES = [
+  { value: "MXN", label: "MXN — Peso mexicano" },
+  { value: "USD", label: "USD — Dólar estadounidense" },
+  { value: "EUR", label: "EUR — Euro" },
+] as const
+
+function CurrencyDropdown({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  const current = CURRENCIES.find((c) => c.value === value)!
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 text-gray-600 border border-gray-200 hover:text-gray-900 hover:bg-black/[0.04] hover:border-gray-300 hover:shadow-sm w-full"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        {current.label}
+        <ChevronDown
+          size={16}
+          strokeWidth={1.5}
+          className="ml-auto transition-transform duration-200"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+        />
+      </button>
+      <div
+        className={[
+          "absolute top-full left-0 mt-2 rounded-xl overflow-hidden z-50 min-w-[220px] bg-white/92 backdrop-blur-md border border-gray-200/80 shadow-lg transition-all duration-200 ease-in-out",
+          open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none",
+        ].join(" ")}
+        role="listbox"
+      >
+        {CURRENCIES.map((opt, i) => (
+          <button
+            key={opt.value}
+            type="button"
+            role="option"
+            aria-selected={value === opt.value}
+            onClick={() => {
+              onChange(opt.value)
+              setOpen(false)
+            }}
+            className={[
+              "w-full flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium transition-colors duration-150 text-left",
+              value === opt.value ? "text-gray-900" : "text-gray-500",
+              i > 0 ? "border-t border-gray-200/60" : "",
+            ].join(" ")}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(0,0,0,0.04)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            {opt.label}
+            {value === opt.value && (
+              <Check size={16} strokeWidth={2} className="text-gray-400 shrink-0" />
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Section: General ──────────────────────────────────────
+
+function GeneralSection() {
+  const { user } = useAuth()
+  if (!user) return null
+
+  const membersCount = 4
+  const plan = "Pro"
+
+  const info = [
+    { label: "Nombre del negocio", value: user.organization.name, icon: Building2 },
+    { label: "Slug", value: user.organization.slug, icon: Globe },
+    { label: "Moneda predeterminada", value: "MXN — Peso mexicano", icon: DollarSign },
+    { label: "Teléfono de contacto", value: "+52 55 1234 5678", icon: Phone },
+    { label: "Miembros", value: `${membersCount} miembros`, icon: Users },
+    { label: "Plan", value: `${plan} · Creado en Mar 2026`, icon: Shield },
+  ]
+
+  return (
+    <motion.div key="general" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
+      <h1 className="text-2xl font-semibold text-gray-900">Información general</h1>
+      <p className="text-sm text-gray-500 mt-1">Resumen de la configuración de tu negocio.</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+        {info.map((item) => {
+          const Icon = item.icon
+          return (
+            <div key={item.label} className="bg-white border border-gray-100 rounded-2xl p-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                  <Icon size={18} className="text-gray-600" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs text-gray-500">{item.label}</p>
+                  <p className="text-sm font-semibold text-gray-900 mt-0.5 truncate">{item.value}</p>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </motion.div>
+  )
+}
+
+// ── Section: Brand ────────────────────────────────────────
+
+function BrandSection() {
+  const { user } = useAuth()
+  const [primaryColor, setPrimaryColor] = useState("#2563eb")
+  const [preparedBy] = useState(user?.organization.name ?? "Zivelo")
+  const [orgName, setOrgName] = useState(user?.organization.name ?? "Zivelo Studio")
+  const [currency, setCurrency] = useState("MXN")
+  const [whatsapp, setWhatsapp] = useState("+52 55 1234 5678")
+  const [logoPreview, setLogoPreview] = useState<string | null>(null)
+  const [logoMode, setLogoMode] = useState<"default" | "upload">("default")
+
+  function handleColorChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setPrimaryColor(e.target.value)
+  }
+
+  function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (e) => setLogoPreview(e.target?.result as string)
+    reader.readAsDataURL(file)
+    setLogoMode("upload")
+  }
+
+  function handleSave() {
+    toast.success("Marca actualizada")
+  }
+
+  return (
+    <motion.div key="brand" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
+      <h1 className="text-2xl font-semibold text-gray-900">Marca</h1>
+      <p className="text-sm text-gray-500 mt-1">Personaliza la identidad visual de tus cotizaciones.</p>
+
+      <div className="bg-white border border-gray-100 rounded-2xl p-6 mt-6 space-y-6">
+        {/* Business info */}
+        <div className="space-y-5">
+          <div>
+            <label htmlFor="brand-org-name" className="block text-sm font-medium text-gray-900 mb-1.5">
+              Nombre del negocio
+            </label>
+            <input
+              id="brand-org-name"
+              type="text"
+              value={orgName}
+              onChange={(e) => setOrgName(e.target.value)}
+              className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 w-full transition-shadow duration-200"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-900 mb-1.5">Slug de la organización</label>
+            <input
+              type="text"
+              defaultValue={user?.organization.slug}
+              disabled
+              className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 opacity-60 cursor-not-allowed w-full"
+            />
+          </div>
+          <div>
+            <label htmlFor="brand-currency" className="block text-sm font-medium text-gray-900 mb-1.5">
+              Moneda predeterminada
+            </label>
+            <CurrencyDropdown value={currency} onChange={setCurrency} />
+          </div>
+          <div>
+            <label htmlFor="brand-whatsapp" className="block text-sm font-medium text-gray-900 mb-1.5">
+              Teléfono de contacto (WhatsApp)
+            </label>
+            <input
+              id="brand-whatsapp"
+              type="text"
+              value={whatsapp}
+              onChange={(e) => setWhatsapp(e.target.value)}
+              className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 w-full transition-shadow duration-200"
+              placeholder="+52 55 1234 5678"
+            />
+          </div>
+        </div>
+
+        {/* Logo */}
+        <div className="pt-2 border-t border-gray-100">
+          <label className="block text-sm font-medium text-gray-900 mb-2">Logo</label>
+          <div className="space-y-2">
+            <div className="relative flex gap-1 rounded-xl border border-gray-200 bg-gray-50/50 p-1 text-sm font-medium">
+              <div
+                className={[
+                  "absolute left-1 top-1 bottom-1 w-[calc(50%-0.125rem)] rounded-lg bg-white shadow-xs transition-transform duration-200 ease-in-out",
+                  logoMode === "upload" ? "translate-x-[calc(100%+0.25rem)]" : "translate-x-0",
+                ].join(" ")}
+              />
+              <button
+                type="button"
+                onClick={() => { setLogoPreview(null); setLogoMode("default") }}
+                className={[
+                  "relative flex items-center gap-2 rounded-lg px-3 py-2 transition-all duration-150 flex-1 justify-center z-10",
+                  logoMode === "default" ? "text-gray-900" : "text-gray-500 hover:text-gray-900",
+                ].join(" ")}
+              >
+                <ImageIcon size={16} strokeWidth={1.5} />
+                Logo empresarial
+              </button>
+              <button
+                type="button"
+                onClick={() => setLogoMode("upload")}
+                className={[
+                  "relative flex items-center gap-2 rounded-lg px-3 py-2 transition-all duration-150 flex-1 justify-center z-10",
+                  logoMode === "upload" ? "text-gray-900" : "text-gray-500 hover:text-gray-900",
+                ].join(" ")}
+              >
+                <Upload size={16} strokeWidth={1.5} />
+                Subir logo
+              </button>
+            </div>
+            {logoMode === "upload" && !logoPreview ? (
+              <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/30 px-6 py-8 text-center transition-colors hover:border-gray-300 hover:bg-black/[0.02]">
+                <Upload size={24} strokeWidth={1.5} className="text-gray-400" />
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Sube tu logo aquí</p>
+                  <p className="text-xs text-gray-400 mt-0.5">SVG o PNG · Se reemplazará el logo por defecto</p>
+                </div>
+                <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
+              </label>
+            ) : (
+              <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50/30 px-5 py-4">
+                <div className="flex h-14 w-28 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white px-3">
+                  <img
+                    src={logoPreview || "/logos/zivelo-bars-dark-full.svg"}
+                    alt="Logo"
+                    className="max-h-10 max-w-full"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Logotipo de Zivelo</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Se usará como imagen de marca en la cotización</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Primary color */}
+        <div>
+          <label htmlFor="primary-color" className="block text-sm font-medium text-gray-900 mb-1.5">
+            Color primario
+          </label>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full border-2 border-gray-200 overflow-hidden">
+              <input
+                type="color"
+                id="primary-color"
+                value={primaryColor}
+                onChange={handleColorChange}
+                className="w-14 h-14 -m-1 cursor-pointer"
+              />
+            </div>
+            <input
+              type="text"
+              value={primaryColor}
+              onChange={(e) => setPrimaryColor(e.target.value)}
+              className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 font-mono focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 w-28 transition-shadow duration-200"
+            />
+          </div>
+        </div>
+
+        {/* Public quote preview */}
+        <div className="bg-gray-50 rounded-xl p-5 border border-gray-100">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+            Vista previa de cotización pública
+          </p>
+          <div className="rounded-xl border bg-white overflow-hidden">
+            <div className="p-5 flex items-center gap-4 border-b border-gray-100">
+              <div className="w-20 h-10 shrink-0 flex items-center">
+                <img
+                  src={logoPreview || "/logos/zivelo-bars-dark-full.svg"}
+                  alt="Logo"
+                  className="max-h-8 max-w-full object-contain"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold" style={{ color: primaryColor }}>
+                  Propuesta · Proyecto Web
+                </p>
+                <p className="text-sm font-semibold text-gray-900 mt-0.5">
+                  Cliente — Propuesta de servicios
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Preparado por <span style={{ color: primaryColor }}>{preparedBy}</span>
+                  <span className="text-gray-400"> · Válido hasta 30 Jun 2026</span>
+                </p>
+              </div>
+            </div>
+            <div className="p-5 space-y-3">
+              <div className="h-3 w-3/4 rounded-full bg-gray-100" />
+              <div className="h-3 w-1/2 rounded-full bg-gray-100" />
+              <div className="h-3 w-2/3 rounded-full bg-gray-100" />
+              <div className="h-3 w-1/3 rounded-full bg-gray-100" />
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-2">
           <PrimaryButton type="button" onClick={handleSave}>
             Guardar cambios
           </PrimaryButton>
@@ -171,81 +513,7 @@ function ProfileSection() {
   )
 }
 
-// ── Section: Workspace ────────────────────────────────────
-
-function WorkspaceSection() {
-  const { user } = useAuth()
-  if (!user) return null
-
-  const isOwner = user.role === "Owner"
-  const [wsName, setWsName] = useState(user.organization.name)
-
-  function handleSave() {
-    toast.success("Espacio de trabajo actualizado")
-  }
-
-  return (
-    <motion.div key="workspace" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
-      <h1 className="text-2xl font-semibold text-gray-900">Espacio de trabajo</h1>
-      <p className="text-sm text-gray-500 mt-1">Gestiona la información de tu espacio de trabajo actual.</p>
-
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 mt-6 space-y-5">
-        <div>
-          <label htmlFor="ws-name" className="block text-sm font-medium text-gray-900 mb-1.5">
-            Nombre del espacio de trabajo
-          </label>
-          <input
-            id="ws-name"
-            type="text"
-            value={wsName}
-            onChange={(e) => setWsName(e.target.value)}
-            disabled={!isOwner}
-            className={`h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 w-full transition-shadow duration-200 ${
-              !isOwner ? "opacity-60 cursor-not-allowed" : ""
-            }`}
-          />
-        </div>
-        <div>
-          <label htmlFor="ws-slug" className="block text-sm font-medium text-gray-900 mb-1.5">
-            Slug del espacio de trabajo
-          </label>
-          <input
-            id="ws-slug"
-            type="text"
-            defaultValue={user.organization.slug}
-            disabled
-            className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 focus:outline-none w-full opacity-60 cursor-not-allowed"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-900 mb-1.5">Tu rol</label>
-          <input
-            type="text"
-            defaultValue={user.role}
-            disabled
-            className="h-10 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 focus:outline-none w-full opacity-60 cursor-not-allowed"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-900 mb-1.5">Estado</label>
-          <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
-            Activo
-          </span>
-        </div>
-
-        {isOwner && (
-          <div className="pt-2">
-            <PrimaryButton type="button" onClick={handleSave}>
-              Guardar cambios
-            </PrimaryButton>
-          </div>
-        )}
-      </div>
-    </motion.div>
-  )
-}
-
-// ── Section: Users & Permissions ──────────────────────────
+// ── Section: Team ─────────────────────────────────────────
 
 const ROLE_COLORS: Record<string, string> = {
   Owner: "#cc0000",
@@ -376,11 +644,10 @@ function AddParticipantModal({
         transition={{ duration: 0.2 }}
         className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-w-md mx-4"
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">
-              {step === "form" ? "Añadir participante" : "Invitación creada"}
+              {step === "form" ? "Añadir miembro" : "Invitación creada"}
             </h2>
             <p className="text-sm text-gray-500 mt-0.5">
               {step === "form"
@@ -480,7 +747,7 @@ function AddParticipantModal({
   )
 }
 
-function UsersSection() {
+function TeamSection() {
   const { user } = useAuth()
   if (!user) return null
 
@@ -489,11 +756,11 @@ function UsersSection() {
   const members = useMemo(() => ALL_MEMBERS, [])
 
   return (
-    <motion.div key="users" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
+    <motion.div key="team" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Usuarios y permisos</h1>
-          <p className="text-sm text-gray-500 mt-1">Gestiona los usuarios, roles e invitaciones del espacio de trabajo.</p>
+          <h1 className="text-2xl font-semibold text-gray-900">Equipo</h1>
+          <p className="text-sm text-gray-500 mt-1">Gestiona los miembros del espacio de trabajo.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <SecondaryButton type="button" onClick={() => toast.info("Importación no disponible aún")}>
@@ -503,10 +770,14 @@ function UsersSection() {
             Exportar
           </SecondaryButton>
           <PrimaryButton type="button" onClick={() => setModalOpen(true)}>
-            Añadir
+            Invitar usuario
           </PrimaryButton>
         </div>
       </div>
+
+      <p className="text-xs text-gray-400 mb-4">
+        Los usuarios mostrados son datos de demostración. La funcionalidad de base de datos estará disponible próximamente.
+      </p>
 
       <div className="bg-white border border-gray-100 rounded-2xl overflow-x-auto">
         <table className="w-full min-w-[640px]">
@@ -588,6 +859,88 @@ function UsersSection() {
   )
 }
 
+// ── Section: Quote Actions ────────────────────────────────
+
+function QuoteActionsSection() {
+  const [allowApproval, setAllowApproval] = useState(true)
+  const [allowWhatsApp, setAllowWhatsApp] = useState(true)
+  const [allowPdf, setAllowPdf] = useState(true)
+
+  function handleSave() {
+    toast.success("Acciones de cotización actualizadas")
+  }
+
+  return (
+    <motion.div key="quote-actions" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
+      <h1 className="text-2xl font-semibold text-gray-900">Acciones de cotización</h1>
+      <p className="text-sm text-gray-500 mt-1">Configura las acciones disponibles por defecto en las cotizaciones nuevas.</p>
+
+      <div className="bg-white border border-gray-100 rounded-2xl p-6 mt-6 space-y-5">
+        <ToggleRow
+          label="Permitir aprobación"
+          description="El cliente podrá aprobar la cotización directamente desde la vista pública."
+          checked={allowApproval}
+          onChange={setAllowApproval}
+        />
+        <ToggleRow
+          label="Permitir preguntas por WhatsApp"
+          description="Mostrar un botón de WhatsApp para que el cliente haga preguntas sobre la cotización."
+          checked={allowWhatsApp}
+          onChange={setAllowWhatsApp}
+        />
+        <ToggleRow
+          label="Permitir descarga de PDF"
+          description="El cliente podrá descargar la cotización en formato PDF desde la vista pública."
+          checked={allowPdf}
+          onChange={setAllowPdf}
+        />
+
+        <div className="pt-2">
+          <PrimaryButton type="button" onClick={handleSave}>
+            Guardar cambios
+          </PrimaryButton>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+function ToggleRow({
+  label,
+  description,
+  checked,
+  onChange,
+}: {
+  label: string
+  description: string
+  checked: boolean
+  onChange: (v: boolean) => void
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 py-2">
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-gray-900">{label}</p>
+        <p className="text-sm text-gray-500 mt-0.5">{description}</p>
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+          checked ? "bg-gray-900" : "bg-gray-200"
+        }`}
+      >
+        <span
+          className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition duration-200 ease-in-out ${
+            checked ? "translate-x-5" : "translate-x-0"
+          }`}
+        />
+      </button>
+    </div>
+  )
+}
+
 // ── Section: Security ─────────────────────────────────────
 
 function SecuritySection() {
@@ -652,6 +1005,75 @@ function SecuritySection() {
   )
 }
 
+// ── NotForYou ───────────────────────────────────────────────
+
+function NotForYou() {
+  return (
+    <motion.div
+      variants={sectionVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="flex flex-col items-center justify-center min-h-[40vh] text-center px-4"
+    >
+      <p className="text-5xl mb-4">👀</p>
+      <h2 className="text-lg font-semibold text-gray-900">Ups, no deberías estar viendo esto</h2>
+      <p className="text-sm text-gray-500 mt-2 max-w-sm">
+        O te perdiste, o andas de curioso. Cualquiera de las dos, mejor vuelve al dashboard.
+      </p>
+    </motion.div>
+  )
+}
+
+// ── Settings Index (centered landing) ─────────────────────
+
+const ALL_SECTION_META: { id: SectionId; label: string; icon: typeof User; description: string }[] = [
+  { id: "general", label: "Información general", icon: Building2, description: "Nombre del negocio, moneda y contacto" },
+  { id: "brand", label: "Marca", icon: Palette, description: "Logo, colores y apariencia de cotizaciones" },
+  { id: "team", label: "Equipo", icon: Users, description: "Miembros y roles del espacio de trabajo" },
+  { id: "quote-actions", label: "Acciones de cotización", icon: GripHorizontal, description: "Opciones por defecto en nuevas cotizaciones" },
+  { id: "account", label: "Cuenta", icon: User, description: "Tu información personal" },
+  { id: "security", label: "Seguridad", icon: Shield, description: "Inicio de sesión y seguridad de la cuenta" },
+]
+
+function SettingsIndex({ onSelect, role }: { onSelect: (id: SectionId) => void; role: string }) {
+  const meta = role === "Owner" || role === "Manager"
+    ? ALL_SECTION_META
+    : role === "Viewer"
+      ? ALL_SECTION_META.filter((s) => s.id !== "team" && s.id !== "quote-actions" && s.id !== "brand")
+      : ALL_SECTION_META.filter((s) => s.id !== "team")
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+      <h1 className="text-2xl font-semibold text-gray-900">Ajustes</h1>
+      <p className="text-sm text-gray-500 mt-1 mb-8">
+        Administra la información de tu negocio, tu marca y tus preferencias de cotización.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
+        {meta.map((s) => {
+          const Icon = s.icon
+          return (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => onSelect(s.id)}
+              className="flex items-start gap-3 bg-white border border-gray-100 rounded-2xl p-5 text-left hover:border-gray-200 hover:shadow-sm transition-all duration-200 cursor-pointer"
+            >
+              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0 mt-0.5">
+                <Icon size={20} className="text-gray-600" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-900">{s.label}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{s.description}</p>
+              </div>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ── Main page ─────────────────────────────────────────────
 
 export default function SettingsPage() {
@@ -679,12 +1101,49 @@ export default function SettingsPage() {
         onBack={handleBack}
       />
       <div className="flex-1 min-w-0">
-        {activeSection === "profile" && <ProfileSection key="profile" />}
-        {activeSection === "workspace" && <WorkspaceSection key="workspace" />}
-        {activeSection === "users" && (user.role === "Owner" || user.role === "Manager") && (
-          <UsersSection key="users" />
+        {/* Mobile: show back arrow when a section is active */}
+        {activeSection && (
+          <div className="sm:hidden mb-4">
+            <Link
+              href="/dashboard/settings"
+              className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              <ArrowLeft size={16} />
+              Volver a ajustes
+            </Link>
+          </div>
         )}
-        {activeSection === "security" && <SecuritySection key="security" />}
+
+        {/* Desktop: show "← Volver al dashboard" above the content */}
+        <div className="hidden sm:block mb-6">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft size={16} />
+            Volver al dashboard
+          </Link>
+        </div>
+
+        {activeSection === null && <SettingsIndex onSelect={handleSelect} role={user.role} />}
+
+        <AnimatePresence mode="wait">
+          {activeSection === "general" && <GeneralSection key="general" />}
+          {activeSection === "brand" && user.role !== "Viewer" && <BrandSection key="brand" />}
+          {activeSection === "brand" && user.role === "Viewer" && <NotForYou key="brand-no-perm" />}
+          {activeSection === "team" && (user.role === "Owner" || user.role === "Manager") && (
+            <TeamSection key="team" />
+          )}
+          {activeSection === "team" && user.role !== "Owner" && user.role !== "Manager" && (
+            <NotForYou key="team-no-perm" />
+          )}
+          {activeSection === "quote-actions" && user.role !== "Viewer" && <QuoteActionsSection key="quote-actions" />}
+          {activeSection === "quote-actions" && user.role === "Viewer" && (
+            <NotForYou key="quote-actions-no-perm" />
+          )}
+          {activeSection === "account" && <AccountSection key="account" />}
+          {activeSection === "security" && <SecuritySection key="security" />}
+        </AnimatePresence>
       </div>
     </div>
   )

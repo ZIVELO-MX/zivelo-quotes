@@ -3,14 +3,17 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import {
   UserIcon,
   LogOutIcon,
   ChevronDownIcon,
   MenuIcon,
-  FilePlusIcon,
-  FilesIcon,
+  LayoutDashboard,
+  FilePlus,
+  FileText,
+  Palette,
+  Settings,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -27,9 +30,18 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
+const MOBILE_NAV_ITEMS = [
+  { label: "Resumen", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Nueva cotización", href: "/dashboard/quotes/new", icon: FilePlus },
+  { label: "Cotizaciones", href: "/dashboard/quotes", icon: FileText },
+  { label: "Marca", href: "/dashboard/settings?section=brand", icon: Palette },
+  { label: "Ajustes", href: "/dashboard/settings", icon: Settings },
+]
+
 export function DashboardHeader() {
   const { user, logout } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   if (!user) return null
@@ -41,15 +53,24 @@ export function DashboardHeader() {
     .slice(0, 2)
     .toUpperCase() ?? ""
 
+  const visibleItems = user.role === "Viewer"
+    ? MOBILE_NAV_ITEMS.filter((i) => i.href !== "/dashboard/quotes/new")
+    : MOBILE_NAV_ITEMS
+
   function handleLogout() {
     logout()
     router.replace("/dashboard/login")
   }
 
+  function isActive(href: string): boolean {
+    if (href === "/dashboard") return pathname === "/dashboard"
+    return pathname.startsWith(href)
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
-        <div className="flex items-center gap-2 sm:gap-8">
+        <div className="flex items-center gap-2">
           <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
             <SheetTrigger asChild>
               <button
@@ -74,24 +95,25 @@ export function DashboardHeader() {
                   />
                 </div>
                 <nav className="flex flex-col p-3 gap-1">
-                  {user.role !== "Viewer" && (
-                    <Link
-                      href="/dashboard/quotes/new"
-                      onClick={() => setMobileNavOpen(false)}
-                      className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-foreground-muted hover:text-foreground hover:bg-background-secondary transition-colors"
-                    >
-                      <FilePlusIcon size={18} />
-                      Nueva cotización
-                    </Link>
-                  )}
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setMobileNavOpen(false)}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-foreground-muted hover:text-foreground hover:bg-background-secondary transition-colors"
-                  >
-                    <FilesIcon size={18} />
-                    Cotizaciones
-                  </Link>
+                  {visibleItems.map((item) => {
+                    const Icon = item.icon
+                    const active = isActive(item.href)
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setMobileNavOpen(false)}
+                        className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                          active
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                        }`}
+                      >
+                        <Icon className="size-[18px] shrink-0" />
+                        {item.label}
+                      </Link>
+                    )
+                  })}
                 </nav>
               </div>
             </SheetContent>
@@ -111,22 +133,6 @@ export function DashboardHeader() {
               style={{ height: "auto" }}
             />
           </Link>
-          <nav className="hidden items-center gap-1 sm:flex">
-            {user.role !== "Viewer" && (
-              <Link
-                href="/dashboard/quotes/new"
-                className="rounded-md px-3 py-1.5 text-sm text-foreground-muted hover:text-foreground transition-colors"
-              >
-                Nueva cotización
-              </Link>
-            )}
-            <Link
-              href="/dashboard"
-              className="rounded-md px-3 py-1.5 text-sm text-foreground-muted hover:text-foreground transition-colors"
-            >
-              Cotizaciones
-            </Link>
-          </nav>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -147,7 +153,7 @@ export function DashboardHeader() {
           <DropdownMenuContent align="end" className="w-44">
             <DropdownMenuItem onSelect={() => router.push("/dashboard/settings")} className="cursor-pointer">
               <UserIcon className="size-4" />
-              Perfil
+              Ajustes
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={handleLogout} className="text-red-600 hover:text-red-600 focus:text-red-600 cursor-pointer">
               <LogOutIcon className="size-4 text-red-600" />

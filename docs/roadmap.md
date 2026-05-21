@@ -6,7 +6,7 @@
 | --- | --- |
 | Versión actual | v0.0.9 → v0.1.0 |
 | Fase activa | MVP operativo |
-| Avance actual | Landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, dashboard layout, creación de quotes, auth hardcodeado (login/logout/protección), página de perfil con 4 secciones (Profile, Workspace, Users & Permissions, Security) y tests base. |
+| Avance actual | Dashboard redesign v1: sidebar nav, home con resumen mock, quotes list, settings con 6 secciones (General, Brand, Team, Quote Actions, Account, Security). Landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, creación de quotes, auth hardcodeado (login/logout/protección) y tests base. |
 | Siguiente foco | Listado de quotes, edición básica y pulir detalles pre-MVP. |
 | Meta inmediata | Zivelo puede crear, editar, publicar y compartir cotizaciones reales desde un dashboard interno protegido. |
 
@@ -36,9 +36,9 @@ Este roadmap prioriza terminar primero el flujo interno de cotizaciones de Zivel
 | WhatsApp actions | Hecho |
 | Tests de schemas | Hecho |
 | Tests de server action | Hecho |
-| Dashboard | Parcial, layout y creación |
-| Página de settings `/dashboard/settings` | Hecho: migrada desde `/profile`, 4 secciones (Profile, Workspace, Users & Permissions, Security), navegación responsive con sidebar (desktop) / tabs (mobile) |
-| Roles y permisos en UI | Hecho: Owner/Manager ven todo; Editor/Viewer ocultan Users; Viewer no crea quotes |
+| Dashboard | Hecho: sidebar nav, home con resumen mock, quotes list |
+| Página de settings `/dashboard/settings` | Hecho: 6 secciones (General, Brand, Team, Quote Actions, Account, Security), centered landing, navegación responsive con sidebar (desktop) / índice (mobile) |
+| Roles y permisos en UI | Hecho: Owner/Manager ven todo; Editor/Viewer ocultan Team; Viewer no crea quotes |
 | Dropdown de roles | Hecho: custom con colores, scroll, estilo quote-form |
 | Avatar | Hecho: foto con fallback a iniciales, Owner con logo Zivelo |
 | Login | Funcional con datos hardcodeados en `/dashboard/login` |
@@ -100,9 +100,10 @@ Esta es la fase activa. El objetivo es que Zivelo pueda usar el producto interna
 
 | Entregable | Alcance | Estado |
 | --- | --- | --- |
-| Dashboard interno | Layout y rutas base bajo `/dashboard`. | Parcial |
+| Dashboard interno | Layout y rutas base bajo `/dashboard`. | Hecho |
+| Dashboard redesign | Sidebar nav, home con resumen mock (sin botón duplicado al final), quotes list, settings con 6 secciones. | Hecho |
 | Crear quote | Formulario con react-hook-form, zod y Server Action. | Hecho |
-| Listado de quotes | Tabla o vista de quotes con estado, cliente, slug y fecha. | Siguiente |
+| Listado de quotes | Tabla con búsqueda, filtro por estado y datos mock. | Hecho |
 | Editar quote | Modificar contenido, items, pricing y CTA. | Siguiente |
 | Auth hardcodeado | Login funcional para `/dashboard/login` con datos fijos. | Hecho |
 | Protección de dashboard | Redirigir usuarios no autenticados fuera de `/dashboard`. | Hecho (cliente-side) |
@@ -110,7 +111,8 @@ Esta es la fase activa. El objetivo es que Zivelo pueda usar el producto interna
 | DevUserSwitcher | Selector flotante para cambiar de rol al instante. BORRAR antes del MVP. | Hecho |
 | Supabase Auth | Migrar auth hardcodeado a Supabase Auth real. | Siguiente |
 | Remover DevUserSwitcher | Borrar `components/dashboard/dev-user-switcher.tsx` y su import en el layout antes del MVP. | Pendiente |
-| Página de settings `/dashboard/settings` | 4 secciones con navbar responsive: sidebar (desktop) / índice Slack (mobile). Migrada desde `/profile`. | Hecho |
+| Página de settings `/dashboard/settings` | 6 secciones con navbar responsive: sidebar (desktop) / índice (mobile). Landing centrado. | Hecho |
+| Data map | `docs/data-map.md` con mapeo DB ↔ Zod ↔ UI mock ↔ Auth. | Hecho |
 | Mobile Support | Viewport config, password visibility toggle, touch targets mejorados, iOS zoom prevention. | Hecho |
 | Dashboard nav mobile | Menú hamburguesa con Sheet con links de navegación. | Hecho |
 | AppSidebar responsive | Sidebar de escritorio reemplazado por tabs horizontales en mobile. | Hecho |
@@ -230,7 +232,8 @@ Zivelo puede operar quotes en dominios o entornos diferenciados sin comprometer 
 | 9 | Tests de schemas y server action | Hecho |
 | 10 | Página de settings `/dashboard/settings` (4 secciones + sidebar/tabs + roles) | Hecho |
 | 10b | Consolidación de rutas: `/profile` → `/dashboard/settings`, `/dashboard/user` redirige a `/dashboard/settings` | Hecho |
-| 11 | Listado de quotes | Siguiente |
+| 11 | Listado de quotes | Hecho |
+| 11b | Dashboard redesign: sidebar, home, settings 6 secciones | Hecho |
 | 12 | Edición básica de quote | Siguiente |
 | 13 | Auth hardcodeado (login/logout/protección) | Hecho |
 | 14 | Pulir pre-MVP: skeletons, loading states, refactors | Siguiente |

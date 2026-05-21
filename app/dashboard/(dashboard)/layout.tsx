@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
+import { motion, AnimatePresence } from "motion/react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
+import { DashboardNav } from "@/components/dashboard/dashboard-nav"
 import { MinimalFooter } from "@/components/layout/minimal-footer"
 import { Spinner } from "@/components/ui/spinner"
 import { DevUserSwitcher } from "@/components/dashboard/dev-user-switcher"
@@ -15,6 +17,7 @@ export default function DashboardLayout({
 }) {
   const { user, isLoading } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -34,10 +37,30 @@ export default function DashboardLayout({
     return null
   }
 
+  const showNav =
+    pathname !== "/dashboard/login" &&
+    pathname !== "/dashboard/settings" &&
+    pathname !== "/dashboard/quotes/new"
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <DashboardHeader />
-      <main className="flex-1 flex flex-col">{children}</main>
+      <div className="flex-1 flex">
+        {showNav && <DashboardNav user={user} />}
+        <main className="flex-1 flex flex-col min-w-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } }}
+              exit={{ opacity: 0, y: -4, transition: { duration: 0.12, ease: "easeIn" } }}
+              className="flex-1 flex flex-col"
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </main>
+      </div>
       <MinimalFooter />
       <DevUserSwitcher />
     </div>
