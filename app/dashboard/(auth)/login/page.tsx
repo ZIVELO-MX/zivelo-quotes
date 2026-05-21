@@ -1,29 +1,48 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Spinner } from "@/components/ui/spinner"
+import { useAuth } from "@/lib/auth/auth-context"
 
-function validateEmail(email: string) {
-  if (!email) return "El correo es obligatorio"
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Correo inválido"
+function validateIdentifier(value: string) {
+  if (!value) return "El correo o usuario es obligatorio"
   return ""
 }
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
+  const { login, isLoading: authLoading } = useAuth()
+  const router = useRouter()
+  const [identifier, setIdentifier] = useState("")
   const [password, setPassword] = useState("")
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+  const [errors, setErrors] = useState<{ identifier?: string; password?: string }>({})
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const emailError = validateEmail(email)
+    const idError = validateIdentifier(identifier)
     const passwordError = password ? "" : "La contraseña es obligatoria"
-    setErrors({ email: emailError, password: passwordError || undefined })
-    if (emailError || passwordError) return
-    toast.info("Función no disponible — próximamente")
+    setErrors({ identifier: idError, password: passwordError || undefined })
+    if (idError || passwordError) return
+
+    const result = login(identifier, password)
+    if (result.success) {
+      toast.success("Sesión iniciada")
+      router.push("/dashboard")
+    } else {
+      toast.error(result.error || "Error al iniciar sesión")
+    }
+  }
+
+  if (authLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner className="size-6" />
+      </div>
+    )
   }
 
   return (
@@ -42,17 +61,18 @@ export default function LoginPage() {
         </div>
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="identifier">Email o usuario</Label>
             <Input
-              id="email"
-              type="email"
+              id="identifier"
+              type="text"
               placeholder="tomas@zivelo.dev"
-              value={email}
-              onChange={(e) => { setEmail(e.target.value); setErrors((prev) => ({ ...prev, email: undefined })) }}
-              className={errors.email ? "border-accent! focus-visible:ring-accent/50!" : ""}
+              autoComplete="username"
+              value={identifier}
+              onChange={(e) => { setIdentifier(e.target.value); setErrors((prev) => ({ ...prev, identifier: undefined })) }}
+              className={errors.identifier ? "border-accent! focus-visible:ring-accent/50!" : ""}
             />
-            {errors.email && (
-              <p className="text-xs text-accent">{errors.email}</p>
+            {errors.identifier && (
+              <p className="text-xs text-accent">{errors.identifier}</p>
             )}
           </div>
           <div className="space-y-2">

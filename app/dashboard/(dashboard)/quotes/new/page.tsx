@@ -1,6 +1,24 @@
+"use client"
+
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/lib/auth/auth-context"
 import { QuoteCreateForm } from "@/components/quote/quote-create-form"
 
 export default function NewQuotePage() {
+  const { user } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user?.role === "Viewer") {
+      router.replace("/forbidden")
+    }
+  }, [user, router])
+
+  if (user?.role === "Viewer") {
+    return null
+  }
+
   return (
     <div className="mx-auto max-w-3xl px-5 pt-10 pb-24">
       <div className="mb-8">
