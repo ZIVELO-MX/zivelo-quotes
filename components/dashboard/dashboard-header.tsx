@@ -14,8 +14,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -77,9 +75,9 @@ export function DashboardHeader() {
             <button className="flex items-center gap-2 sm:gap-3 rounded-full sm:rounded-xl outline-none cursor-pointer transition-all duration-200 sm:hover:bg-black/[0.03] sm:data-[state=open]:bg-black/[0.03] hover:ring-2 hover:ring-border-strong sm:hover:ring-0 data-[state=open]:ring-2 data-[state=open]:ring-accent/20 sm:data-[state=open]:ring-0 sm:px-3 sm:py-1.5 sm:-mr-3">
               <Avatar className="size-8">
                 {user.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
-                <AvatarFallback className="text-xs bg-foreground text-white">
+                <div className="flex size-full items-center justify-center rounded-full bg-gray-900 text-white text-xs font-semibold">
                   {initials}
-                </AvatarFallback>
+                </div>
               </Avatar>
               <div className="hidden sm:block text-left">
                 <p className="text-sm font-medium text-foreground leading-tight">{user.name}</p>
@@ -88,28 +86,13 @@ export function DashboardHeader() {
               <ChevronDownIcon className="size-3.5 text-foreground-dim shrink-0" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>
-              <div className="flex items-center gap-3">
-                <Avatar className="size-9">
-                  {user.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
-                  <AvatarFallback className="text-xs bg-foreground text-white">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-sm font-medium text-foreground truncate">{user.name}</span>
-                  <span className="text-xs text-foreground-dim font-normal truncate">{user.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+          <DropdownMenuContent align="end" className="w-44">
             <DropdownMenuItem onSelect={() => router.push("/profile")} className="cursor-pointer">
               <UserIcon className="size-4" />
               Perfil
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={handleLogout} className="text-red-600 hover:text-red-600 focus:text-red-600 cursor-pointer">
-              <LogOutIcon className="size-4" />
+              <LogOutIcon className="size-4 text-red-600" />
               Cerrar sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
