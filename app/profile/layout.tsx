@@ -8,7 +8,7 @@ import { MinimalFooter } from "@/components/layout/minimal-footer"
 import { Spinner } from "@/components/ui/spinner"
 import { DevUserSwitcher } from "@/components/dashboard/dev-user-switcher"
 
-export default function DashboardLayout({
+export default function ProfileLayout({
   children,
 }: {
   children: React.ReactNode
@@ -37,7 +37,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <DashboardHeader />
-      <main className="flex-1 flex flex-col">{children}</main>
+      <main className="flex-1 flex">{children}</main>
       <MinimalFooter />
       <DevUserSwitcher />
     </div>
