@@ -300,7 +300,7 @@ function RoleDropdown({
         ].join(" ")}
         role="listbox"
       >
-        <div className="max-h-60 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
+        <div className="max-h-40 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
           {options.map((opt, i) => (
           <button
             key={opt}
@@ -373,7 +373,7 @@ function AddParticipantModal({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2 }}
-        className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-w-md mx-4 overflow-hidden"
+        className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-w-md mx-4"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
