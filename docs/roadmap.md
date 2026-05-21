@@ -6,8 +6,8 @@
 | --- | --- |
 | Versión actual | v0.0.9 → v0.1.0 |
 | Fase activa | MVP operativo |
-| Avance actual | Landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, dashboard layout, creación de quotes, auth hardcodeado (login/logout/protección) y tests base. |
-| Siguiente foco | Listado de quotes y edición básica. |
+| Avance actual | Landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, dashboard layout, creación de quotes, auth hardcodeado (login/logout/protección), página de perfil con 4 secciones (Profile, Workspace, Users & Permissions, Security) y tests base. |
+| Siguiente foco | Listado de quotes, edición básica y pulir detalles pre-MVP. |
 | Meta inmediata | Zivelo puede crear, editar, publicar y compartir cotizaciones reales desde un dashboard interno protegido. |
 
 Este roadmap prioriza terminar primero el flujo interno de cotizaciones de Zivelo. La plataforma debe quedar preparada para organizaciones, miembros e invitaciones, pero esas funciones no deben bloquear el MVP operativo.
@@ -37,10 +37,15 @@ Este roadmap prioriza terminar primero el flujo interno de cotizaciones de Zivel
 | Tests de schemas | Hecho |
 | Tests de server action | Hecho |
 | Dashboard | Parcial, layout y creación |
+| Página de perfil `/profile` | Hecho: 4 secciones (Profile, Workspace, Users & Permissions, Security), navegación por sidebar, animaciones |
+| Roles y permisos en UI | Hecho: Owner/Manager ven todo; Editor/Viewer ocultan Users; Viewer no crea quotes |
+| Dropdown de roles | Hecho: custom con colores, scroll, estilo quote-form |
+| Avatar | Hecho: foto con fallback a iniciales, Owner con logo Zivelo |
 | Login | Funcional con datos hardcodeados en `/dashboard/login` |
 | Auth real | Hardcodeado (`lib/auth/`), pendiente migrar a Supabase Auth |
 | Protección de dashboard | Hecho (cliente-side, redirect a login si no hay sesión) |
 | Logout | Hecho desde menú de usuario en header |
+| Página 403 | Hecho en `/forbidden` |
 | Organizaciones / miembros / invitaciones | Pendiente, futuro |
 
 ## Fases
@@ -105,6 +110,13 @@ Esta es la fase activa. El objetivo es que Zivelo pueda usar el producto interna
 | DevUserSwitcher | Selector flotante para cambiar de rol al instante. BORRAR antes del MVP. | Hecho |
 | Supabase Auth | Migrar auth hardcodeado a Supabase Auth real. | Siguiente |
 | Remover DevUserSwitcher | Borrar `components/dashboard/dev-user-switcher.tsx` y su import en el layout antes del MVP. | Pendiente |
+| Página de perfil `/profile` | 4 secciones con sidebar, animaciones, colores por rol. | Hecho |
+| Página 403 | Ruta `/forbidden` para acceso denegado. | Hecho |
+| Avatar con foto | Foto vía AvatarImage, fallback a iniciales (nombre+apellido). | Hecho |
+| Pulir detalles pre-MVP | Extraer demo data a `lib/auth/demo-data.ts` | Siguiente |
+| Pulir detalles pre-MVP | Extraer `RoleDropdown` a `components/ui/role-dropdown.tsx` | Siguiente |
+| Pulir detalles pre-MVP | Agregar loading states y skeleton UI en dashboard y perfil | Siguiente |
+| Pulir detalles pre-MVP | Agregar `Suspense` y skeletons donde haya carga asíncrona | Siguiente |
 | Publicar / despublicar | Control claro de estado `draft` / `published`. | Parcial |
 | Página pública | Render desde DB en `/q/[quoteSlug]`. | Hecho |
 | Exportar PDF | Snapshot compartible. | Hecho |
@@ -212,12 +224,14 @@ Zivelo puede operar quotes en dominios o entornos diferenciados sin comprometer 
 | 7 | RLS inicial en `Quote` | Hecho |
 | 8 | Setup de testing | Hecho |
 | 9 | Tests de schemas y server action | Hecho |
-| 10 | Listado de quotes | Siguiente |
-| 11 | Edición básica de quote | Siguiente |
-| 12 | Auth hardcodeado (login/logout/protección) | Hecho |
-| 13 | Supabase Auth para dashboard (migrar auth real) | Siguiente |
-| 13 | Pulir publicación y estados | Después |
-| 14 | Organizaciones, miembros e invitaciones | Futuro |
+| 10 | Página de perfil (4 secciones + sidebar + roles) | Hecho |
+| 11 | Listado de quotes | Siguiente |
+| 12 | Edición básica de quote | Siguiente |
+| 13 | Auth hardcodeado (login/logout/protección) | Hecho |
+| 14 | Pulir pre-MVP: skeletons, loading states, refactors | Siguiente |
+| 15 | Supabase Auth para dashboard (migrar auth real) | Siguiente |
+| 16 | Pulir publicación y estados | Después |
+| 17 | Organizaciones, miembros e invitaciones | Futuro |
 
 ## Fuera Del MVP Operativo
 
