@@ -247,10 +247,10 @@ function WorkspaceSection() {
 // ── Section: Users & Permissions ──────────────────────────
 
 const ROLE_COLORS: Record<string, string> = {
-  Owner: "bg-red-500",
-  Manager: "bg-blue-500",
-  Editor: "bg-amber-500",
-  Viewer: "bg-gray-400",
+  Owner: "#dc2626",
+  Manager: "#cc0000",
+  Editor: "#d97706",
+  Viewer: "#9ca3af",
 }
 
 function RoleDropdown({
@@ -284,7 +284,7 @@ function RoleDropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <span className={`block h-2 w-2 rounded-full ${ROLE_COLORS[value] ?? "bg-gray-400"}`} />
+        <span className="block h-2 w-2 rounded-full" style={{ backgroundColor: ROLE_COLORS[value] ?? "#9ca3af" }} />
         {value}
         <ChevronDown
           size={16}
@@ -300,7 +300,8 @@ function RoleDropdown({
         ].join(" ")}
         role="listbox"
       >
-        {options.map((opt, i) => (
+        <div className="max-h-48 overflow-y-auto">
+          {options.map((opt, i) => (
           <button
             key={opt}
             type="button"
@@ -319,14 +320,15 @@ function RoleDropdown({
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
             <span className="flex items-center gap-2">
-              <span className={`block h-2 w-2 rounded-full ${ROLE_COLORS[opt] ?? "bg-gray-400"}`} />
+              <span className="block h-2 w-2 rounded-full" style={{ backgroundColor: ROLE_COLORS[opt] ?? "#9ca3af" }} />
               {opt}
             </span>
             {value === opt && (
               <Check size={16} strokeWidth={2} className="text-gray-400 shrink-0" />
             )}
           </button>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -538,7 +540,8 @@ function UsersSection() {
                   </td>
                   <td className="px-4 py-3 text-gray-500">{m.email}</td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+                      <span className="block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: ROLE_COLORS[m.role] ?? "#9ca3af" }} />
                       {m.role}
                     </span>
                   </td>
