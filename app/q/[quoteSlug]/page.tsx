@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
-import { Footer } from "@/components/layout/footer"
+import { MinimalFooter } from "@/components/layout/minimal-footer"
 import { QuoteHero, QuoteSummary, QuotePricing } from "@/components/quote"
 import { QuoteItemsList } from "@/components/quote/quote-items-list"
 import { QuoteActions } from "@/components/quote/quote-actions"
@@ -51,21 +51,23 @@ export default async function QuotePage({ params }: Props) {
   const total = calculateTotal(quote.items)
 
   return (
-    <main className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-5 pt-24 pb-24">
-        <QuoteHero
-          projectLabel={quote.projectLabel}
-          title={quote.title}
-          preparedBy={quote.preparedBy}
-          validUntil={quote.validUntil}
-          status={quote.status}
-        />
-        <QuoteSummary summary={quote.summary} />
-        <QuoteItemsList items={quote.items} />
-        <QuotePricing total={total} />
-        <QuoteActions phone={quote.phone} title={quote.title} quote={quote} />
-      </div>
-      <Footer />
-    </main>
+    <div className="min-h-screen bg-background flex flex-col">
+      <main className="flex-1">
+        <div className="max-w-4xl mx-auto px-5 pt-24 pb-24">
+          <QuoteHero
+            projectLabel={quote.projectLabel}
+            title={quote.title}
+            preparedBy={quote.preparedBy}
+            validUntil={quote.validUntil}
+            status={quote.status}
+          />
+          <QuoteSummary summary={quote.summary} />
+          <QuoteItemsList items={quote.items} />
+          <QuotePricing total={total} />
+          <QuoteActions phone={quote.phone} title={quote.title} quote={quote} />
+        </div>
+      </main>
+      <MinimalFooter />
+    </div>
   )
 }
