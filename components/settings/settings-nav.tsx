@@ -8,11 +8,14 @@ import {
   Shield,
   Building2,
   Users,
+  Palette,
+  GripHorizontal,
+  Settings2,
 } from "lucide-react"
 import { useIsMobile } from "@/hooks/use-mobile"
 import type { User as UserType } from "@/lib/auth/auth-context"
 
-export type SectionId = "profile" | "workspace" | "users" | "security"
+export type SectionId = "general" | "brand" | "team" | "quote-actions" | "account" | "security"
 
 interface Section {
   id: SectionId
@@ -28,9 +31,11 @@ interface SettingsNavProps {
 }
 
 const ALL_SECTIONS: Section[] = [
-  { id: "profile", label: "Perfil", icon: User },
-  { id: "workspace", label: "Espacio de trabajo", icon: Building2 },
-  { id: "users", label: "Usuarios y permisos", icon: Users },
+  { id: "general", label: "Información general", icon: Building2 },
+  { id: "brand", label: "Marca", icon: Palette },
+  { id: "team", label: "Equipo", icon: Users },
+  { id: "quote-actions", label: "Acciones", icon: GripHorizontal },
+  { id: "account", label: "Cuenta", icon: User },
   { id: "security", label: "Seguridad", icon: Shield },
 ]
 
@@ -46,7 +51,8 @@ function getInitials(name: string): string {
 
 function getVisibleSections(role: string): Section[] {
   if (role === "Owner" || role === "Manager") return ALL_SECTIONS
-  return ALL_SECTIONS.filter((s) => s.id !== "users")
+  if (role === "Viewer") return ALL_SECTIONS.filter((s) => s.id !== "team" && s.id !== "quote-actions" && s.id !== "brand")
+  return ALL_SECTIONS.filter((s) => s.id !== "team")
 }
 
 // ── Desktop Sidebar ─────────────────────────────────────────
@@ -138,10 +144,10 @@ function MobileSettingsIndex({
   const initials = getInitials(user.name)
 
   const accountSections = sections.filter((s) =>
-    ["profile", "security"].includes(s.id)
+    ["account", "security"].includes(s.id)
   )
   const workspaceSections = sections.filter((s) =>
-    ["workspace", "users"].includes(s.id)
+    ["general", "brand", "team", "quote-actions"].includes(s.id)
   )
 
   function NavRow({ section }: { section: Section }) {
@@ -181,7 +187,7 @@ function MobileSettingsIndex({
 
       <div className="mt-4">
         <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 px-1 pb-1">
-          Cuenta
+          Personales
         </p>
         <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
           {accountSections.map((s, i) => (
