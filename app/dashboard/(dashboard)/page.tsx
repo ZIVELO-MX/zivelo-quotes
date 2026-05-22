@@ -233,11 +233,15 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
+                  <Link
+                    href={`/dashboard/quotes/${q.slug}/edit`}
+                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  >
+                    <Pencil size={14} />
+                    Editar
+                  </Link>
                   {q.status === "draft" && (
-                    <>
-                      <ActionButton icon={Pencil} label="Editar" onClick={() => toast.info("Editar — próximamente")} />
-                      <ActionButton icon={Send} label="Publicar" onClick={() => toast.info("Publicar — próximamente")} />
-                    </>
+                    <ActionButton icon={Send} label="Publicar" onClick={() => toast.info("Publicar — próximamente")} />
                   )}
                   {q.status === "active" && (
                     <>

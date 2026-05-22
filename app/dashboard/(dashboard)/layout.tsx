@@ -37,10 +37,12 @@ export default function DashboardLayout({
     return null
   }
 
+  const isEditQuote = pathname.startsWith("/dashboard/quotes/") && pathname.endsWith("/edit")
   const showNav =
     pathname !== "/dashboard/login" &&
     pathname !== "/dashboard/settings" &&
-    pathname !== "/dashboard/quotes/new"
+    pathname !== "/dashboard/quotes/new" &&
+    !isEditQuote
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

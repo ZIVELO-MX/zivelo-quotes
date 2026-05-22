@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { useAuth } from "@/lib/auth/auth-context"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Plus, Search, ChevronDown } from "lucide-react"
+import { ArrowLeft, Plus, Search, ChevronDown, Pencil } from "lucide-react"
 import { toast } from "sonner"
 
 // ── Mock data ──────────────────────────────────────────────
@@ -211,8 +211,9 @@ export default function QuotesPage() {
                     </div>
                     <Link
                       href={`/dashboard/quotes/${q.slug}/edit`}
-                      className="text-xs font-medium text-gray-400 hover:text-gray-900 transition-colors"
+                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                     >
+                      <Pencil size={14} />
                       Editar
                     </Link>
                   </div>
@@ -265,8 +266,9 @@ export default function QuotesPage() {
                       <td className="px-5 py-3">
                         <Link
                           href={`/dashboard/quotes/${q.slug}/edit`}
-                          className="text-xs font-medium text-gray-400 hover:text-gray-900 transition-colors"
+                          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
                         >
+                          <Pencil size={14} />
                           Editar
                         </Link>
                       </td>
