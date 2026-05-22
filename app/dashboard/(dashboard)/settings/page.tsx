@@ -1068,12 +1068,12 @@ function NotForYou() {
 // ── Settings Index (centered landing) ─────────────────────
 
 const ALL_SECTION_META: { id: SectionId; label: string; icon: typeof User; description: string }[] = [
+  { id: "account", label: "Cuenta", icon: User, description: "Tu información personal" },
+  { id: "security", label: "Seguridad", icon: Shield, description: "Inicio de sesión y seguridad de la cuenta" },
   { id: "general", label: "Información general", icon: Building2, description: "Nombre del negocio, moneda y contacto" },
   { id: "brand", label: "Marca", icon: Palette, description: "Logo, colores y apariencia de cotizaciones" },
   { id: "team", label: "Equipo", icon: Users, description: "Miembros y roles del espacio de trabajo" },
   { id: "quote-actions", label: "Acciones de cotización", icon: GripHorizontal, description: "Opciones por defecto en nuevas cotizaciones" },
-  { id: "account", label: "Cuenta", icon: User, description: "Tu información personal" },
-  { id: "security", label: "Seguridad", icon: Shield, description: "Inicio de sesión y seguridad de la cuenta" },
 ]
 
 function SettingsIndex({ onSelect, role }: { onSelect: (id: SectionId) => void; role: string }) {
@@ -1083,14 +1083,13 @@ function SettingsIndex({ onSelect, role }: { onSelect: (id: SectionId) => void; 
       ? ALL_SECTION_META.filter((s) => s.id !== "team" && s.id !== "quote-actions" && s.id !== "brand")
       : ALL_SECTION_META.filter((s) => s.id !== "team")
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
-      <h1 className="text-2xl font-semibold text-gray-900">Ajustes</h1>
-      <p className="text-sm text-gray-500 mt-1 mb-8">
-        Administra la información de tu negocio, tu marca y tus preferencias de cotización.
-      </p>
+  const personalSections = meta.filter((s) => ["account", "security"].includes(s.id))
+  const workspaceSections = meta.filter((s) => ["general", "brand", "team", "quote-actions"].includes(s.id))
+
+  function SectionGrid({ items }: { items: typeof ALL_SECTION_META }) {
+    return (
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
-        {meta.map((s) => {
+        {items.map((s) => {
           const Icon = s.icon
           return (
             <button
@@ -1110,6 +1109,31 @@ function SettingsIndex({ onSelect, role }: { onSelect: (id: SectionId) => void; 
           )
         })}
       </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col items-center min-h-[60vh] px-4">
+      <h1 className="text-2xl font-semibold text-gray-900 mt-8">Ajustes</h1>
+      <p className="text-sm text-gray-500 mt-1 mb-8">
+        Administra la información de tu negocio, tu marca y tus preferencias de cotización.
+      </p>
+
+      <div className="w-full max-w-xl">
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+          Personales
+        </p>
+        <SectionGrid items={personalSections} />
+      </div>
+
+      {workspaceSections.length > 0 && (
+        <div className="w-full max-w-xl mt-8">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+            Workspace
+          </p>
+          <SectionGrid items={workspaceSections} />
+        </div>
+      )}
     </div>
   )
 }
@@ -1141,19 +1165,6 @@ export default function SettingsPage() {
         onBack={handleBack}
       />
       <div className="flex-1 min-w-0">
-        {/* Mobile: show back arrow when a section is active */}
-        {activeSection && (
-          <div className="sm:hidden mb-4">
-            <Link
-              href="/dashboard/settings"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
-            >
-              <ArrowLeft size={16} />
-              Volver a ajustes
-            </Link>
-          </div>
-        )}
-
         {/* Desktop: show "← Volver al dashboard" above the content */}
         <div className="hidden sm:block mb-6">
           <Link
