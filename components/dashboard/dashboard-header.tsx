@@ -10,9 +10,7 @@ import {
   ChevronDownIcon,
   MenuIcon,
   LayoutDashboard,
-  FilePlus,
   FileText,
-  Palette,
   Settings,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
@@ -32,9 +30,7 @@ import {
 
 const MOBILE_NAV_ITEMS = [
   { label: "Resumen", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Nueva cotización", href: "/dashboard/quotes/new", icon: FilePlus },
   { label: "Cotizaciones", href: "/dashboard/quotes", icon: FileText },
-  { label: "Marca", href: "/dashboard/settings?section=brand", icon: Palette },
   { label: "Ajustes", href: "/dashboard/settings", icon: Settings },
 ]
 
@@ -53,9 +49,6 @@ export function DashboardHeader() {
     .slice(0, 2)
     .toUpperCase() ?? ""
 
-  const visibleItems = user.role === "Viewer"
-    ? MOBILE_NAV_ITEMS.filter((i) => i.href !== "/dashboard/quotes/new")
-    : MOBILE_NAV_ITEMS
 
   function handleLogout() {
     logout()
@@ -95,7 +88,7 @@ export function DashboardHeader() {
                   />
                 </div>
                 <nav className="flex flex-col p-3 gap-1">
-                  {visibleItems.map((item) => {
+                  {MOBILE_NAV_ITEMS.map((item) => {
                     const Icon = item.icon
                     const active = isActive(item.href)
                     return (
