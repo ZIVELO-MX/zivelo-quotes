@@ -328,14 +328,25 @@ function CurrencyDropdown({ value, onChange }: { value: string; onChange: (v: st
   )
 }
 
-export function QuoteCreateForm() {
+interface QuoteFormProps {
+  mode?: "create" | "edit"
+  initialData?: FormValues
+}
+
+export function QuoteForm({ mode = "create", initialData }: QuoteFormProps) {
   const router = useRouter()
+  const isEdit = mode === "edit"
   const [submitting, setSubmitting] = useState(false)
-  const [logoMode, setLogoMode] = useState<"default" | "upload">("default")
+  const [logoMode, setLogoMode] = useState<"default" | "upload">(
+    initialData?.branding?.logoPath &&
+      initialData.branding.logoPath !== "public/logos/zivelo-bars-dark-full.svg"
+      ? "upload"
+      : "default",
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialData ?? {
       title: "",
       slug: "",
       projectLabel: "",
@@ -371,6 +382,7 @@ export function QuoteCreateForm() {
   ) {
     const value = e.target.value
     fieldOnChange(e)
+    if (isEdit) return
     const currentSlug = form.getValues("slug")
     if (!currentSlug || currentSlug === slugify(form.formState.defaultValues?.title ?? "")) {
       form.setValue("slug", slugify(value))
@@ -380,13 +392,15 @@ export function QuoteCreateForm() {
   async function onSubmit(values: FormValues) {
     setSubmitting(true)
     try {
-      const { createQuote } = await import("@/lib/actions/quote")
-      const result = await createQuote(values)
+      const { createQuote, updateQuote } = await import("@/lib/actions/quote")
+      const result = isEdit
+        ? await updateQuote(initialData!.slug, values)
+        : await createQuote(values)
       if (result.success) {
-        toast.success("Cotización creada")
-        router.push(`/q/${result.slug}`)
+        toast.success(isEdit ? "Cotización actualizada" : "Cotización creada")
+        router.push(`/dashboard/quotes`)
       } else {
-        toast.error(result.error ?? "Error al crear la cotización")
+        toast.error(result.error ?? "Error al guardar la cotización")
       }
     } catch {
       toast.error("Ocurrió un error")
@@ -431,7 +445,12 @@ export function QuoteCreateForm() {
                   <FormItem>
                     <FormLabel>Slug *</FormLabel>
                     <FormControl>
-                      <Input placeholder="acme-corp-sitio-web" {...field} />
+                      <Input
+                        placeholder="acme-corp-sitio-web"
+                        {...field}
+                        disabled={isEdit}
+                        className={isEdit ? "text-gray-400 bg-gray-50 cursor-not-allowed" : ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -876,10 +895,14 @@ export function QuoteCreateForm() {
             disabled={submitting}
             className="bg-accent hover:bg-accent-hover text-white"
           >
-            {submitting ? "Creando…" : "Crear cotización"}
+            {submitting
+              ? isEdit ? "Guardando…" : "Creando…"
+              : isEdit ? "Guardar cambios" : "Crear cotización"}
           </Button>
         </div>
       </form>
     </Form>
   )
 }
+
+export { QuoteForm as QuoteCreateForm }

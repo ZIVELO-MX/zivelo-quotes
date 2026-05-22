@@ -189,27 +189,34 @@ export default function QuotesPage() {
           filtered.map((q) => {
             const colors = STATUS_COLORS[q.status]
             return (
-              <div
-                key={q.id}
-                className="bg-white border border-gray-100 rounded-2xl p-4 cursor-pointer transition-colors hover:bg-gray-50/50"
-                onClick={() => toast.info(`Vista de detalle — próximamente (${q.id})`)}
-              >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-gray-900 truncate">{q.title}</p>
-                    <p className="text-xs text-gray-500 truncate mt-0.5">{q.client}</p>
+                <div
+                  key={q.id}
+                  className="bg-white border border-gray-100 rounded-2xl p-4 transition-colors hover:bg-gray-50/50"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-gray-900 truncate">{q.title}</p>
+                      <p className="text-xs text-gray-500 truncate mt-0.5">{q.client}</p>
+                    </div>
+                    <p className="text-sm font-semibold text-gray-900 shrink-0">{formatPrice(q.total, q.currency)}</p>
                   </div>
-                  <p className="text-sm font-semibold text-gray-900 shrink-0">{formatPrice(q.total, q.currency)}</p>
+                  <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
+                    <div className="flex items-center gap-3">
+                      <span className={`inline-flex items-center gap-1.5 ${colors.text}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                        {STATUS_LABELS[q.status]}
+                      </span>
+                      <span>·</span>
+                      <span>{q.validUntil || "Sin vencimiento"}</span>
+                    </div>
+                    <Link
+                      href={`/dashboard/quotes/${q.slug}/edit`}
+                      className="text-xs font-medium text-gray-400 hover:text-gray-900 transition-colors"
+                    >
+                      Editar
+                    </Link>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-gray-500">
-                  <span className={`inline-flex items-center gap-1.5 ${colors.text}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
-                    {STATUS_LABELS[q.status]}
-                  </span>
-                  <span>·</span>
-                  <span>{q.validUntil || "Sin vencimiento"}</span>
-                </div>
-              </div>
             )
           })
         )}
@@ -217,50 +224,58 @@ export default function QuotesPage() {
 
       {/* Desktop table */}
       <div className="hidden sm:block bg-white border border-gray-100 rounded-2xl overflow-x-auto">
-        <table className="w-full min-w-[640px]">
-          <thead>
-            <tr className="bg-gray-50">
-              <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Título</th>
-              <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Cliente</th>
-              <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Estado</th>
-              <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Vence</th>
-              <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="px-5 py-12 text-center text-sm text-gray-400">
-                  No se encontraron cotizaciones.
-                </td>
+          <table className="w-full min-w-[640px]">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Título</th>
+                <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Cliente</th>
+                <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Estado</th>
+                <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Vence</th>
+                <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left">Total</th>
+                <th className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 px-5 py-3 text-left" />
               </tr>
-            ) : (
-              filtered.map((q) => {
-                const colors = STATUS_COLORS[q.status]
-                return (
-                  <tr
-                    key={q.id}
-                    className="text-sm text-gray-700 border-t border-gray-100 transition-colors hover:bg-gray-50/50 cursor-pointer"
-                    onClick={() => toast.info(`Vista de detalle — próximamente (${q.id})`)}
-                  >
-                    <td className="px-5 py-3">
-                      <p className="font-medium text-gray-900">{q.title}</p>
-                    </td>
-                    <td className="px-5 py-3 text-gray-500">{q.client}</td>
-                    <td className="px-5 py-3">
-                      <span className={`inline-flex items-center gap-1.5 ${colors.text}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
-                        {STATUS_LABELS[q.status]}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-gray-500">{q.validUntil || "—"}</td>
-                    <td className="px-5 py-3 font-medium text-gray-900">{formatPrice(q.total, q.currency)}</td>
-                  </tr>
-                )
-              })
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-5 py-12 text-center text-sm text-gray-400">
+                    No se encontraron cotizaciones.
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((q) => {
+                  const colors = STATUS_COLORS[q.status]
+                  return (
+                    <tr
+                      key={q.id}
+                      className="text-sm text-gray-700 border-t border-gray-100 transition-colors hover:bg-gray-50/50"
+                    >
+                      <td className="px-5 py-3">
+                        <p className="font-medium text-gray-900">{q.title}</p>
+                      </td>
+                      <td className="px-5 py-3 text-gray-500">{q.client}</td>
+                      <td className="px-5 py-3">
+                        <span className={`inline-flex items-center gap-1.5 ${colors.text}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                          {STATUS_LABELS[q.status]}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-gray-500">{q.validUntil || "—"}</td>
+                      <td className="px-5 py-3 font-medium text-gray-900">{formatPrice(q.total, q.currency)}</td>
+                      <td className="px-5 py-3">
+                        <Link
+                          href={`/dashboard/quotes/${q.slug}/edit`}
+                          className="text-xs font-medium text-gray-400 hover:text-gray-900 transition-colors"
+                        >
+                          Editar
+                        </Link>
+                      </td>
+                    </tr>
+                  )
+                })
+              )}
+            </tbody>
+          </table>
       </div>
 
       {filtered.length > 0 && (
