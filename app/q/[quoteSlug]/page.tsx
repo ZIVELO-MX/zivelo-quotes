@@ -22,7 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function getQuote(slug: string): Promise<QuoteData | null> {
   try {
-    const row = await prisma.quote.findUnique({ where: { slug } })
+    const row = await prisma.quote.findUnique({
+      where: { slug, status: "active" },
+    })
     if (!row) return null
     return {
       projectLabel: row.projectLabel,

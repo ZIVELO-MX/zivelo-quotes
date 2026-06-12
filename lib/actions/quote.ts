@@ -135,3 +135,47 @@ export async function listQuotes(): Promise<{ success: boolean; quotes: QuoteSum
     return { success: false, quotes: [] }
   }
 }
+
+export async function publishQuote(slug: string) {
+  try {
+    const quote = await prisma.quote.update({
+      where: { slug },
+      data: { status: "active" },
+    })
+    revalidatePath("/dashboard")
+    revalidatePath(`/q/${quote.slug}`)
+    return { success: true, slug: quote.slug }
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code: string }).code === "P2025"
+    ) {
+      return { success: false, error: "Cotización no encontrada" }
+    }
+    return { success: false, error: "Error al publicar la cotización" }
+  }
+}
+
+export async function unpublishQuote(slug: string) {
+  try {
+    const quote = await prisma.quote.update({
+      where: { slug },
+      data: { status: "draft" },
+    })
+    revalidatePath("/dashboard")
+    revalidatePath(`/q/${quote.slug}`)
+    return { success: true, slug: quote.slug }
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code: string }).code === "P2025"
+    ) {
+      return { success: false, error: "Cotización no encontrada" }
+    }
+    return { success: false, error: "Error al despublicar la cotización" }
+  }
+}
