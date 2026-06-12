@@ -8,7 +8,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       type: "oauth",
       authorization: {
         url: "https://accounts.zoho.com/oauth/v2/auth",
-        params: { scope: "openid email profile" },
+        params: { scope: "email profile" },
       },
       token: "https://accounts.zoho.com/oauth/v2/token",
       userinfo: "https://accounts.zoho.com/oauth/v2/userinfo",
