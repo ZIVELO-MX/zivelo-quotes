@@ -8,6 +8,8 @@ export const itemSchema = z.object({
   description: z.string().default(""),
   price: z.coerce.number().min(0, "Debe ser 0 o mayor"),
   bullets: z.array(z.string()).default([]),
+  attachments: z.array(z.string()).default([]),
+  links: z.array(z.string()).default([]),
 })
 
 export const formSchema = z.object({
