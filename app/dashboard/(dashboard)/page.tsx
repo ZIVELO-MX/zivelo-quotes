@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { publishQuote, unpublishQuote } from "@/lib/actions/quote"
 
 // ── Mock data ──────────────────────────────────────────────
 
@@ -241,7 +242,12 @@ export default function DashboardPage() {
                     Editar
                   </Link>
                   {q.status === "draft" && (
-                    <ActionButton icon={Send} label="Publicar" onClick={() => toast.info("Publicar — próximamente")} />
+                    <ActionButton icon={Send} label="Publicar" onClick={() => {
+                      publishQuote(q.slug).then((result) => {
+                        if (result.success) toast.success("Cotización publicada")
+                        else toast.error(result.error ?? "Error al publicar")
+                      })
+                    }} />
                   )}
                   {q.status === "active" && (
                     <>
@@ -250,6 +256,12 @@ export default function DashboardPage() {
                         toast.success("Enlace copiado")
                       }} primary />
                       <ActionButton icon={Eye} label="Vista previa" onClick={() => window.open(`/q/${q.slug}`, "_blank")} />
+                      <ActionButton icon={RefreshCw} label="Despublicar" onClick={() => {
+                        unpublishQuote(q.slug).then((result) => {
+                          if (result.success) toast.success("Cotización despublicada")
+                          else toast.error(result.error ?? "Error al despublicar")
+                        })
+                      }} />
                     </>
                   )}
                   {q.status === "expired" && (
