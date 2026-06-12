@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useRef, useEffect } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
@@ -25,10 +25,9 @@ import {
   Upload,
   Globe,
   DollarSign,
-  Phone,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
-import { HARDCODED_USERS } from "@/lib/auth/hardcoded-users"
+import { listUsers, type UserSummary } from "@/lib/actions/user"
 import { SettingsNav, type SectionId } from "@/components/settings/settings-nav"
 
 // ── Helpers ───────────────────────────────────────────────
@@ -42,42 +41,6 @@ function getInitials(name: string): string {
     .join("")
     .toUpperCase()
 }
-
-const NOW = new Date().toISOString()
-
-// ── Demo data (hardcoded for UI) ──────────────────────────
-
-const DEMO_INVITATIONS = [
-  {
-    email: "invitado@example.com",
-    role: "Editor",
-    status: "Invitación pendiente" as const,
-    invitedAt: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    email: "colaborador@test.com",
-    role: "Viewer",
-    status: "Invitación pendiente" as const,
-    invitedAt: new Date(Date.now() - 172800000).toISOString(),
-  },
-]
-
-const ALL_MEMBERS = [
-  ...HARDCODED_USERS.map((u) => ({
-    email: u.email,
-    name: u.name,
-    role: u.role,
-    status: "Activo" as const,
-    lastActive: NOW,
-  })),
-  ...DEMO_INVITATIONS.map((i) => ({
-    email: i.email,
-    name: i.email.split("@")[0],
-    role: i.role,
-    status: i.status,
-    lastActive: null,
-  })),
-]
 
 // ── Animation variants ────────────────────────────────────
 
@@ -264,16 +227,19 @@ function GeneralSection() {
   const { user } = useAuth()
   if (!user) return null
 
-  const membersCount = 4
-  const plan = "Pro"
+  const [membersCount, setMembersCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    listUsers().then((res) => {
+      if (res.success) setMembersCount(res.users.length)
+    })
+  }, [])
 
   const info = [
     { label: "Nombre del negocio", value: user.organization.name, icon: Building2 },
     { label: "Slug", value: user.organization.slug, icon: Globe },
     { label: "Moneda predeterminada", value: "MXN — Peso mexicano", icon: DollarSign },
-    { label: "Teléfono de contacto", value: "+52 55 1234 5678", icon: Phone },
-    { label: "Miembros", value: `${membersCount} miembros`, icon: Users },
-    { label: "Plan", value: `${plan} · Creado en Mar 2026`, icon: Shield },
+    { label: "Miembros", value: membersCount !== null ? `${membersCount} miembros` : "—", icon: Users },
   ]
 
   return (
@@ -307,11 +273,11 @@ function GeneralSection() {
 
 function BrandSection() {
   const { user } = useAuth()
-  const [primaryColor, setPrimaryColor] = useState("#2563eb")
+  const [primaryColor, setPrimaryColor] = useState("#cc0000")
   const [preparedBy] = useState(user?.organization.name ?? "Zivelo")
   const [orgName, setOrgName] = useState(user?.organization.name ?? "Zivelo Studio")
   const [currency, setCurrency] = useState("MXN")
-  const [whatsapp, setWhatsapp] = useState("+52 55 1234 5678")
+  const [whatsapp, setWhatsapp] = useState("")
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [logoMode, setLogoMode] = useState<"default" | "upload">("default")
 
@@ -747,13 +713,39 @@ function AddParticipantModal({
   )
 }
 
+type TeamMember = {
+  email: string
+  name: string
+  role: string
+  status: "Activo"
+  lastActive: string | null
+}
+
 function TeamSection() {
   const { user } = useAuth()
   if (!user) return null
 
   const [modalOpen, setModalOpen] = useState(false)
   const isOwner = user.role === "Owner"
-  const members = useMemo(() => ALL_MEMBERS, [])
+  const [members, setMembers] = useState<TeamMember[]>([])
+  const [loadingMembers, setLoadingMembers] = useState(true)
+
+  useEffect(() => {
+    listUsers().then((res) => {
+      if (res.success) {
+        setMembers(res.users.map((u: UserSummary) => ({
+          email: u.email,
+          name: u.name,
+          role: u.role,
+          status: "Activo" as const,
+          lastActive: u.createdAt,
+        })))
+      } else {
+        setMembers([{ email: user.email, name: user.name, role: user.role, status: "Activo", lastActive: null }])
+      }
+      setLoadingMembers(false)
+    })
+  }, [user.email, user.name, user.role])
 
   return (
     <motion.div key="team" variants={sectionVariants} initial="initial" animate="animate" exit="exit">
@@ -775,13 +767,11 @@ function TeamSection() {
         </div>
       </div>
 
-      <p className="text-xs text-gray-400 mb-4">
-        Los usuarios mostrados son datos de demostración. La funcionalidad de base de datos estará disponible próximamente.
-      </p>
-
       {/* Mobile card view */}
       <div className="sm:hidden space-y-3">
-        {members.map((m) => {
+        {loadingMembers ? (
+          <div className="py-8 text-center text-sm text-gray-400">Cargando miembros…</div>
+        ) : members.map((m) => {
           const initials = getInitials(m.name)
           const isCurrentUser = m.email === user.email
           return (
@@ -832,7 +822,13 @@ function TeamSection() {
             </tr>
           </thead>
           <tbody>
-            {members.map((m) => {
+            {loadingMembers ? (
+              <tr>
+                <td colSpan={6} className="px-4 py-8 text-center text-sm text-gray-400">
+                  Cargando miembros…
+                </td>
+              </tr>
+            ) : members.map((m) => {
               const initials = getInitials(m.name)
               const isCurrentUser = m.email === user.email
               return (

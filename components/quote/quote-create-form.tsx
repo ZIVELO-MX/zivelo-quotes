@@ -398,7 +398,8 @@ export function QuoteForm({ mode = "create", initialData }: QuoteFormProps) {
         : await createQuote(values)
       if (result.success) {
         toast.success(isEdit ? "Cotización actualizada" : "Cotización creada")
-        router.push(`/dashboard/quotes`)
+        const slug = !isEdit ? (result as { success: true; slug: string }).slug : null
+        router.push(slug ? `/dashboard/quotes/${slug}/edit` : `/dashboard/quotes`)
       } else {
         toast.error(result.error ?? "Error al guardar la cotización")
       }
