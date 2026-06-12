@@ -726,6 +726,8 @@ export function QuoteForm({ mode = "create", initialData }: QuoteFormProps) {
                   description: "",
                   price: 0,
                   bullets: [],
+                  attachments: [],
+                  links: [],
                 })
               }
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 text-foreground-muted border border-border hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm cursor-pointer"
