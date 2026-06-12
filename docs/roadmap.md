@@ -109,7 +109,8 @@ Esta es la fase activa. El objetivo es que Zivelo pueda usar el producto interna
 | Protección de dashboard | Redirigir usuarios no autenticados fuera de `/dashboard`. | Hecho (cliente-side) |
 | Logout | Salida clara desde el dashboard. | Hecho |
 | DevUserSwitcher | Selector flotante para cambiar de rol al instante. BORRAR antes del MVP. | Hecho |
-| Supabase Auth | Migrar auth hardcodeado a Supabase Auth real. | Siguiente |
+| Zoho OAuth (NextAuth v5) | Reemplazar auth hardcodeado por Zoho OAuth vía NextAuth. | En progreso (PR #27) |
+| Forzar cambio de contraseña | Al primer login, detectar `mustChangePassword = true` en el modelo `User` y redirigir a `/dashboard/change-password`. | Pendiente |
 | Remover DevUserSwitcher | Borrar `components/dashboard/dev-user-switcher.tsx` y su import en el layout antes del MVP. | Pendiente |
 | Página de settings `/dashboard/settings` | 6 secciones con navbar responsive: sidebar (desktop) / índice (mobile). Landing centrado. | Hecho |
 | Data map | `docs/data-map.md` con mapeo DB ↔ Zod ↔ UI mock ↔ Auth. | Hecho |

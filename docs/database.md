@@ -77,22 +77,28 @@ const formSchema = z.object({
 
 > Ver `docs/data-map.md` para el mapeo completo DB ↔ Zod ↔ UI mock.
 
-### Autenticación (Hardcodeada — Sin Modelo en DB)
+### DB compartida con otro proyecto
 
-Actualmente no hay modelos `User` ni `Organization` en Prisma. La autenticación es completamente hardcodeada:
+La instancia de Supabase es compartida con un proyecto más pequeño que tiene sus propias tablas (`contact_submissions`, `project_translations`, `projects`). Esas tablas **no forman parte del schema de Prisma de este proyecto** y no deben tocarse.
 
-- **`lib/auth/hardcoded-users.ts`**: 4 usuarios fijos (Owner, Manager, Editor, Viewer) con roles y organización demo
-- **`lib/auth/auth-context.tsx`**: Contexto React que almacena el usuario en `localStorage`
-- **`HARDCODED_ORGANIZATION`**: Datos quemados (`Zivelo Studio`, slug `zivelo`, color `#cc0000`)
+Por esto se usa `prisma db execute` para aplicar migraciones puntuales en lugar de `prisma db push` (que intentaría eliminar las tablas externas). Lo mismo aplica para cualquier `prisma migrate reset` — no ejecutar en esta DB.
+
+### Autenticación (Hardcodeada → Zoho OAuth)
+
+En main la autenticación es hardcodeada. El modelo `User` de Prisma fue agregado en v0.1.0 para gestión interna de miembros:
+
+- **`lib/auth/hardcoded-users.ts`**: 4 usuarios fijos (Owner, Manager, Editor, Viewer) con roles y organización demo — temporal hasta que se mergee PR #27
+- **`lib/auth/auth-context.tsx`**: Contexto React — reemplazado por NextAuth `SessionProvider` en PR #27
+- El modelo `User` en Prisma almacena email, nombre, rol y `passwordHash` para el futuro login por email
 
 | Archivo | Propósito | Estado |
 |---|---|---|
-| `prisma/schema.prisma` | Solo modelo `Quote` | Actual |
-| `lib/auth/hardcoded-users.ts` | Usuarios demo con roles y org | Temporal (MVP) |
-| `lib/auth/auth-context.tsx` | Provider React + localStorage | Temporal (MVP) |
-| `app/dashboard/(dashboard)/settings/page.tsx` | Settings UI con secciones hardcodeadas | Actual |
+| `prisma/schema.prisma` | Modelos `Quote` + `User` + enum `Role` | Actual |
+| `lib/auth/hardcoded-users.ts` | Usuarios demo con roles y org | Temporal (hasta PR #27) |
+| `lib/auth/auth-context.tsx` | Provider React + localStorage | Temporal (hasta PR #27) |
+| `auth.ts` | Zoho OAuth vía NextAuth v5 | En PR #27 |
 
-Los datos de organización y miembros que se ven en la UI de settings (`/dashboard/settings`) provienen de estos archivos hardcodeados, no de la base de datos.
+Los datos de organización y miembros que se ven en la UI de settings (`/dashboard/settings`) provienen de archivos hardcodeados, no de la base de datos. Cambia con PR #27.
 
 ### RLS Actual
 
@@ -286,8 +292,8 @@ model QuoteVersion {
 
 | Versión | Modelo | Entidades en Prisma |
 |---|---|---|
-| Ahora (v0.1) | Flat + JSONB | `Quote` |
-| v0.3 | Flat + JSONB + Auth | `Quote` + (Supabase Auth, sin modelos nuevos) |
+| Ahora (v0.1) | Flat + JSONB | `Quote`, `User` |
+| v0.3 | Flat + JSONB + Auth | `Quote`, `User` + Zoho OAuth activo |
 | v0.5 | Relacional simple | `Quote`, `UserProfile`, `Organization`, `OrganizationMember`, `OrganizationInvitation` |
 | v0.7 | Relacional + Templates | + `QuoteTemplate` |
 | v1.0 | Relacional completo | + `QuoteVersion` |

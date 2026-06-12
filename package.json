@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:quote": "vitest run tests/lib/schemas/quote.test.ts",
-    "test:action": "vitest run tests/lib/actions/quote.test.ts"
+    "test:action": "vitest run tests/lib/actions/quote.test.ts",
+    "setup:dev": "tsx scripts/setup-dev.ts",
+    "send:invite": "tsx scripts/send-invite.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -68,14 +70,6 @@
     "vaul": "^1.1.2",
     "zod": "^3.24.1"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
-      "esbuild",
-      "prisma"
-    ]
-  },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
@@ -85,8 +79,10 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^16.6.1",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.9",
+    "nodemailer": "^7.0.13",
     "postcss": "^8.5",
     "tailwindcss": "^4.2.0",
     "tsx": "^4",

@@ -7,6 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  Owner
+  Manager
+  Editor
+  Viewer
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  name               String
+  role               Role     @default(Manager)
+  passwordHash       String?
+  mustChangePassword Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
 model Quote {
   id            String   @id @default(cuid())
   slug          String   @unique
