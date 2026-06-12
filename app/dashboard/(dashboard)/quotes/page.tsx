@@ -59,11 +59,6 @@ export default function QuotesPage() {
   const router = useRouter()
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<QuoteStatus | "all">("all")
-
-  if (!user) return null
-
-  const canCreate = user.role !== "Viewer"
-
   const [filterOpen, setFilterOpen] = useState(false)
   const filterRef = useRef<HTMLDivElement>(null)
 
@@ -76,6 +71,10 @@ export default function QuotesPage() {
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
+
+  if (!user) return null
+
+  const canCreate = user.role !== "Viewer"
 
   const FILTER_OPTIONS: { value: QuoteStatus | "all"; label: string; dot: string | null }[] = [
     { value: "all", label: "Todos los estados", dot: null },
