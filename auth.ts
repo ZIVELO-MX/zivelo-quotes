@@ -5,22 +5,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     {
       id: "zoho",
       name: "Zoho",
-      type: "oauth",
-      authorization: {
-        url: "https://accounts.zoho.com/oauth/v2/auth",
-        params: { scope: "email profile" },
-      },
-      token: "https://accounts.zoho.com/oauth/v2/token",
-      userinfo: "https://accounts.zoho.com/oauth/v2/userinfo",
+      type: "oidc",
+      issuer: "https://accounts.zoho.com",
       clientId: process.env.ZOHO_CLIENT_ID!,
       clientSecret: process.env.ZOHO_CLIENT_SECRET!,
+      authorization: { params: { scope: "openid email profile" } },
       profile(profile: Record<string, unknown>) {
         return {
-          id: String(profile.ZSOID ?? profile.sub ?? profile.email ?? ""),
+          id: String(profile.sub ?? profile.ZSOID ?? profile.email ?? ""),
           name: String(
+            profile.name ??
             profile.display_name ??
             profile.First_Name ??
-            profile.name ??
             profile.email ??
             ""
           ),
