@@ -4,10 +4,10 @@
 
 | Campo | Estado |
 | --- | --- |
-| Versión actual | v0.0.9 → v0.1.0 |
-| Fase activa | MVP operativo |
-| Avance actual | Dashboard redesign v1: sidebar nav, home con resumen mock, quotes list, settings con 6 secciones (General, Brand, Team, Quote Actions, Account, Security). Landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, creación de quotes, auth hardcodeado (login/logout/protección) y tests base. |
-| Siguiente foco | Listado de quotes, edición básica y pulir detalles pre-MVP. |
+| Versión actual | v0.1.0 |
+| Fase activa | MVP operativo (cierre) |
+| Avance actual | Zoho OAuth (NextAuth v5) en producción, modelo `User` en DB, edición de quotes, dashboard con datos reales (home + quotes list + settings Team/General desde DB), limpieza de data hardcodeada (PR #28), botones de preview de quotes, landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, tests base. |
+| Siguiente foco | Persistencia de settings (Brand/Account/Quote Actions) y navbar completo. Ver [`estado-funcionalidades.md`](./estado-funcionalidades.md) y [`navbar-redesign.md`](./navbar-redesign.md). |
 | Meta inmediata | Zivelo puede crear, editar, publicar y compartir cotizaciones reales desde un dashboard interno protegido. |
 
 Este roadmap prioriza terminar primero el flujo interno de cotizaciones de Zivelo. La plataforma debe quedar preparada para organizaciones, miembros e invitaciones, pero esas funciones no deben bloquear el MVP operativo.
@@ -36,13 +36,13 @@ Este roadmap prioriza terminar primero el flujo interno de cotizaciones de Zivel
 | WhatsApp actions | Hecho |
 | Tests de schemas | Hecho |
 | Tests de server action | Hecho |
-| Dashboard | Hecho: sidebar nav, home con resumen mock, quotes list |
+| Dashboard | Hecho: sidebar nav, home con datos reales de DB (PR #28), quotes list desde DB |
 | Página de settings `/dashboard/settings` | Hecho: 6 secciones (General, Brand, Team, Quote Actions, Account, Security), centered landing, navegación responsive con sidebar (desktop) / índice (mobile) |
 | Roles y permisos en UI | Hecho: Owner/Manager ven todo; Editor/Viewer ocultan Team; Viewer no crea quotes |
 | Dropdown de roles | Hecho: custom con colores, scroll, estilo quote-form |
 | Avatar | Hecho: foto con fallback a iniciales, Owner con logo Zivelo |
-| Login | Funcional con datos hardcodeados en `/dashboard/login` |
-| Auth real | Hardcodeado (`lib/auth/`), pendiente migrar a Supabase Auth |
+| Login | Hecho con Zoho OAuth en `/dashboard/login` (email/password y Google pendientes — ver estado-funcionalidades.md) |
+| Auth real | Hecho: Zoho OAuth vía NextAuth v5 (`auth.ts`), roles por `OWNER_EMAILS`, modelo `User` en DB |
 | Protección de dashboard | Hecho (cliente-side, redirect a login si no hay sesión) |
 | Logout | Hecho desde menú de usuario en header |
 | Página 403 | Hecho en `/forbidden` |
@@ -104,14 +104,15 @@ Esta es la fase activa. El objetivo es que Zivelo pueda usar el producto interna
 | Dashboard redesign | Sidebar nav, home con resumen mock (sin botón duplicado al final), quotes list, settings con 6 secciones. | Hecho |
 | Crear quote | Formulario con react-hook-form, zod y Server Action. | Hecho |
 | Listado de quotes | Tabla con búsqueda, filtro por estado y datos mock. | Hecho |
-| Editar quote | Modificar contenido, items, pricing y CTA. | Siguiente |
-| Auth hardcodeado | Login funcional para `/dashboard/login` con datos fijos. | Hecho |
+| Editar quote | Modificar contenido, items, pricing y CTA. | Hecho (PR #22) |
+| Auth hardcodeado | Login funcional para `/dashboard/login` con datos fijos. | Reemplazado por Zoho OAuth |
 | Protección de dashboard | Redirigir usuarios no autenticados fuera de `/dashboard`. | Hecho (cliente-side) |
 | Logout | Salida clara desde el dashboard. | Hecho |
-| DevUserSwitcher | Selector flotante para cambiar de rol al instante. BORRAR antes del MVP. | Hecho |
-| Zoho OAuth (NextAuth v5) | Reemplazar auth hardcodeado por Zoho OAuth vía NextAuth. | En progreso (PR #27) |
-| Forzar cambio de contraseña | Al primer login, detectar `mustChangePassword = true` en el modelo `User` y redirigir a `/dashboard/change-password`. | Pendiente |
-| Remover DevUserSwitcher | Borrar `components/dashboard/dev-user-switcher.tsx` y su import en el layout antes del MVP. | Pendiente |
+| Zoho OAuth (NextAuth v5) | Reemplazar auth hardcodeado por Zoho OAuth vía NextAuth. | Hecho (PR #27) |
+| Forzar cambio de contraseña | Al primer login, detectar `mustChangePassword = true` en el modelo `User` y redirigir a `/dashboard/change-password`. | Pendiente (requiere login por contraseña, v0.2.0) |
+| Remover DevUserSwitcher | Borrar `components/dashboard/dev-user-switcher.tsx` y `lib/auth/hardcoded-users.ts`. | Hecho (PR #28) |
+| Limpieza de data hardcodeada | Settings con usuarios reales de DB, home con datos reales, scripts `setup:dev` / `cleanup:dev`. | Hecho (PR #28) |
+| Botones de preview | Post-creación redirige al editor; botón "Ver" en lista, home y página de edición. | Hecho (PR #28) |
 | Página de settings `/dashboard/settings` | 6 secciones con navbar responsive: sidebar (desktop) / índice (mobile). Landing centrado. | Hecho |
 | Data map | `docs/data-map.md` con mapeo DB ↔ Zod ↔ UI mock ↔ Auth. | Hecho |
 | Mobile Support | Viewport config, password visibility toggle, touch targets mejorados, iOS zoom prevention. | Hecho |
@@ -138,6 +139,9 @@ La fase termina cuando Zivelo pueda iniciar sesión, crear una cotización desde
 
 | Entregable | Descripción |
 | --- | --- |
+| Persistencia de settings | Server actions para Cuenta, Marca y Acciones de cotización — hoy los "Guardar" no persisten. Ver [`estado-funcionalidades.md`](./estado-funcionalidades.md) 🔴 #1–3. |
+| Navbar completo | Sidebar persistente con grupos desplegables que integra el nav de settings. Ver [`navbar-redesign.md`](./navbar-redesign.md). |
+| Login por contraseña | Provider Credentials contra `User.passwordHash` + flujo `mustChangePassword`. |
 | Estados robustos | Draft, published, archived o expired según necesidad real. |
 | Validaciones de publicación | Evitar publicar quotes incompletas. |
 | Acciones rápidas | Duplicar, archivar, previsualizar y publicar. |
@@ -235,10 +239,11 @@ Zivelo puede operar quotes en dominios o entornos diferenciados sin comprometer 
 | 10b | Consolidación de rutas: `/profile` → `/dashboard/settings`, `/dashboard/user` redirige a `/dashboard/settings` | Hecho |
 | 11 | Listado de quotes | Hecho |
 | 11b | Dashboard redesign: sidebar, home, settings 6 secciones | Hecho |
-| 12 | Edición básica de quote | Siguiente |
-| 13 | Auth hardcodeado (login/logout/protección) | Hecho |
+| 12 | Edición básica de quote | Hecho |
+| 13 | Auth hardcodeado (login/logout/protección) | Hecho, reemplazado |
 | 14 | Pulir pre-MVP: skeletons, loading states, refactors | Siguiente |
-| 15 | Supabase Auth para dashboard (migrar auth real) | Siguiente |
+| 15 | Auth real para dashboard (Zoho OAuth, NextAuth v5) | Hecho |
+| 15b | Persistencia de settings + navbar completo | Siguiente |
 | 16 | Pulir publicación y estados | Después |
 | 17 | Organizaciones, miembros e invitaciones | Futuro |
 
