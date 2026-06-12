@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useAuth } from "@/lib/auth/auth-context"
 import {
   FileText,
@@ -37,6 +37,8 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> =
   expired: { bg: "bg-red-50", text: "text-red-700", dot: "bg-red-500" },
 }
 
+const PAGE_LOAD_MS = Date.now()
+
 // ── Main Page ──────────────────────────────────────────────
 
 export default function DashboardPage() {
@@ -52,25 +54,28 @@ export default function DashboardPage() {
     })
   }, [tick])
 
+  const active = useMemo(() => quotes.filter((q) => q.status === "active"), [quotes])
+  const drafts = useMemo(() => quotes.filter((q) => q.status === "draft"), [quotes])
+  const expired = useMemo(() => quotes.filter((q) => q.status === "expired"), [quotes])
+  const quotedValue = useMemo(() => active.reduce((sum, q) => sum + q.total, 0), [active])
+
+  const pending = useMemo(() => {
+    const result: { text: string; icon: React.ElementType }[] = []
+    if (drafts.length > 0) result.push({ text: `${drafts.length} borrador${drafts.length > 1 ? "es" : ""} sin publicar`, icon: FileText })
+    const soonToExpire = active.filter((q) => {
+      if (!q.validUntil) return false
+      const diff = (new Date(q.validUntil).getTime() - PAGE_LOAD_MS) / 86400000
+      return diff >= 0 && diff <= 7
+    })
+    if (soonToExpire.length > 0) result.push({ text: `${soonToExpire.length} cotización${soonToExpire.length > 1 ? "es" : ""} por vencer esta semana`, icon: Clock })
+    if (expired.length > 0) result.push({ text: `${expired.length} cotización${expired.length > 1 ? "es" : ""} vencida${expired.length > 1 ? "s" : ""}`, icon: AlertTriangle })
+    return result
+  }, [active, drafts, expired])
+
   if (!user) return null
 
-  const active = quotes.filter((q) => q.status === "active")
-  const drafts = quotes.filter((q) => q.status === "draft")
-  const expired = quotes.filter((q) => q.status === "expired")
-  const quotedValue = active.reduce((sum, q) => sum + q.total, 0)
   const currency = quotes[0]?.currency ?? "MXN"
-
   const recentQuotes = quotes.slice(0, 4)
-
-  const pending: { text: string; icon: React.ElementType }[] = []
-  if (drafts.length > 0) pending.push({ text: `${drafts.length} borrador${drafts.length > 1 ? "es" : ""} sin publicar`, icon: FileText })
-  const soonToExpire = active.filter((q) => {
-    if (!q.validUntil) return false
-    const diff = (new Date(q.validUntil).getTime() - Date.now()) / 86400000
-    return diff >= 0 && diff <= 7
-  })
-  if (soonToExpire.length > 0) pending.push({ text: `${soonToExpire.length} cotización${soonToExpire.length > 1 ? "es" : ""} por vencer esta semana`, icon: Clock })
-  if (expired.length > 0) pending.push({ text: `${expired.length} cotización${expired.length > 1 ? "es" : ""} vencida${expired.length > 1 ? "s" : ""}`, icon: AlertTriangle })
 
   return (
     <div className="flex-1 p-4 sm:p-6 max-w-5xl mx-auto w-full">
