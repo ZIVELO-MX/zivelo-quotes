@@ -1,14 +1,12 @@
 "use client"
 
-import { useEffect } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { DashboardNav } from "@/components/dashboard/dashboard-nav"
 import { MinimalFooter } from "@/components/layout/minimal-footer"
 import { Spinner } from "@/components/ui/spinner"
-import { DevUserSwitcher } from "@/components/dashboard/dev-user-switcher"
 
 export default function DashboardLayout({
   children,
@@ -16,14 +14,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const { user, isLoading } = useAuth()
-  const router = useRouter()
   const pathname = usePathname()
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace("/dashboard/login")
-    }
-  }, [isLoading, user, router])
 
   if (isLoading) {
     return (
@@ -64,7 +55,6 @@ export default function DashboardLayout({
         </main>
       </div>
       <MinimalFooter />
-      <DevUserSwitcher />
     </div>
   )
 }

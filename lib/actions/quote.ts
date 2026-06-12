@@ -1,5 +1,6 @@
 "use server"
 
+import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { formSchema, type FormValues } from "@/lib/schemas/quote"
@@ -7,6 +8,8 @@ import { z } from "zod"
 import type { Prisma } from "@prisma/client"
 
 export async function createQuote(data: unknown) {
+  const session = await auth()
+  if (!session?.user) return { success: false, error: "No autorizado" }
   try {
     const parsed = formSchema.parse(data)
     const quote = await prisma.quote.create({
@@ -59,6 +62,8 @@ export async function getQuoteBySlug(slug: string) {
 }
 
 export async function updateQuote(slug: string, data: unknown) {
+  const session = await auth()
+  if (!session?.user) return { success: false, error: "No autorizado" }
   try {
     const parsed = formSchema.parse(data)
     const quote = await prisma.quote.update({

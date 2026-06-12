@@ -1,50 +1,28 @@
 "use client"
 
+import { signIn } from "next-auth/react"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
-import { useAuth } from "@/lib/auth/auth-context"
-
-function validateIdentifier(value: string) {
-  if (!value) return "El correo o usuario es obligatorio"
-  return ""
-}
 
 export default function LoginPage() {
-  const { login, isLoading: authLoading } = useAuth()
-  const router = useRouter()
   const [identifier, setIdentifier] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<{ identifier?: string; password?: string }>({})
+  const [zohoLoading, setZohoLoading] = useState(false)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const idError = validateIdentifier(identifier)
-    const passwordError = password ? "" : "La contraseña es obligatoria"
-    setErrors({ identifier: idError, password: passwordError || undefined })
+    const idError = !identifier ? "El correo o usuario es obligatorio" : ""
+    const passwordError = !password ? "La contraseña es obligatoria" : ""
+    setErrors({ identifier: idError || undefined, password: passwordError || undefined })
     if (idError || passwordError) return
-
-    const result = login(identifier, password)
-    if (result.success) {
-      toast.success("Sesión iniciada")
-      router.push("/dashboard")
-    } else {
-      toast.error(result.error || "Error al iniciar sesión")
-    }
-  }
-
-  if (authLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner className="size-6" />
-      </div>
-    )
+    toast.info("Acceso por contraseña no disponible — usa Zoho para entrar")
   }
 
   return (
@@ -61,6 +39,7 @@ export default function LoginPage() {
             Accede al panel de administración
           </p>
         </div>
+
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="identifier">Email o usuario</Label>
@@ -141,13 +120,17 @@ export default function LoginPage() {
           </button>
           <button
             type="button"
-            onClick={() => toast.info("Función no disponible — próximamente")}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border px-4 py-3 sm:py-2.5 text-sm font-medium text-foreground-muted transition-all duration-200 hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm cursor-pointer min-h-[44px]"
+            disabled={zohoLoading}
+            onClick={() => { setZohoLoading(true); signIn("zoho", { callbackUrl: "/dashboard" }) }}
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border px-4 py-3 sm:py-2.5 text-sm font-medium text-foreground-muted transition-all duration-200 hover:text-foreground hover:bg-black/4 hover:border-border-strong hover:shadow-sm cursor-pointer min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
-              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.167 6.839 9.49.5.09.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.253-.447-1.27.098-2.646 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.547 1.376.203 2.393.1 2.646.64.698 1.028 1.59 1.028 2.682 0 3.841-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.577.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
-            </svg>
-            SSO
+            {zohoLoading
+              ? <Spinner className="size-4" />
+              : (
+                <span className="h-5 w-5 flex items-center justify-center text-sm font-bold text-[#E42527]" aria-hidden="true">Z</span>
+              )
+            }
+            Zoho
           </button>
         </div>
       </div>
