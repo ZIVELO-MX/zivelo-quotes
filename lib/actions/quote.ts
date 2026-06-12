@@ -83,3 +83,55 @@ export async function updateQuote(slug: string, data: unknown) {
     return { success: false, error: "Error al actualizar la cotización" }
   }
 }
+
+export type QuoteSummary = {
+  id: string
+  slug: string
+  title: string
+  client: string
+  status: string
+  validUntil: string | null
+  total: number
+  currency: string
+  updatedAt: string
+}
+
+export async function listQuotes(): Promise<{ success: boolean; quotes: QuoteSummary[] }> {
+  try {
+    const rows = await prisma.quote.findMany({
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        recipientName: true,
+        status: true,
+        validUntil: true,
+        currency: true,
+        items: true,
+        updatedAt: true,
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 50,
+    })
+    const quotes: QuoteSummary[] = rows.map((row) => {
+      const items = Array.isArray(row.items)
+        ? (row.items as Array<{ price?: number }>)
+        : []
+      const total = items.reduce((sum, item) => sum + (item.price ?? 0), 0)
+      return {
+        id: row.id,
+        slug: row.slug,
+        title: row.title,
+        client: row.recipientName,
+        status: row.status,
+        validUntil: row.validUntil || null,
+        total,
+        currency: row.currency,
+        updatedAt: row.updatedAt.toISOString().split("T")[0],
+      }
+    })
+    return { success: true, quotes }
+  } catch {
+    return { success: false, quotes: [] }
+  }
+}

@@ -6,8 +6,9 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Plus, Search, ChevronDown, Pencil } from "lucide-react"
 import { toast } from "sonner"
+import { listQuotes, type QuoteSummary } from "@/lib/actions/quote"
 
-// ── Mock data ──────────────────────────────────────────────
+// ── Types ──────────────────────────────────────────────────
 
 type QuoteStatus = "active" | "draft" | "expired"
 
@@ -22,17 +23,6 @@ interface Quote {
   slug: string
   updatedAt: string
 }
-
-const ALL_QUOTES: Quote[] = [
-  { id: "1", title: "Propuesta de sitio web", client: "ACME Corp", status: "active", validUntil: "30 Jun, 2026", total: 24000, currency: "MXN", slug: "acme-web", updatedAt: "2026-05-18" },
-  { id: "2", title: "Menú digital", client: "Restaurante Norte", status: "draft", validUntil: null, total: 12500, currency: "MXN", slug: "norte-menu", updatedAt: "2026-05-17" },
-  { id: "3", title: "Landing page", client: "Clínica Nova", status: "expired", validUntil: "10 May, 2026", total: 18000, currency: "MXN", slug: "nova-landing", updatedAt: "2026-04-10" },
-  { id: "4", title: "Sistema de inventarios", client: "Distribuidora San José", status: "active", validUntil: "15 Jul, 2026", total: 45000, currency: "MXN", slug: "sanjose-inventarios", updatedAt: "2026-05-15" },
-  { id: "5", title: "App de delivery", client: "Burguer House", status: "draft", validUntil: null, total: 32000, currency: "MXN", slug: "burguer-delivery", updatedAt: "2026-05-12" },
-  { id: "6", title: "CRM a medida", client: "Grupo Nova", status: "active", validUntil: "20 Aug, 2026", total: 60000, currency: "MXN", slug: "nova-crm", updatedAt: "2026-05-10" },
-  { id: "7", title: "Tienda online", client: "Moda Express", status: "expired", validUntil: "01 May, 2026", total: 28000, currency: "MXN", slug: "moda-shop", updatedAt: "2026-03-28" },
-  { id: "8", title: "Dashboard analítico", client: "Fintech MX", status: "active", validUntil: "10 Sep, 2026", total: 55000, currency: "MXN", slug: "fintech-dashboard", updatedAt: "2026-05-20" },
-]
 
 // ── Helpers ────────────────────────────────────────────────
 
@@ -61,6 +51,8 @@ export default function QuotesPage() {
   const [statusFilter, setStatusFilter] = useState<QuoteStatus | "all">("all")
   const [filterOpen, setFilterOpen] = useState(false)
   const filterRef = useRef<HTMLDivElement>(null)
+  const [quotes, setQuotes] = useState<Quote[]>([])
+  const [loadingQuotes, setLoadingQuotes] = useState(true)
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -72,6 +64,14 @@ export default function QuotesPage() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
+  useEffect(() => {
+    listQuotes().then((result) => {
+      if (result.success) {
+        setQuotes(result.quotes as Quote[])
+      }
+      setLoadingQuotes(false)
+    })
+  }, [])
   if (!user) return null
 
   const canCreate = user.role !== "Viewer"
@@ -85,7 +85,7 @@ export default function QuotesPage() {
 
   const activeFilter = FILTER_OPTIONS.find((o) => o.value === statusFilter)!
 
-  const filtered = ALL_QUOTES.filter((q) => {
+  const filtered = quotes.filter((q) => {
     const matchesSearch =
       !search ||
       q.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -180,7 +180,11 @@ export default function QuotesPage() {
 
       {/* Mobile card view */}
       <div className="sm:hidden space-y-3">
-        {filtered.length === 0 ? (
+        {loadingQuotes ? (
+          <div className="bg-white border border-gray-100 rounded-2xl px-5 py-12 text-center text-sm text-gray-400">
+            Cargando cotizaciones...
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="bg-white border border-gray-100 rounded-2xl px-5 py-12 text-center text-sm text-gray-400">
             No se encontraron cotizaciones.
           </div>
@@ -236,7 +240,13 @@ export default function QuotesPage() {
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 ? (
+              {loadingQuotes ? (
+                <tr>
+                  <td colSpan={6} className="px-5 py-12 text-center text-sm text-gray-400">
+                    Cargando cotizaciones...
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-5 py-12 text-center text-sm text-gray-400">
                     No se encontraron cotizaciones.
@@ -281,7 +291,7 @@ export default function QuotesPage() {
 
       {filtered.length > 0 && (
         <p className="text-xs text-gray-400 mt-3 text-center">
-          Mostrando {filtered.length} de {ALL_QUOTES.length} cotizaciones
+          Mostrando {filtered.length} de {quotes.length} cotizaciones
         </p>
       )}
     </div>
