@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
@@ -12,7 +12,8 @@
     "test:quote": "vitest run tests/lib/schemas/quote.test.ts",
     "test:action": "vitest run tests/lib/actions/quote.test.ts",
     "setup:dev": "tsx scripts/setup-dev.ts",
-    "send:invite": "tsx scripts/send-invite.ts"
+    "send:invite": "tsx scripts/send-invite.ts",
+    "cleanup:dev": "tsx scripts/cleanup-dev.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

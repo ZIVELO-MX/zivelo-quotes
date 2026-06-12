@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ExternalLink } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { QuoteForm } from "@/components/quote/quote-create-form"
 import { getQuoteBySlug } from "@/lib/actions/quote"
@@ -76,7 +76,7 @@ export default function EditQuotePage({ params }: { params: Promise<{ slug: stri
 
   return (
     <div className="flex-1 p-4 sm:p-6 max-w-3xl mx-auto w-full">
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <Link
           href="/dashboard/quotes"
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
@@ -84,6 +84,17 @@ export default function EditQuotePage({ params }: { params: Promise<{ slug: stri
           <ArrowLeft size={16} />
           Volver a cotizaciones
         </Link>
+        {slug && (
+          <a
+            href={`/q/${slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
+          >
+            <ExternalLink size={16} />
+            Ver cotización
+          </a>
+        )}
       </div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">

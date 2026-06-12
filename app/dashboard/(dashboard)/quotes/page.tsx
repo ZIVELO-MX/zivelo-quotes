@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { useAuth } from "@/lib/auth/auth-context"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Plus, Search, ChevronDown, Pencil } from "lucide-react"
+import { ArrowLeft, Plus, Search, ChevronDown, Pencil, ExternalLink } from "lucide-react"
 import { toast } from "sonner"
 import { listQuotes, type QuoteSummary } from "@/lib/actions/quote"
 
@@ -212,13 +212,24 @@ export default function QuotesPage() {
                       <span>·</span>
                       <span>{q.validUntil || "Sin vencimiento"}</span>
                     </div>
-                    <Link
-                      href={`/dashboard/quotes/${q.slug}/edit`}
-                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    >
-                      <Pencil size={14} />
-                      Editar
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={`/q/${q.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-50 text-gray-500 hover:bg-gray-100"
+                      >
+                        <ExternalLink size={14} />
+                        Ver
+                      </a>
+                      <Link
+                        href={`/dashboard/quotes/${q.slug}/edit`}
+                        className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      >
+                        <Pencil size={14} />
+                        Editar
+                      </Link>
+                    </div>
                   </div>
                 </div>
             )
@@ -273,13 +284,24 @@ export default function QuotesPage() {
                       <td className="px-5 py-3 text-gray-500">{q.validUntil || "—"}</td>
                       <td className="px-5 py-3 font-medium text-gray-900">{formatPrice(q.total, q.currency)}</td>
                       <td className="px-5 py-3">
-                        <Link
-                          href={`/dashboard/quotes/${q.slug}/edit`}
-                          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        >
-                          <Pencil size={14} />
-                          Editar
-                        </Link>
+                        <div className="flex items-center gap-2">
+                          <a
+                            href={`/q/${q.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-50 text-gray-500 hover:bg-gray-100"
+                          >
+                            <ExternalLink size={14} />
+                            Ver
+                          </a>
+                          <Link
+                            href={`/dashboard/quotes/${q.slug}/edit`}
+                            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          >
+                            <Pencil size={14} />
+                            Editar
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   )

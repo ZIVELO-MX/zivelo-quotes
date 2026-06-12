@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
 import { useAuth } from "@/lib/auth/auth-context"
 import {
   FileText,
@@ -11,78 +12,12 @@ import {
   CopyCheck,
   Clock,
   AlertTriangle,
-  Phone,
   Plus,
+  ExternalLink,
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
-import { publishQuote, unpublishQuote } from "@/lib/actions/quote"
-
-// ── Mock data ──────────────────────────────────────────────
-
-const MOCK_SUMMARY = {
-  active: 12,
-  drafts: 4,
-  expired: 3,
-  quotedValue: 84000,
-  currency: "MXN",
-}
-
-const MOCK_QUOTES = [
-  {
-    id: "1",
-    title: "Propuesta de sitio web",
-    client: "ACME Corp",
-    status: "active" as const,
-    validUntil: "30 Jun, 2026",
-    total: 24000,
-    currency: "MXN",
-    slug: "acme-web",
-  },
-  {
-    id: "2",
-    title: "Menú digital",
-    client: "Restaurante Norte",
-    status: "draft" as const,
-    total: 12500,
-    currency: "MXN",
-    slug: "norte-menu",
-  },
-  {
-    id: "3",
-    title: "Landing page",
-    client: "Clínica Nova",
-    status: "expired" as const,
-    validUntil: "10 May, 2026",
-    total: 18000,
-    currency: "MXN",
-    slug: "nova-landing",
-  },
-  {
-    id: "4",
-    title: "Sistema de inventarios",
-    client: "Distribuidora San José",
-    status: "active" as const,
-    validUntil: "15 Jul, 2026",
-    total: 45000,
-    currency: "MXN",
-    slug: "sanjose-inventarios",
-  },
-]
-
-const MOCK_ACTIVITY = [
-  { action: "Nueva cotización creada", target: "Sistema de inventarios", time: "Hace 2 horas" },
-  { action: "Cotización actualizada", target: "Restaurante Norte", time: "Hace 1 día" },
-  { action: "Cotización expirada", target: "Clínica Nova", time: "Hace 3 días" },
-  { action: "Cotización publicada", target: "ACME Corp", time: "Hace 5 días" },
-]
-
-const MOCK_PENDING = [
-  { text: "2 borradores sin publicar", icon: FileText },
-  { text: "3 cotizaciones por vencer pronto", icon: Clock },
-  { text: "Configurar número de WhatsApp", icon: Phone },
-  { text: "Revisar cotizaciones vencidas", icon: AlertTriangle },
-]
+import { listQuotes, publishQuote, unpublishQuote, type QuoteSummary } from "@/lib/actions/quote"
 
 // ── Helpers ────────────────────────────────────────────────
 
@@ -102,11 +37,45 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> =
   expired: { bg: "bg-red-50", text: "text-red-700", dot: "bg-red-500" },
 }
 
+const PAGE_LOAD_MS = Date.now()
+
 // ── Main Page ──────────────────────────────────────────────
 
 export default function DashboardPage() {
   const { user } = useAuth()
+  const [quotes, setQuotes] = useState<QuoteSummary[]>([])
+  const [loading, setLoading] = useState(true)
+  const [tick, setTick] = useState(0)
+
+  useEffect(() => {
+    listQuotes().then((res) => {
+      setQuotes(res.quotes)
+      setLoading(false)
+    })
+  }, [tick])
+
+  const active = useMemo(() => quotes.filter((q) => q.status === "active"), [quotes])
+  const drafts = useMemo(() => quotes.filter((q) => q.status === "draft"), [quotes])
+  const expired = useMemo(() => quotes.filter((q) => q.status === "expired"), [quotes])
+  const quotedValue = useMemo(() => active.reduce((sum, q) => sum + q.total, 0), [active])
+
+  const pending = useMemo(() => {
+    const result: { text: string; icon: React.ElementType }[] = []
+    if (drafts.length > 0) result.push({ text: `${drafts.length} borrador${drafts.length > 1 ? "es" : ""} sin publicar`, icon: FileText })
+    const soonToExpire = active.filter((q) => {
+      if (!q.validUntil) return false
+      const diff = (new Date(q.validUntil).getTime() - PAGE_LOAD_MS) / 86400000
+      return diff >= 0 && diff <= 7
+    })
+    if (soonToExpire.length > 0) result.push({ text: `${soonToExpire.length} cotización${soonToExpire.length > 1 ? "es" : ""} por vencer esta semana`, icon: Clock })
+    if (expired.length > 0) result.push({ text: `${expired.length} cotización${expired.length > 1 ? "es" : ""} vencida${expired.length > 1 ? "s" : ""}`, icon: AlertTriangle })
+    return result
+  }, [active, drafts, expired])
+
   if (!user) return null
+
+  const currency = quotes[0]?.currency ?? "MXN"
+  const recentQuotes = quotes.slice(0, 4)
 
   return (
     <div className="flex-1 p-4 sm:p-6 max-w-5xl mx-auto w-full">
@@ -130,156 +99,149 @@ export default function DashboardPage() {
       </div>
 
       {/* Summary */}
-      <Section title="Resumen" subtitle="Estado general de tus cotizaciones y actividad reciente.">
+      <Section title="Resumen" subtitle="Estado general de tus cotizaciones.">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <SummaryCard label="Activas" value={String(MOCK_SUMMARY.active)} color="text-emerald-600" />
-          <SummaryCard label="Borradores" value={String(MOCK_SUMMARY.drafts)} color="text-gray-600" />
-          <SummaryCard label="Vencidas" value={String(MOCK_SUMMARY.expired)} color="text-red-600" />
-          <SummaryCard label="Cotizado" value={formatPrice(MOCK_SUMMARY.quotedValue, MOCK_SUMMARY.currency)} color="text-gray-900" />
+          <SummaryCard label="Activas" value={loading ? "—" : String(active.length)} color="text-emerald-600" />
+          <SummaryCard label="Borradores" value={loading ? "—" : String(drafts.length)} color="text-gray-600" />
+          <SummaryCard label="Vencidas" value={loading ? "—" : String(expired.length)} color="text-red-600" />
+          <SummaryCard label="Cotizado" value={loading ? "—" : formatPrice(quotedValue, currency)} color="text-gray-900" />
         </div>
       </Section>
 
-      {/* Quote Status + Activity + Pending */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+      {/* Quote Status + Pending */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         {/* Quote Status */}
         <div className="bg-white border border-gray-100 rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Estado de cotizaciones</h3>
-          <div className="space-y-3">
-            <StatusBar
-              label="Activas"
-              value={MOCK_SUMMARY.active}
-              total={MOCK_SUMMARY.active + MOCK_SUMMARY.drafts + MOCK_SUMMARY.expired}
-              color="bg-emerald-500"
-            />
-            <StatusBar
-              label="Borradores"
-              value={MOCK_SUMMARY.drafts}
-              total={MOCK_SUMMARY.active + MOCK_SUMMARY.drafts + MOCK_SUMMARY.expired}
-              color="bg-gray-400"
-            />
-            <StatusBar
-              label="Vencidas"
-              value={MOCK_SUMMARY.expired}
-              total={MOCK_SUMMARY.active + MOCK_SUMMARY.drafts + MOCK_SUMMARY.expired}
-              color="bg-red-400"
-            />
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-gray-900 mb-4">Actividad reciente</h3>
-          <div className="space-y-4">
-            {MOCK_ACTIVITY.map((a, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-gray-300 mt-2 shrink-0" />
-                <div>
-                  <p className="text-sm text-gray-700">
-                    {a.action}: <span className="font-medium">{a.target}</span>
-                  </p>
-                  <p className="text-xs text-gray-400 mt-0.5">{a.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-sm text-gray-400">Cargando…</p>
+          ) : quotes.length === 0 ? (
+            <p className="text-sm text-gray-400">Sin cotizaciones aún.</p>
+          ) : (
+            <div className="space-y-3">
+              <StatusBar label="Activas" value={active.length} total={quotes.length} color="bg-emerald-500" />
+              <StatusBar label="Borradores" value={drafts.length} total={quotes.length} color="bg-gray-400" />
+              <StatusBar label="Vencidas" value={expired.length} total={quotes.length} color="bg-red-400" />
+            </div>
+          )}
         </div>
 
         {/* Pending Items */}
         <div className="bg-white border border-gray-100 rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-gray-900 mb-4">Pendientes sugeridos</h3>
-          <div className="space-y-3">
-            {MOCK_PENDING.map((p, i) => {
-              const Icon = p.icon
-              return (
-                <div key={i} className="flex items-center gap-3 text-sm text-gray-600">
-                  <Icon size={16} className="text-gray-400 shrink-0" />
-                  <span>{p.text}</span>
-                </div>
-              )
-            })}
-          </div>
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Pendientes</h3>
+          {loading ? (
+            <p className="text-sm text-gray-400">Cargando…</p>
+          ) : pending.length === 0 ? (
+            <p className="text-sm text-gray-400">Sin pendientes — todo al día.</p>
+          ) : (
+            <div className="space-y-3">
+              {pending.map((p, i) => {
+                const Icon = p.icon
+                return (
+                  <div key={i} className="flex items-center gap-3 text-sm text-gray-600">
+                    <Icon size={16} className="text-gray-400 shrink-0" />
+                    <span>{p.text}</span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Recent Quotes */}
       <Section title="Cotizaciones recientes" subtitle="Últimas cotizaciones creadas o actualizadas.">
-        <div className="space-y-3">
-          {MOCK_QUOTES.map((q) => {
-            const colors = STATUS_COLORS[q.status]
-            return (
-              <div
-                key={q.id}
-                className="bg-white border border-gray-100 rounded-2xl p-5"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                  <div className="min-w-0">
-                    <h4 className="text-sm font-semibold text-gray-900">{q.title}</h4>
-                    <p className="text-sm text-gray-500 mt-0.5">
-                      Cliente: {q.client}
-                      <span className="mx-1.5">·</span>
-                      <span className={`inline-flex items-center gap-1.5 ${colors.text}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
-                        {STATUS_LABELS[q.status]}
-                      </span>
-                      {q.validUntil && (
-                        <>
-                          <span className="mx-1.5">·</span>
-                          Vence: {q.validUntil}
-                        </>
-                      )}
-                    </p>
+        {loading ? (
+          <div className="py-8 text-center text-sm text-gray-400">Cargando cotizaciones…</div>
+        ) : recentQuotes.length === 0 ? (
+          <div className="py-8 text-center text-sm text-gray-400">
+            No hay cotizaciones aún.{" "}
+            <Link href="/dashboard/quotes/new" className="text-gray-700 underline hover:text-gray-900">
+              Crea la primera
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {recentQuotes.map((q) => {
+              const colors = STATUS_COLORS[q.status] ?? STATUS_COLORS.draft
+              return (
+                <div key={q.id} className="bg-white border border-gray-100 rounded-2xl p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-semibold text-gray-900">{q.title}</h4>
+                      <p className="text-sm text-gray-500 mt-0.5">
+                        {q.client}
+                        <span className="mx-1.5">·</span>
+                        <span className={`inline-flex items-center gap-1.5 ${colors.text}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                          {STATUS_LABELS[q.status] ?? q.status}
+                        </span>
+                        {q.validUntil && (
+                          <>
+                            <span className="mx-1.5">·</span>
+                            Vence: {q.validUntil}
+                          </>
+                        )}
+                      </p>
+                    </div>
+                    <div className="text-sm font-semibold text-gray-900 shrink-0">
+                      {formatPrice(q.total, q.currency)}
+                    </div>
                   </div>
-                  <div className="text-sm font-semibold text-gray-900 shrink-0">
-                    {formatPrice(q.total, q.currency)}
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
-                  <Link
-                    href={`/dashboard/quotes/${q.slug}/edit`}
-                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  >
-                    <Pencil size={14} />
-                    Editar
-                  </Link>
-                  {q.status === "draft" && (
-                    <ActionButton icon={Send} label="Publicar" onClick={() => {
-                      publishQuote(q.slug).then((result) => {
-                        if (result.success) toast.success("Cotización publicada")
-                        else toast.error(result.error ?? "Error al publicar")
-                      })
-                    }} />
-                  )}
-                  {q.status === "active" && (
-                    <>
-                      <ActionButton icon={Copy} label="Copiar enlace" onClick={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/q/${q.slug}`)
-                        toast.success("Enlace copiado")
-                      }} primary />
-                      <ActionButton icon={Eye} label="Vista previa" onClick={() => window.open(`/q/${q.slug}`, "_blank")} />
-                      <ActionButton icon={RefreshCw} label="Despublicar" onClick={() => {
-                        unpublishQuote(q.slug).then((result) => {
-                          if (result.success) toast.success("Cotización despublicada")
-                          else toast.error(result.error ?? "Error al despublicar")
+                  <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
+                    <Link
+                      href={`/dashboard/quotes/${q.slug}/edit`}
+                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    >
+                      <Pencil size={14} />
+                      Editar
+                    </Link>
+                    <a
+                      href={`/q/${q.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-gray-50 text-gray-500 hover:bg-gray-100"
+                    >
+                      <ExternalLink size={14} />
+                      Ver
+                    </a>
+                    {q.status === "draft" && (
+                      <ActionButton icon={Send} label="Publicar" onClick={() => {
+                        publishQuote(q.slug).then((result) => {
+                          if (result.success) { toast.success("Cotización publicada"); setTick((t) => t + 1) }
+                          else toast.error(result.error ?? "Error al publicar")
                         })
                       }} />
-                    </>
-                  )}
-                  {q.status === "expired" && (
-                    <>
-                      <ActionButton icon={RefreshCw} label="Renovar" onClick={() => toast.info("Renovar — próximamente")} />
-                      <ActionButton icon={CopyCheck} label="Duplicar" onClick={() => toast.info("Duplicar — próximamente")} />
-                    </>
-                  )}
+                    )}
+                    {q.status === "active" && (
+                      <>
+                        <ActionButton icon={Copy} label="Copiar enlace" onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/q/${q.slug}`)
+                          toast.success("Enlace copiado")
+                        }} primary />
+                        <ActionButton icon={Eye} label="Vista previa" onClick={() => window.open(`/q/${q.slug}`, "_blank")} />
+                        <ActionButton icon={RefreshCw} label="Despublicar" onClick={() => {
+                          unpublishQuote(q.slug).then((result) => {
+                            if (result.success) { toast.success("Cotización despublicada"); setTick((t) => t + 1) }
+                            else toast.error(result.error ?? "Error al despublicar")
+                          })
+                        }} />
+                      </>
+                    )}
+                    {q.status === "expired" && (
+                      <>
+                        <ActionButton icon={RefreshCw} label="Renovar" onClick={() => toast.info("Renovar — próximamente")} />
+                        <ActionButton icon={CopyCheck} label="Duplicar" onClick={() => toast.info("Duplicar — próximamente")} />
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )
-          })}
-        </div>
+              )
+            })}
+          </div>
+        )}
         <div className="mt-4 text-center">
-          <Link
-            href="/dashboard/quotes"
-            className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
-          >
+          <Link href="/dashboard/quotes" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
             Ver todas las cotizaciones →
           </Link>
         </div>
@@ -315,12 +277,12 @@ function StatusBar({ label, value, total, color }: { label: string; value: numbe
   const pct = total > 0 ? Math.round((value / total) * 100) : 0
   return (
     <div>
-      <div className="flex justify-between text-sm mb-1">
-        <span className="text-gray-700">{label}</span>
-        <span className="text-gray-500 font-medium">{value}</span>
+      <div className="flex justify-between text-xs text-gray-500 mb-1">
+        <span>{label}</span>
+        <span>{value}</span>
       </div>
-      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full ${color} transition-all`} style={{ width: `${pct}%` }} />
+      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+        <div className={`h-full ${color} rounded-full`} style={{ width: `${pct}%` }} />
       </div>
     </div>
   )
@@ -332,7 +294,7 @@ function ActionButton({
   onClick,
   primary,
 }: {
-  icon: typeof Copy
+  icon: React.ElementType
   label: string
   onClick: () => void
   primary?: boolean
@@ -341,10 +303,8 @@ function ActionButton({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
-        primary
-          ? "bg-gray-900 text-white hover:bg-gray-800"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+        primary ? "bg-gray-900 text-white hover:bg-gray-800" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
       }`}
     >
       <Icon size={14} />
