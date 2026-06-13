@@ -2,7 +2,7 @@
 
 Auditoría de todo lo que se ve en la UI pero **no funciona todavía**, clasificado por severidad. Complementa [`roadmap.md`](./roadmap.md) — cada item indica la fase sugerida para implementarse.
 
-> Última revisión: 2026-06-12 (post PR #27 Zoho OAuth; PR #28 limpieza de data hardcodeada en revisión).
+> Última revisión: 2026-06-13 (feat/password-login-auth-error: login por contraseña, confirmación de logout, página de error de auth).
 
 ## Clasificación
 
@@ -22,13 +22,13 @@ Auditoría de todo lo que se ve en la UI pero **no funciona todavía**, clasific
 | 2 | Guardar Cuenta | `settings/page.tsx` → `AccountSection.handleSave()` | Llama `updateUser({ name })` que es un **no-op** (ver 🟢 #1). Toast "Cuenta actualizada" sin persistir | Server action `updateUserProfile` que escriba en el modelo `User` ya existente en DB | v0.2.0 |
 | 3 | Guardar Acciones de cotización | `settings/page.tsx` → `QuoteActionsSection.handleSave()` | 3 toggles (aprobación, WhatsApp, PDF) sin persistencia; toast "Acciones de cotización actualizadas" | Persistir defaults en DB y aplicarlos al crear quotes nuevas | v0.2.0 |
 | 4 | Invitar usuario | `settings/page.tsx` → `AddParticipantModal` | Genera link `https://quotes.zivelo.dev/accept-invite?token=demo_${Date.now()}` — el token es fake, no se guarda nada, y la ruta `/accept-invite` **no existe** | Tabla `Invitation` con token real, ruta `/accept-invite` que valide y cree el `User`, expiración | v0.5.0 |
-| 5 | Cerrar sesión (en Cuenta) | `settings/page.tsx` → `AccountSection`, botón "Cerrar sesión" | `toast.info("Función de cierre de sesión simulada")` — **el logout real ya existe** en el dropdown del header | Conectar al `logout()` de `lib/auth/auth-context.tsx` (una línea) o eliminar el botón duplicado | inmediato |
+| 5 | Cerrar sesión (en Cuenta) | `settings/page.tsx` → `AccountSection`, botón "Cerrar sesión" | ~~`toast.info("Función de cierre de sesión simulada")`~~ — **resuelto** en `feat/password-login-auth-error`: conectado al logout real con diálogo de confirmación | ✅ Hecho | inmediato |
 
 ## 🟡 Placeholder — "próximamente"
 
 | # | Feature | Ubicación | Qué falta | Fase |
 | --- | --- | --- | --- | --- |
-| 1 | Login email/password | `app/dashboard/(auth)/login/page.tsx` → `handleSubmit()` | Provider Credentials en NextAuth validando contra `User.passwordHash` (scrypt, ya seedeado por `setup-dev.ts`) + flujo `mustChangePassword` | v0.2.0 |
+| 1 | Login email/password | `app/dashboard/(auth)/login/page.tsx` → `handleSubmit()` | ~~toast "no disponible"~~ — **resuelto** en `feat/password-login-auth-error`: Provider Credentials implementado en `auth.ts`, valida contra `User.passwordHash` (scrypt). Flujo `mustChangePassword` queda pendiente para v0.2.0. | ✅ Hecho (parcial) |
 | 2 | Login con Google | `login/page.tsx` → botón Google | Configurar provider Google en `auth.ts` + credenciales en Google Cloud Console | v0.5.0 |
 | 3 | ¿Olvidaste tu contraseña? | `login/page.tsx` | Flujo de reset: token por email (SMTP ya configurado), ruta `/reset-password` | v0.5.0 |
 | 4 | Renovar quote vencida | `app/dashboard/(dashboard)/page.tsx` → ActionButton "Renovar" | Server action: extender `validUntil`, status → `active` | v0.2.0 |
@@ -48,6 +48,17 @@ Auditoría de todo lo que se ve en la UI pero **no funciona todavía**, clasific
 | 2 | `ZIVELO_ORG` hardcodeado | `lib/auth/auth-context.tsx` | Nombre, slug, color (`#cc0000`) y logo de la organización son constantes — no hay modelo `Organization` en DB. Todo lo que muestra `user.organization.*` viene de aquí | v0.5.0 |
 | 3 | Branding desconectado | settings ↔ quotes públicas | El branding por-quote (campo `branding` JSON en `Quote`) no lee defaults de settings porque settings no persiste (🔴 #1) | v0.2.0 |
 | 4 | Forzar cambio de contraseña | modelo `User.mustChangePassword` | El campo existe en DB pero nada lo lee; planificado en roadmap v0.1.0 | v0.2.0 |
+| 5 | Rol asignado por password | `auth.ts` → callback `jwt` | Al iniciar sesión con Credentials, el rol se asigna por `OWNER_EMAILS` igual que con Zoho. Si el `User.role` en DB difiere, se ignora — v0.2.0 debería leerlo desde DB | v0.2.0 |
+
+---
+
+## ✅ Resuelto en esta rama (feat/password-login-auth-error)
+
+| Feature | Qué cambió |
+| --- | --- |
+| Login por contraseña | `auth.ts` agrega provider `Credentials` con verificación scrypt contra `User.passwordHash`. `login/page.tsx` llama `signIn("credentials", ...)` en lugar de mostrar toast. |
+| Confirmación de logout | Todos los botones de "Cerrar sesión" (header dropdown, sidebar expandido, sidebar colapsado, Settings > Cuenta) muestran `AlertDialog` antes de ejecutar el logout. |
+| Página de error de auth | `app/dashboard/(auth)/error/page.tsx` creada. `auth.ts` apunta `pages.error` a `/dashboard/error`. Muestra el error de NextAuth y ofrece volver al login o cerrar sesión. |
 
 ---
 
@@ -67,6 +78,7 @@ Hallazgos de la revisión, en orden de impacto:
 
 ## Orden de implementación sugerido
 
-1. **Inmediato (fix de una línea):** conectar logout de Cuenta al real (🔴 #5).
-2. **v0.2.0 — persistencia de settings:** server actions para Cuenta/Marca/Acciones (🔴 #1–3, 🟢 #1, #3), login por contraseña + cambio forzado (🟡 #1, #9, 🟢 #4), renovar/duplicar quotes (🟡 #4–5).
-3. **v0.5.0 — organizaciones e invitaciones:** modelo `Organization` (🟢 #2), invitaciones reales (🔴 #4), gestión de miembros (🟡 #6–8), Google OAuth y password reset (🟡 #2–3), eliminación de cuenta/org (🟡 #10–11).
+1. ~~**Inmediato (fix de una línea):** conectar logout de Cuenta al real (🔴 #5).~~ ✅ Hecho.
+2. ~~**Login por contraseña (🟡 #1):** Credentials en NextAuth.~~ ✅ Hecho (sin flujo `mustChangePassword`).
+3. **v0.2.0 — persistencia de settings:** server actions para Cuenta/Marca/Acciones (🔴 #1–3, 🟢 #1, #3), cambio forzado de contraseña (🟡 #9, 🟢 #4, #5), renovar/duplicar quotes (🟡 #4–5).
+4. **v0.5.0 — organizaciones e invitaciones:** modelo `Organization` (🟢 #2), invitaciones reales (🔴 #4), gestión de miembros (🟡 #6–8), Google OAuth y password reset (🟡 #2–3), eliminación de cuenta/org (🟡 #10–11).
