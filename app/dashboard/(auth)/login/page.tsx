@@ -14,15 +14,34 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<{ identifier?: string; password?: string }>({})
+  const [credLoading, setCredLoading] = useState(false)
   const [zohoLoading, setZohoLoading] = useState(false)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const idError = !identifier ? "El correo o usuario es obligatorio" : ""
     const passwordError = !password ? "La contraseña es obligatoria" : ""
     setErrors({ identifier: idError || undefined, password: passwordError || undefined })
     if (idError || passwordError) return
-    toast.info("Acceso por contraseña no disponible — usa Zoho para entrar")
+
+    setCredLoading(true)
+    try {
+      const result = await signIn("credentials", {
+        identifier: identifier.trim(),
+        password,
+        redirect: false,
+      })
+      if (result?.error) {
+        toast.error("Correo o contraseña incorrectos")
+        setErrors({ password: "Credenciales inválidas" })
+      } else {
+        window.location.href = "/dashboard"
+      }
+    } catch {
+      toast.error("Error al iniciar sesión — intenta de nuevo")
+    } finally {
+      setCredLoading(false)
+    }
   }
 
   return (
@@ -90,8 +109,8 @@ export default function LoginPage() {
               </button>
             </div>
           </div>
-          <Button type="submit" className="w-full">
-            Entrar
+          <Button type="submit" className="w-full" disabled={credLoading}>
+            {credLoading ? <Spinner className="size-4" /> : "Entrar"}
           </Button>
         </form>
 

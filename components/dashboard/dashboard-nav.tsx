@@ -29,6 +29,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import type { User as UserType } from "@/lib/auth/auth-context"
+import { LogoutConfirm } from "@/components/dashboard/logout-confirm"
 
 // ── Types ─────────────────────────────────────────────────
 
@@ -285,14 +286,15 @@ export function NavContent({
             <p className="text-[10px] text-gray-500 truncate leading-tight">{user.email}</p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors w-full text-left cursor-pointer"
-        >
-          <LogOut className="size-[18px] shrink-0" />
-          Cerrar sesión
-        </button>
+        <LogoutConfirm onConfirm={handleLogout}>
+          <button
+            type="button"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors w-full text-left cursor-pointer"
+          >
+            <LogOut className="size-[18px] shrink-0" />
+            Cerrar sesión
+          </button>
+        </LogoutConfirm>
       </div>
     </div>
   )
@@ -352,14 +354,15 @@ function CollapsedNav({ user, onExpand }: { user: UserType; onExpand: () => void
             </AvatarFallback>
           </Avatar>
         </button>
-        <button
-          type="button"
-          title="Cerrar sesión"
-          onClick={() => { logout(); router.replace("/dashboard/login") }}
-          className="flex items-center justify-center w-10 h-10 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
-        >
-          <LogOut className="size-[18px]" />
-        </button>
+        <LogoutConfirm onConfirm={() => { logout(); router.replace("/dashboard/login") }}>
+          <button
+            type="button"
+            title="Cerrar sesión"
+            className="flex items-center justify-center w-10 h-10 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+          >
+            <LogOut className="size-[18px]" />
+          </button>
+        </LogoutConfirm>
       </div>
     </div>
   )

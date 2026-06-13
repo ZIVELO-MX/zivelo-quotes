@@ -25,6 +25,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { NavContent } from "@/components/dashboard/dashboard-nav"
+import { LogoutConfirm } from "@/components/dashboard/logout-confirm"
 
 export function DashboardHeader() {
   const { user, logout } = useAuth()
@@ -118,10 +119,15 @@ export function DashboardHeader() {
               <UserIcon className="size-4" />
               Ajustes
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={handleLogout} className="text-red-600 hover:text-red-600 focus:text-red-600 cursor-pointer">
-              <LogOutIcon className="size-4 text-red-600" />
-              Cerrar sesión
-            </DropdownMenuItem>
+            <LogoutConfirm onConfirm={handleLogout}>
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                className="text-red-600 hover:text-red-600 focus:text-red-600 cursor-pointer"
+              >
+                <LogOutIcon className="size-4 text-red-600" />
+                Cerrar sesión
+              </DropdownMenuItem>
+            </LogoutConfirm>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

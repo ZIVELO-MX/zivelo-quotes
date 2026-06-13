@@ -28,6 +28,7 @@ import { useAuth } from "@/lib/auth/auth-context"
 import { listUsers, type UserSummary } from "@/lib/actions/user"
 import { SettingsNav, type SectionId } from "@/components/settings/settings-nav"
 import { RoleDropdown, ROLE_COLORS } from "@/components/ui/role-dropdown"
+import { LogoutConfirm } from "@/components/dashboard/logout-confirm"
 
 // ── Helpers ───────────────────────────────────────────────
 
@@ -130,14 +131,15 @@ function AccountSection() {
           <PrimaryButton type="button" onClick={handleSave}>
             Guardar cambios
           </PrimaryButton>
-          <button
-            type="button"
-            onClick={() => { logout(); router.replace("/dashboard/login") }}
-            className="flex items-center gap-2 border border-gray-200 text-gray-700 hover:bg-gray-50 h-10 px-4 rounded-lg text-sm font-medium transition-colors cursor-pointer"
-          >
-            <LogOut size={16} />
-            Cerrar sesión
-          </button>
+          <LogoutConfirm onConfirm={() => { logout(); router.replace("/dashboard/login") }}>
+            <button
+              type="button"
+              className="flex items-center gap-2 border border-gray-200 text-gray-700 hover:bg-gray-50 h-10 px-4 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+            >
+              <LogOut size={16} />
+              Cerrar sesión
+            </button>
+          </LogoutConfirm>
         </div>
       </div>
     </motion.div>
