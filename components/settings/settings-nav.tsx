@@ -1,6 +1,5 @@
 "use client"
 
-import { useCallback } from "react"
 import {
   ArrowLeft,
   ChevronRight,
@@ -261,27 +260,16 @@ export function SettingsNav({
   const isMobile = useIsMobile()
   const sections = getVisibleSections(user.role)
 
-  const activeSectionData = useCallback(
-    () => sections.find((s) => s.id === activeSection) ?? null,
-    [sections, activeSection],
-  )
+  // On desktop the persistent sidebar (DashboardNav) handles navigation;
+  // SettingsNav only renders on mobile.
+  if (!isMobile) return null
 
-  if (isMobile) {
-    if (activeSection) {
-      const section = sections.find((s) => s.id === activeSection)
-      if (!section) return null
-      return <MobileDetailHeader section={section} onBack={onBack} />
-    }
-    return (
-      <MobileSettingsIndex user={user} onSelect={onSelect} sections={sections} />
-    )
+  if (activeSection) {
+    const section = sections.find((s) => s.id === activeSection)
+    if (!section) return null
+    return <MobileDetailHeader section={section} onBack={onBack} />
   }
-
   return (
-    <DesktopSidebar
-      activeSection={activeSection}
-      onSelect={onSelect}
-      sections={sections}
-    />
+    <MobileSettingsIndex user={user} onSelect={onSelect} sections={sections} />
   )
 }

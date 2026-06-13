@@ -28,19 +28,12 @@ export default function DashboardLayout({
     return null
   }
 
-  const isEditQuote = pathname.startsWith("/dashboard/quotes/") && pathname.endsWith("/edit")
-  const showNav =
-    pathname !== "/dashboard/login" &&
-    pathname !== "/dashboard/settings" &&
-    pathname !== "/dashboard/quotes/new" &&
-    !isEditQuote
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <DashboardHeader />
-      <div className="flex-1 flex">
-        {showNav && <DashboardNav user={user} />}
-        <main className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex overflow-hidden">
+        <DashboardNav user={user} />
+        <main className="flex-1 flex flex-col min-w-0 overflow-y-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
