@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import {
   LayoutDashboard,
@@ -10,6 +10,14 @@ import {
   ChevronDown,
   ChevronRight,
   LogOut,
+  List,
+  FilePlus,
+  User,
+  Shield,
+  Building2,
+  Palette,
+  Users,
+  Sliders,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -20,7 +28,7 @@ import type { User as UserType } from "@/lib/auth/auth-context"
 interface NavLink {
   label: string
   href: string
-  /** Roles that should NOT see this link. */
+  icon: typeof LayoutDashboard
   hiddenFor?: string[]
 }
 
@@ -28,7 +36,6 @@ interface NavGroup {
   id: string
   label: string
   icon: typeof LayoutDashboard
-  /** If provided, the group header itself is a direct link (no collapsible children). */
   href?: string
   children?: NavLink[]
 }
@@ -47,8 +54,8 @@ const NAV_GROUPS: NavGroup[] = [
     label: "Cotizaciones",
     icon: FileText,
     children: [
-      { label: "Todas", href: "/dashboard/quotes" },
-      { label: "Nueva cotización", href: "/dashboard/quotes/new", hiddenFor: ["Viewer"] },
+      { label: "Todas", href: "/dashboard/quotes", icon: List },
+      { label: "Nueva cotización", href: "/dashboard/quotes/new", icon: FilePlus, hiddenFor: ["Viewer"] },
     ],
   },
   {
@@ -56,12 +63,12 @@ const NAV_GROUPS: NavGroup[] = [
     label: "Configuración",
     icon: Settings,
     children: [
-      { label: "Cuenta", href: "/dashboard/settings?section=account" },
-      { label: "Seguridad", href: "/dashboard/settings?section=security" },
-      { label: "Información general", href: "/dashboard/settings?section=general" },
-      { label: "Marca", href: "/dashboard/settings?section=brand", hiddenFor: ["Viewer"] },
-      { label: "Equipo", href: "/dashboard/settings?section=team", hiddenFor: ["Editor", "Viewer"] },
-      { label: "Acciones", href: "/dashboard/settings?section=quote-actions", hiddenFor: ["Viewer"] },
+      { label: "Cuenta", href: "/dashboard/settings?section=account", icon: User },
+      { label: "Seguridad", href: "/dashboard/settings?section=security", icon: Shield },
+      { label: "Información general", href: "/dashboard/settings?section=general", icon: Building2 },
+      { label: "Marca", href: "/dashboard/settings?section=brand", icon: Palette, hiddenFor: ["Viewer"] },
+      { label: "Equipo", href: "/dashboard/settings?section=team", icon: Users, hiddenFor: ["Editor", "Viewer"] },
+      { label: "Acciones", href: "/dashboard/settings?section=quote-actions", icon: Sliders, hiddenFor: ["Viewer"] },
     ],
   },
 ]
@@ -88,6 +95,18 @@ function isGroupActive(group: NavGroup, pathname: string): boolean {
   )
 }
 
+// Checks both pathname and query params so only the exact settings section is active.
+function isChildActive(childHref: string, pathname: string, searchParams: URLSearchParams): boolean {
+  const [path, query] = childHref.split("?")
+  if (!pathname.startsWith(path)) return false
+  if (!query) return true
+  const childParams = new URLSearchParams(query)
+  for (const [key, value] of childParams.entries()) {
+    if (searchParams.get(key) !== value) return false
+  }
+  return true
+}
+
 // ── NavContent (shared between desktop sidebar and mobile Sheet) ──
 
 export function NavContent({
@@ -98,10 +117,10 @@ export function NavContent({
   onNavigate?: () => void
 }) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const router = useRouter()
   const { logout } = useAuth()
 
-  // Auto-expand groups that contain the active route on first render
   const initialExpanded = NAV_GROUPS.reduce<Record<string, boolean>>((acc, group) => {
     if (group.children) {
       acc[group.id] = isGroupActive(group, pathname)
@@ -129,7 +148,7 @@ export function NavContent({
         {NAV_GROUPS.map((group) => {
           const Icon = group.icon
 
-          // Direct link (no collapsible children)
+          // Direct link (no children)
           if (group.href) {
             const active = pathname === group.href
             return (
@@ -179,19 +198,20 @@ export function NavContent({
               {isOpen && visibleChildren.length > 0 && (
                 <div className="flex flex-col gap-0.5 mt-0.5 mb-1">
                   {visibleChildren.map((child) => {
-                    const childPath = child.href.split("?")[0]
-                    const childActive = pathname.startsWith(childPath)
+                    const ChildIcon = child.icon
+                    const childActive = isChildActive(child.href, pathname, searchParams)
                     return (
                       <Link
                         key={child.href}
                         href={child.href}
                         onClick={onNavigate}
-                        className={`flex items-center pl-8 pr-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                        className={`flex items-center gap-2 pl-6 pr-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
                           childActive
                             ? "bg-gray-900 text-white"
                             : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                         }`}
                       >
+                        <ChildIcon className="size-3.5 shrink-0" />
                         {child.label}
                       </Link>
                     )
@@ -234,8 +254,8 @@ export function NavContent({
 
 export function DashboardNav({ user }: { user: UserType }) {
   return (
-    <aside className="w-56 shrink-0 hidden sm:flex flex-col h-[calc(100vh-3.5rem)] sticky top-14">
-      <div className="bg-white border border-gray-100 rounded-2xl m-3 flex flex-col flex-1 overflow-y-auto">
+    <aside className="w-56 shrink-0 hidden sm:flex flex-col sticky top-14 self-start max-h-[calc(100vh-3.5rem)]">
+      <div className="bg-white border border-gray-100 rounded-2xl m-3 flex flex-col overflow-y-auto" style={{ maxHeight: "calc(100vh - 3.5rem - 1.5rem)" }}>
         <NavContent user={user} />
       </div>
     </aside>

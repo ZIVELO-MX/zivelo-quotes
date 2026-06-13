@@ -31,9 +31,9 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <DashboardHeader />
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex">
         <DashboardNav user={user} />
-        <main className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <main className="flex-1 flex flex-col min-w-0 overflow-y-auto h-[calc(100vh-3.5rem)] sticky top-14">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
@@ -45,9 +45,9 @@ export default function DashboardLayout({
               {children}
             </motion.div>
           </AnimatePresence>
+          <MinimalFooter />
         </main>
       </div>
-      <MinimalFooter />
     </div>
   )
 }
