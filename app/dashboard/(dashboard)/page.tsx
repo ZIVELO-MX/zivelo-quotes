@@ -101,10 +101,21 @@ export default function DashboardPage() {
       {/* Summary */}
       <Section title="Resumen" subtitle="Estado general de tus cotizaciones.">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <SummaryCard label="Activas" value={loading ? "—" : String(active.length)} color="text-emerald-600" />
-          <SummaryCard label="Borradores" value={loading ? "—" : String(drafts.length)} color="text-gray-600" />
-          <SummaryCard label="Vencidas" value={loading ? "—" : String(expired.length)} color="text-red-600" />
-          <SummaryCard label="Cotizado" value={loading ? "—" : formatPrice(quotedValue, currency)} color="text-gray-900" />
+          {loading ? (
+            [...Array(4)].map((_, i) => (
+              <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 animate-pulse">
+                <div className="h-3 w-16 bg-gray-100 rounded-full mb-3" />
+                <div className="h-7 w-10 bg-gray-100 rounded-full" />
+              </div>
+            ))
+          ) : (
+            <>
+              <SummaryCard label="Activas" value={String(active.length)} color="text-emerald-600" />
+              <SummaryCard label="Borradores" value={String(drafts.length)} color="text-gray-600" />
+              <SummaryCard label="Vencidas" value={String(expired.length)} color="text-red-600" />
+              <SummaryCard label="Cotizado" value={formatPrice(quotedValue, currency)} color="text-gray-900" />
+            </>
+          )}
         </div>
       </Section>
 
@@ -114,7 +125,17 @@ export default function DashboardPage() {
         <div className="bg-white border border-gray-100 rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Estado de cotizaciones</h3>
           {loading ? (
-            <p className="text-sm text-gray-400">Cargando…</p>
+            <div className="space-y-3 animate-pulse">
+              {[...Array(3)].map((_, i) => (
+                <div key={i}>
+                  <div className="flex justify-between mb-1">
+                    <div className="h-3 w-16 bg-gray-100 rounded-full" />
+                    <div className="h-3 w-4 bg-gray-100 rounded-full" />
+                  </div>
+                  <div className="h-1.5 bg-gray-100 rounded-full" />
+                </div>
+              ))}
+            </div>
           ) : quotes.length === 0 ? (
             <p className="text-sm text-gray-400">Sin cotizaciones aún.</p>
           ) : (
@@ -130,7 +151,14 @@ export default function DashboardPage() {
         <div className="bg-white border border-gray-100 rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Pendientes</h3>
           {loading ? (
-            <p className="text-sm text-gray-400">Cargando…</p>
+            <div className="space-y-3 animate-pulse">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="h-4 w-4 bg-gray-100 rounded shrink-0" />
+                  <div className="h-3 bg-gray-100 rounded-full flex-1" />
+                </div>
+              ))}
+            </div>
           ) : pending.length === 0 ? (
             <p className="text-sm text-gray-400">Sin pendientes — todo al día.</p>
           ) : (
@@ -152,7 +180,23 @@ export default function DashboardPage() {
       {/* Recent Quotes */}
       <Section title="Cotizaciones recientes" subtitle="Últimas cotizaciones creadas o actualizadas.">
         {loading ? (
-          <div className="py-8 text-center text-sm text-gray-400">Cargando cotizaciones…</div>
+          <div className="space-y-3 animate-pulse">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <div className="h-4 w-2/5 bg-gray-100 rounded-full" />
+                    <div className="h-3 w-3/5 bg-gray-100 rounded-full" />
+                  </div>
+                  <div className="h-4 w-24 bg-gray-100 rounded-full shrink-0" />
+                </div>
+                <div className="flex gap-2 mt-3 pt-3 border-t border-gray-100">
+                  <div className="h-7 w-16 bg-gray-100 rounded-lg" />
+                  <div className="h-7 w-12 bg-gray-100 rounded-lg" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : recentQuotes.length === 0 ? (
           <div className="py-8 text-center text-sm text-gray-400">
             No hay cotizaciones aún.{" "}
