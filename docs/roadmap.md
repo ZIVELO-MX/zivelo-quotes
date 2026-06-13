@@ -6,8 +6,8 @@
 | --- | --- |
 | Versión actual | v0.1.0 |
 | Fase activa | MVP operativo (cierre) |
-| Avance actual | Zoho OAuth (NextAuth v5) en producción, modelo `User` en DB, edición de quotes, dashboard con datos reales (home + quotes list + settings Team/General desde DB), limpieza de data hardcodeada (PR #28), botones de preview de quotes, landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, tests base. |
-| Siguiente foco | Persistencia de settings (Brand/Account/Quote Actions) y navbar completo. Ver [`estado-funcionalidades.md`](./estado-funcionalidades.md) y [`navbar-redesign.md`](./navbar-redesign.md). |
+| Avance actual | Zoho OAuth (NextAuth v5) en producción, modelo `User` en DB, edición de quotes, dashboard con datos reales (home + quotes list + settings Team/General desde DB), limpieza de data hardcodeada (PR #28), botones de preview de quotes, landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, tests base. Publish/unpublish funcional + gating de página pública. Navbar completo persistente (sidebar colapsable, footer con logout, Sheet mobile). RoleDropdown extraído, logout fake corregido, skeletons de carga. |
+| Siguiente foco | Persistencia de settings (Brand/Account/Quote Actions). Ver [`estado-funcionalidades.md`](./estado-funcionalidades.md). |
 | Meta inmediata | Zivelo puede crear, editar, publicar y compartir cotizaciones reales desde un dashboard interno protegido. |
 
 Este roadmap prioriza terminar primero el flujo interno de cotizaciones de Zivelo. La plataforma debe quedar preparada para organizaciones, miembros e invitaciones, pero esas funciones no deben bloquear el MVP operativo.
@@ -121,11 +121,12 @@ Esta es la fase activa. El objetivo es que Zivelo pueda usar el producto interna
 | Consolidación de rutas | `/profile` → `/dashboard/settings`, `/dashboard/user` redirige a `/dashboard/settings`. | Hecho |
 | Página 403 | Ruta `/forbidden` para acceso denegado. | Hecho |
 | Avatar con foto | Foto vía AvatarImage, fallback a iniciales (nombre+apellido). | Hecho |
-| Pulir detalles pre-MVP | Extraer demo data a `lib/auth/demo-data.ts` | Siguiente |
-| Pulir detalles pre-MVP | Extraer `RoleDropdown` a `components/ui/role-dropdown.tsx` | Siguiente |
-| Pulir detalles pre-MVP | Agregar loading states y skeleton UI en dashboard y perfil | Siguiente |
-| Pulir detalles pre-MVP | Agregar `Suspense` y skeletons donde haya carga asíncrona | Siguiente |
-| Publicar / despublicar | Control claro de estado `draft` / `published`. | Parcial |
+| Pulir detalles pre-MVP | Extraer demo data a `lib/auth/demo-data.ts` | Pendiente |
+| Pulir detalles pre-MVP | Extraer `RoleDropdown` a `components/ui/role-dropdown.tsx` | Hecho (feat/mvp-polish) |
+| Pulir detalles pre-MVP | Agregar loading states y skeleton UI en dashboard y perfil | Hecho (feat/mvp-polish) |
+| Pulir detalles pre-MVP | Logout fake en Settings > Cuenta conectado al real | Hecho (feat/mvp-polish) |
+| Publicar / despublicar | Control claro de estado `draft` / `active`, gating de página pública, fix RLS. | Hecho |
+| Navbar completo | Sidebar persistente en todas las rutas, grupos colapsables, footer con logout, Sheet mobile. | Hecho (feat/navbar-completo) |
 | Página pública | Render desde DB en `/q/[quoteSlug]`. | Hecho |
 | Exportar PDF | Snapshot compartible. | Hecho |
 | Open Graph dinámico | Preview social por quote. | Hecho |
@@ -140,7 +141,7 @@ La fase termina cuando Zivelo pueda iniciar sesión, crear una cotización desde
 | Entregable | Descripción |
 | --- | --- |
 | Persistencia de settings | Server actions para Cuenta, Marca y Acciones de cotización — hoy los "Guardar" no persisten. Ver [`estado-funcionalidades.md`](./estado-funcionalidades.md) 🔴 #1–3. |
-| Navbar completo | Sidebar persistente con grupos desplegables que integra el nav de settings. Ver [`navbar-redesign.md`](./navbar-redesign.md). |
+| Navbar completo | ~~Movido a v0.1.0 — hecho en `feat/navbar-completo`.~~ |
 | Login por contraseña | Provider Credentials contra `User.passwordHash` + flujo `mustChangePassword`. |
 | Estados robustos | Draft, published, archived o expired según necesidad real. |
 | Validaciones de publicación | Evitar publicar quotes incompletas. |

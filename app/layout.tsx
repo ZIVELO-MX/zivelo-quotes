@@ -11,11 +11,18 @@ const inter = Inter({
   variable: "--font-inter",
 })
 
+// NEXT_PUBLIC_BASE_URL → production explicit URL
+// VERCEL_URL          → auto-injected by Vercel for every deployment/preview (no protocol)
+// fallback            → local dev
+const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+
 export const metadata: Metadata = {
   title: "Zivelo Quotes — Cotizaciones interactivas",
   description:
     "Crea, comparte y presenta cotizaciones y propuestas interactivas con Zivelo Quotes.",
-  metadataBase: new URL("https://quotes.zivelo.dev"),
+  metadataBase: new URL(baseUrl),
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     shortcut: [{ url: "/icon.svg", type: "image/svg+xml" }],
@@ -25,7 +32,7 @@ export const metadata: Metadata = {
     title: "Zivelo Quotes — Cotizaciones interactivas",
     description:
       "Crea, comparte y presenta cotizaciones y propuestas interactivas con Zivelo Quotes.",
-    url: "https://quotes.zivelo.dev",
+    url: baseUrl,
     siteName: "Zivelo Quotes",
     type: "website",
     locale: "es_ES",
