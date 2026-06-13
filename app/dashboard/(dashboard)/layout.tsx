@@ -18,29 +18,23 @@ export default function DashboardLayout({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="h-screen bg-background flex items-center justify-center">
         <Spinner className="size-6" />
       </div>
     )
   }
 
-  if (!user) {
-    return null
-  }
-
-  const isEditQuote = pathname.startsWith("/dashboard/quotes/") && pathname.endsWith("/edit")
-  const showNav =
-    pathname !== "/dashboard/login" &&
-    pathname !== "/dashboard/settings" &&
-    pathname !== "/dashboard/quotes/new" &&
-    !isEditQuote
+  if (!user) return null
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <DashboardHeader />
-      <div className="flex-1 flex">
-        {showNav && <DashboardNav user={user} />}
-        <main className="flex-1 flex flex-col min-w-0">
+    <div className="flex h-screen overflow-hidden bg-background">
+      {/* Sidebar — full height, anchored left */}
+      <DashboardNav user={user} />
+
+      {/* Content column — header + scrollable main + footer */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <DashboardHeader />
+        <main className="flex-1 overflow-y-auto flex flex-col">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
@@ -52,9 +46,9 @@ export default function DashboardLayout({
               {children}
             </motion.div>
           </AnimatePresence>
+          <MinimalFooter />
         </main>
       </div>
-      <MinimalFooter />
     </div>
   )
 }

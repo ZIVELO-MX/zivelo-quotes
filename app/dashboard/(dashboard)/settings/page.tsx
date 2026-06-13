@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
-import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
 import { toast } from "sonner"
 import {
@@ -19,7 +18,6 @@ import {
   MoreHorizontal,
   Check,
   LogOut,
-  ArrowLeft,
   ChevronRight,
   ImageIcon,
   Upload,
@@ -1067,49 +1065,39 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="flex flex-1 min-h-full gap-4 sm:gap-6 p-4 sm:p-6 max-w-5xl mx-auto w-full flex-col sm:flex-row">
+    <div className="flex flex-1 min-h-full flex-col p-4 sm:p-6 max-w-3xl mx-auto w-full">
+      {/* Mobile: SettingsNav handles index view and back navigation */}
       <SettingsNav
         user={user}
         activeSection={activeSection}
         onSelect={handleSelect}
         onBack={handleBack}
       />
-      <div className="flex-1 min-w-0">
-        {/* Desktop: show "← Volver al dashboard" above the content */}
-        <div className="hidden sm:block mb-6">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
-          >
-            <ArrowLeft size={16} />
-            Volver al dashboard
-          </Link>
+
+      {/* Desktop: show section index when no section is selected */}
+      {activeSection === null && (
+        <div className="hidden sm:block">
+          <SettingsIndex onSelect={handleSelect} role={user.role} />
         </div>
+      )}
 
-        {activeSection === null && (
-          <div className="hidden sm:block">
-            <SettingsIndex onSelect={handleSelect} role={user.role} />
-          </div>
+      <AnimatePresence mode="wait">
+        {activeSection === "general" && <GeneralSection key="general" />}
+        {activeSection === "brand" && user.role !== "Viewer" && <BrandSection key="brand" />}
+        {activeSection === "brand" && user.role === "Viewer" && <NotForYou key="brand-no-perm" />}
+        {activeSection === "team" && (user.role === "Owner" || user.role === "Manager") && (
+          <TeamSection key="team" />
         )}
-
-        <AnimatePresence mode="wait">
-          {activeSection === "general" && <GeneralSection key="general" />}
-          {activeSection === "brand" && user.role !== "Viewer" && <BrandSection key="brand" />}
-          {activeSection === "brand" && user.role === "Viewer" && <NotForYou key="brand-no-perm" />}
-          {activeSection === "team" && (user.role === "Owner" || user.role === "Manager") && (
-            <TeamSection key="team" />
-          )}
-          {activeSection === "team" && user.role !== "Owner" && user.role !== "Manager" && (
-            <NotForYou key="team-no-perm" />
-          )}
-          {activeSection === "quote-actions" && user.role !== "Viewer" && <QuoteActionsSection key="quote-actions" />}
-          {activeSection === "quote-actions" && user.role === "Viewer" && (
-            <NotForYou key="quote-actions-no-perm" />
-          )}
-          {activeSection === "account" && <AccountSection key="account" />}
-          {activeSection === "security" && <SecuritySection key="security" />}
-        </AnimatePresence>
-      </div>
+        {activeSection === "team" && user.role !== "Owner" && user.role !== "Manager" && (
+          <NotForYou key="team-no-perm" />
+        )}
+        {activeSection === "quote-actions" && user.role !== "Viewer" && <QuoteActionsSection key="quote-actions" />}
+        {activeSection === "quote-actions" && user.role === "Viewer" && (
+          <NotForYou key="quote-actions-no-perm" />
+        )}
+        {activeSection === "account" && <AccountSection key="account" />}
+        {activeSection === "security" && <SecuritySection key="security" />}
+      </AnimatePresence>
     </div>
   )
 }

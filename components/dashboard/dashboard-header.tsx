@@ -3,15 +3,12 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter, usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 import {
   UserIcon,
   LogOutIcon,
   ChevronDownIcon,
   MenuIcon,
-  LayoutDashboard,
-  FileText,
-  Settings,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -27,17 +24,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-
-const MOBILE_NAV_ITEMS = [
-  { label: "Resumen", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Cotizaciones", href: "/dashboard/quotes", icon: FileText },
-  { label: "Ajustes", href: "/dashboard/settings", icon: Settings },
-]
+import { NavContent } from "@/components/dashboard/dashboard-nav"
 
 export function DashboardHeader() {
   const { user, logout } = useAuth()
   const router = useRouter()
-  const pathname = usePathname()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   if (!user) return null
@@ -49,15 +40,9 @@ export function DashboardHeader() {
     .slice(0, 2)
     .toUpperCase() ?? ""
 
-
   function handleLogout() {
     logout()
     router.replace("/dashboard/login")
-  }
-
-  function isActive(href: string): boolean {
-    if (href === "/dashboard") return pathname === "/dashboard"
-    return pathname.startsWith(href)
   }
 
   return (
@@ -76,7 +61,7 @@ export function DashboardHeader() {
             <SheetContent side="left" className="w-64 p-0">
               <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
               <div className="flex flex-col h-full">
-                <div className="flex items-center gap-3 px-5 h-14 border-b border-border">
+                <div className="flex items-center gap-3 px-5 h-14 border-b border-border shrink-0">
                   <Image
                     src="/logos/zivelo-bars-dark-full.svg"
                     alt="Zivelo"
@@ -87,27 +72,12 @@ export function DashboardHeader() {
                     style={{ height: "auto" }}
                   />
                 </div>
-                <nav className="flex flex-col p-3 gap-1">
-                  {MOBILE_NAV_ITEMS.map((item) => {
-                    const Icon = item.icon
-                    const active = isActive(item.href)
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setMobileNavOpen(false)}
-                        className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                          active
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                        }`}
-                      >
-                        <Icon className="size-[18px] shrink-0" />
-                        {item.label}
-                      </Link>
-                    )
-                  })}
-                </nav>
+                <div className="flex-1 overflow-y-auto">
+                  <NavContent
+                    user={user}
+                    onNavigate={() => setMobileNavOpen(false)}
+                  />
+                </div>
               </div>
             </SheetContent>
           </Sheet>

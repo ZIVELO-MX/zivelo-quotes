@@ -6,7 +6,7 @@
 | --- | --- |
 | Versión actual | v0.1.0 |
 | Fase activa | MVP operativo (cierre) |
-| Avance actual | Zoho OAuth (NextAuth v5) en producción, modelo `User` en DB, edición de quotes, dashboard con datos reales (home + quotes list + settings Team/General desde DB), limpieza de data hardcodeada (PR #28), botones de preview de quotes, landing pública, quote pública dinámica desde DB, Prisma + Supabase PostgreSQL, PDF export, OG image, WhatsApp actions, tests base. Publish/unpublish funcional + gating de página pública. Navbar completo persistente (sidebar colapsable, footer con logout, Sheet mobile). RoleDropdown extraído, logout fake corregido, skeletons de carga. |
+| Avance actual | Zoho OAuth (NextAuth v5) en producción, modelo `User` en DB, edición de quotes, dashboard con datos reales, publish/unpublish funcional + gating de página pública, fix RLS. Sidebar persistente full-height anclado a la izquierda, colapsable (224px↔64px) con animación motion, grupos colapsables con animación CSS (Radix `--radix-collapsible-content-height`), active state exacto por ruta/query param, íconos en sub-items, Sheet mobile. RoleDropdown extraído, logout fake corregido, skeletons de carga, metadataBase dinámica con VERCEL_URL fallback. |
 | Siguiente foco | Persistencia de settings (Brand/Account/Quote Actions). Ver [`estado-funcionalidades.md`](./estado-funcionalidades.md). |
 | Meta inmediata | Zivelo puede crear, editar, publicar y compartir cotizaciones reales desde un dashboard interno protegido. |
 
@@ -126,7 +126,7 @@ Esta es la fase activa. El objetivo es que Zivelo pueda usar el producto interna
 | Pulir detalles pre-MVP | Agregar loading states y skeleton UI en dashboard y perfil | Hecho (feat/mvp-polish) |
 | Pulir detalles pre-MVP | Logout fake en Settings > Cuenta conectado al real | Hecho (feat/mvp-polish) |
 | Publicar / despublicar | Control claro de estado `draft` / `active`, gating de página pública, fix RLS. | Hecho |
-| Navbar completo | Sidebar persistente en todas las rutas, grupos colapsables, footer con logout, Sheet mobile. | Hecho (feat/navbar-completo) |
+| Navbar completo | Sidebar full-height anclado a la izquierda, colapsable con animación, grupos con animación CSS, active state exacto, íconos en sub-items, Sheet mobile. | Hecho (feat/navbar-completo) |
 | Página pública | Render desde DB en `/q/[quoteSlug]`. | Hecho |
 | Exportar PDF | Snapshot compartible. | Hecho |
 | Open Graph dinámico | Preview social por quote. | Hecho |
