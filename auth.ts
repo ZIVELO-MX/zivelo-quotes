@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { scryptSync } from "crypto"
 import { prisma } from "@/lib/prisma"
+import { authConfig } from "./auth.config"
 
 function verifyPassword(plain: string, stored: string): boolean {
   const [salt, hash] = stored.split(":")
@@ -11,6 +12,7 @@ function verifyPassword(plain: string, stored: string): boolean {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -61,26 +63,35 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   ],
   callbacks: {
-    jwt({ token, user }) {
+    ...authConfig.callbacks,
+    async jwt({ token, user, trigger }) {
+      // On sign-in: read role and mustChangePassword from DB
       if (user?.email) {
-        const ownerEmails = (process.env.OWNER_EMAILS ?? "")
-          .split(",")
-          .map((e) => e.trim())
-          .filter(Boolean)
-        token.role = ownerEmails.includes(user.email) ? "Owner" : "Manager"
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+          select: { role: true, mustChangePassword: true },
+        })
+        if (dbUser) {
+          token.role = dbUser.role
+          token.mustChangePassword = dbUser.mustChangePassword
+        } else {
+          const ownerEmails = (process.env.OWNER_EMAILS ?? "")
+            .split(",")
+            .map((e) => e.trim())
+            .filter(Boolean)
+          token.role = ownerEmails.includes(user.email) ? "Owner" : "Manager"
+          token.mustChangePassword = false
+        }
+      }
+      // On session update (after password change): re-read mustChangePassword
+      if (trigger === "update" && token.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email as string },
+          select: { mustChangePassword: true },
+        })
+        if (dbUser) token.mustChangePassword = dbUser.mustChangePassword
       }
       return token
     },
-    session({ session, token }) {
-      if (session.user) {
-        (session.user as Record<string, unknown>).role = token.role ?? "Manager"
-      }
-      return session
-    },
   },
-  pages: {
-    signIn: "/dashboard/login",
-    error:  "/dashboard/error",
-  },
-  trustHost: true,
 })
