@@ -32,16 +32,17 @@ export default function DashboardLayout({
       <DashboardNav user={user} />
 
       {/* Content column — header + scrollable main + footer */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0">
         <DashboardHeader />
-        <main className="flex-1 overflow-y-auto flex flex-col">
+        {/* min-h-0 prevents the flex child from blocking overflow */}
+        <main className="flex-1 min-h-0 overflow-y-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } }}
               exit={{ opacity: 0, y: -4, transition: { duration: 0.12, ease: "easeIn" } }}
-              className="flex-1 flex flex-col"
+              className="min-h-full flex flex-col"
             >
               {children}
             </motion.div>
