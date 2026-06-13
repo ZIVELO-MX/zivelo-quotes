@@ -8,7 +8,6 @@ import {
   FileText,
   Settings,
   ChevronDown,
-  ChevronRight,
   LogOut,
   List,
   FilePlus,
@@ -19,8 +18,14 @@ import {
   Users,
   Sliders,
 } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/auth-context"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import type { User as UserType } from "@/lib/auth/auth-context"
 
 // ── Types ─────────────────────────────────────────────────
@@ -29,6 +34,8 @@ interface NavLink {
   label: string
   href: string
   icon: typeof LayoutDashboard
+  /** Match pathname exactly instead of using startsWith */
+  exact?: boolean
   hiddenFor?: string[]
 }
 
@@ -55,7 +62,7 @@ const NAV_GROUPS: NavGroup[] = [
     icon: FileText,
     children: [
       { label: "Todas", href: "/dashboard/quotes", icon: List },
-      { label: "Nueva cotización", href: "/dashboard/quotes/new", icon: FilePlus, hiddenFor: ["Viewer"] },
+      { label: "Nueva cotización", href: "/dashboard/quotes/new", icon: FilePlus, exact: true, hiddenFor: ["Viewer"] },
     ],
   },
   {
@@ -76,8 +83,9 @@ const NAV_GROUPS: NavGroup[] = [
 // ── Helpers ───────────────────────────────────────────────
 
 function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/)
-  return parts
+  return name
+    .trim()
+    .split(/\s+/)
     .slice(0, 2)
     .map((p) => p[0] ?? "")
     .join("")
@@ -90,16 +98,19 @@ function isGroupActive(group: NavGroup, pathname: string): boolean {
       ? pathname === "/dashboard"
       : pathname.startsWith(group.href)
   }
-  return (group.children ?? []).some((child) =>
-    pathname.startsWith(child.href.split("?")[0])
-  )
+  return (group.children ?? []).some((child) => childMatchesPath(child, pathname, new URLSearchParams()))
 }
 
-// Checks both pathname and query params so only the exact settings section is active.
-function isChildActive(childHref: string, pathname: string, searchParams: URLSearchParams): boolean {
-  const [path, query] = childHref.split("?")
+function childMatchesPath(child: NavLink, pathname: string, searchParams: URLSearchParams): boolean {
+  const [path, query] = child.href.split("?")
+
+  if (child.exact) return pathname === path
+
   if (!pathname.startsWith(path)) return false
+
   if (!query) return true
+
+  // Check query params (e.g. ?section=account)
   const childParams = new URLSearchParams(query)
   for (const [key, value] of childParams.entries()) {
     if (searchParams.get(key) !== value) return false
@@ -107,7 +118,7 @@ function isChildActive(childHref: string, pathname: string, searchParams: URLSea
   return true
 }
 
-// ── NavContent (shared between desktop sidebar and mobile Sheet) ──
+// ── NavContent ─────────────────────────────────────────────
 
 export function NavContent({
   user,
@@ -121,18 +132,12 @@ export function NavContent({
   const router = useRouter()
   const { logout } = useAuth()
 
-  const initialExpanded = NAV_GROUPS.reduce<Record<string, boolean>>((acc, group) => {
-    if (group.children) {
-      acc[group.id] = isGroupActive(group, pathname)
-    }
-    return acc
-  }, {})
-
-  const [expanded, setExpanded] = useState<Record<string, boolean>>(initialExpanded)
-
-  function toggleGroup(id: string) {
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }))
-  }
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
+    NAV_GROUPS.reduce<Record<string, boolean>>((acc, group) => {
+      if (group.children) acc[group.id] = isGroupActive(group, pathname)
+      return acc
+    }, {})
+  )
 
   function handleLogout() {
     logout()
@@ -143,12 +148,11 @@ export function NavContent({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Nav items */}
-      <nav className="flex flex-col gap-0.5 p-2 flex-1">
+      <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
         {NAV_GROUPS.map((group) => {
           const Icon = group.icon
 
-          // Direct link (no children)
+          // Direct link
           if (group.href) {
             const active = pathname === group.href
             return (
@@ -156,11 +160,12 @@ export function NavContent({
                 key={group.id}
                 href={group.href}
                 onClick={onNavigate}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 w-full ${
+                className={cn(
+                  "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full",
                   active
                     ? "bg-gray-900 text-white"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                )}
               >
                 <Icon className="size-[18px] shrink-0" />
                 {group.label}
@@ -169,61 +174,66 @@ export function NavContent({
           }
 
           // Collapsible group
-          const groupActive = isGroupActive(group, pathname)
-          const isOpen = expanded[group.id] ?? false
           const visibleChildren = (group.children ?? []).filter(
             (child) => !child.hiddenFor?.includes(user.role)
           )
+          const groupActive = isGroupActive(group, pathname)
+          const isOpen = openGroups[group.id] ?? false
 
           return (
-            <div key={group.id}>
-              <button
-                type="button"
-                onClick={() => toggleGroup(group.id)}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 w-full text-left cursor-pointer ${
+            <Collapsible
+              key={group.id}
+              open={isOpen}
+              onOpenChange={(open) =>
+                setOpenGroups((prev) => ({ ...prev, [group.id]: open }))
+              }
+            >
+              <CollapsibleTrigger
+                className={cn(
+                  "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full text-left cursor-pointer",
                   groupActive && !isOpen
                     ? "bg-gray-100 text-gray-900"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                )}
               >
                 <Icon className="size-[18px] shrink-0" />
                 <span className="flex-1">{group.label}</span>
-                {isOpen ? (
-                  <ChevronDown className="size-3.5 shrink-0 text-gray-400" />
-                ) : (
-                  <ChevronRight className="size-3.5 shrink-0 text-gray-400" />
-                )}
-              </button>
+                <ChevronDown
+                  className={cn(
+                    "size-3.5 shrink-0 text-gray-400 transition-transform duration-200",
+                    isOpen ? "rotate-0" : "-rotate-90"
+                  )}
+                />
+              </CollapsibleTrigger>
 
-              {isOpen && visibleChildren.length > 0 && (
-                <div className="flex flex-col gap-0.5 mt-0.5 mb-1">
-                  {visibleChildren.map((child) => {
-                    const ChildIcon = child.icon
-                    const childActive = isChildActive(child.href, pathname, searchParams)
-                    return (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={onNavigate}
-                        className={`flex items-center gap-2 pl-6 pr-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                          childActive
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-                        }`}
-                      >
-                        <ChildIcon className="size-3.5 shrink-0" />
-                        {child.label}
-                      </Link>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
+              <CollapsibleContent className="space-y-0.5 mt-0.5">
+                {visibleChildren.map((child) => {
+                  const ChildIcon = child.icon
+                  const active = childMatchesPath(child, pathname, searchParams)
+                  return (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      onClick={onNavigate}
+                      className={cn(
+                        "flex items-center gap-2 pl-6 pr-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                        active
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                      )}
+                    >
+                      <ChildIcon className="size-3.5 shrink-0" />
+                      {child.label}
+                    </Link>
+                  )
+                })}
+              </CollapsibleContent>
+            </Collapsible>
           )
         })}
       </nav>
 
-      {/* Footer: user info + logout */}
+      {/* Footer */}
       <div className="p-2 border-t border-gray-100">
         <div className="flex items-center gap-2.5 px-3 py-2 mb-0.5">
           <Avatar className="size-7 shrink-0">
@@ -240,7 +250,7 @@ export function NavContent({
         <button
           type="button"
           onClick={handleLogout}
-          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 w-full text-left cursor-pointer"
+          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors w-full text-left cursor-pointer"
         >
           <LogOut className="size-[18px] shrink-0" />
           Cerrar sesión
@@ -255,7 +265,10 @@ export function NavContent({
 export function DashboardNav({ user }: { user: UserType }) {
   return (
     <aside className="w-56 shrink-0 hidden sm:flex flex-col sticky top-14 self-start max-h-[calc(100vh-3.5rem)]">
-      <div className="bg-white border border-gray-100 rounded-2xl m-3 flex flex-col overflow-y-auto" style={{ maxHeight: "calc(100vh - 3.5rem - 1.5rem)" }}>
+      <div
+        className="bg-white border border-gray-100 rounded-2xl m-3 flex flex-col overflow-y-auto"
+        style={{ maxHeight: "calc(100vh - 3.5rem - 1.5rem)" }}
+      >
         <NavContent user={user} />
       </div>
     </aside>
