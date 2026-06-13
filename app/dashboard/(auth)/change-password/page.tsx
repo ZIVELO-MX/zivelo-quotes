@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { signOut } from "next-auth/react"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -12,9 +11,6 @@ import { Spinner } from "@/components/ui/spinner"
 import { changePassword } from "@/lib/actions/user"
 
 export default function ChangePasswordPage() {
-  const { update } = useSession()
-  const router = useRouter()
-
   const [password, setPassword]           = useState("")
   const [confirm, setConfirm]             = useState("")
   const [showPassword, setShowPassword]   = useState(false)
@@ -37,10 +33,9 @@ export default function ChangePasswordPage() {
         toast.error(result.error ?? "Error al cambiar la contraseña")
         return
       }
-      toast.success("Contraseña actualizada")
-      // Refresh JWT so mustChangePassword becomes false without re-login
-      await update()
-      router.replace("/dashboard")
+      // Sign out so the next login gets a fresh JWT with mustChangePassword=false
+      toast.success("Contraseña guardada — inicia sesión para continuar")
+      await signOut({ callbackUrl: "/dashboard/login" })
     } catch {
       toast.error("Error inesperado — intenta de nuevo")
     } finally {
